@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌿 PROJETO GERMINA
+# 🌿 GERMINA
 ### Documentação do Projeto
 
 **Germinar conhecimentos sobre Plantas Medicinais usando a Tecnologia**
@@ -26,6 +26,15 @@ Repositório de documentação do projeto **GERMINA**, uma aplicação web gamif
 
 ---
 
+## Equipe
+
+| Papel | Nome | Vínculo |
+|---|---|---|
+| **Pesquisadora principal** | Sarah Batista de Freitas | Mestranda — PPGCTS/UFAM · Bolsista FAPEAM |
+| **Desenvolvedor** | Gustavo Souza | Bolsista PIBIC/UFAM |
+
+---
+
 ## Sobre o Projeto
 
 O GERMINA é desenvolvido em parceria entre o **Programa de Pós-Graduação em Ciências, Tecnologia e Saúde (UFAM/ICET)** e o curso de **Engenharia de Software I (ICET-UFAM)**, com apoio da **FAPEAM**.
@@ -41,7 +50,9 @@ O sistema tem como objetivo principal disponibilizar, de forma acessível e enga
 | **Pesquisadora principal** | Sarah Batista de Freitas |
 | **Formação** | Ciências Biológicas — UFAM/AM |
 | **Programa** | Mestrado em Ciências, Tecnologia e Saúde — UFAM/ICET |
-| **Fomento** | Bolsista FAPEAM — 2026 |
+| **Fomento (pesquisa)** | Bolsista FAPEAM — 2026 |
+| **Desenvolvedor** | Gustavo Souza |
+| **Programa (desenvolvimento)** | PIBIC — Bolsista UFAM |
 | **Locus da pesquisa** | Horto Municipal de Itacoatiara/AM |
 | **Parceria técnica** | Engenharia de Software I — ICET/UFAM |
 
@@ -127,5 +138,5 @@ SEVERINO, Antônio Joaquim. **Metodologia do trabalho científico**. 24. ed. rev
 ---
 
 <p align="center">
-  Desenvolvido em colaboração entre UFAM/ICET · Engenharia de Software I · FAPEAM · 2026
+  Desenvolvido em colaboração entre UFAM/ICET · Engenharia de Software I · PIBIC/UFAM · FAPEAM · 2026
 </p>
