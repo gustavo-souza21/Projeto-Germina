@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌿 GERMINA
+# 🌿 PROJETO GERMINA
 ### Documentação do Projeto
 
 **Germinar conhecimentos sobre Plantas Medicinais usando a Tecnologia**
