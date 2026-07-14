@@ -1,0 +1,172 @@
+/* ==========================================================================
+   GERMINA — Design Tokens
+   Paleta extraída da identidade visual (logo folha+circuito, referências
+   Figma): verde-mata como cor de vida/planta, azul-tecnológico como o
+   "circuito" que sustenta a raiz, terracota-âmbar reservado só para XP e
+   conquistas (o único acento "quente" do sistema).
+   ========================================================================== */
+
+:root {
+  /* Verde — natureza, crescimento, marca */
+  --germina-green-900: #0f3d2e;
+  --germina-green-700: #1b5e3f;
+  --germina-green-500: #2d8659;
+  --germina-green-300: #7fbf9e;
+  --germina-green-100: #e6f2ec;
+
+  /* Azul — tecnologia, o "circuito" que sustenta a raiz */
+  --germina-blue-700: #1c3d5a;
+  --germina-blue-500: #2f6690;
+  --germina-blue-300: #8fb8d4;
+
+  /* Âmbar — reservado exclusivamente para XP, selos e conquistas */
+  --germina-amber-600: #b8860b;
+  --germina-amber-400: #d9a441;
+  --germina-amber-100: #faf1dd;
+
+  /* Neutros */
+  --germina-bg: #f6f8f6;
+  --germina-surface: #ffffff;
+  --germina-ink: #16241d;
+  --germina-ink-muted: #4b5a52;
+  --germina-border: #dde7e1;
+
+  /* Tipografia — fontes de sistema (sem dependência de CDN externo) */
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --font-body: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Raios e sombras */
+  --radius-card: 18px;
+  --radius-pill: 999px;
+  --shadow-card: 0 4px 16px rgba(15, 61, 46, 0.08);
+  --shadow-card-hover: 0 10px 28px rgba(15, 61, 46, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--germina-bg);
+  color: var(--germina-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--germina-green-900);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Foco visível para acessibilidade de teclado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--germina-blue-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Componentes reutilizáveis ---------- */
+
+.btn-germina {
+  background: var(--germina-green-700);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 0.7rem 1.6rem;
+  font-weight: 600;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.btn-germina:hover {
+  background: var(--germina-green-900);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-germina-outline {
+  background: transparent;
+  color: var(--germina-green-700);
+  border: 1.5px solid var(--germina-green-700);
+  border-radius: var(--radius-pill);
+  padding: 0.65rem 1.5rem;
+  font-weight: 600;
+  transition: background 0.15s ease;
+}
+.btn-germina-outline:hover {
+  background: var(--germina-green-100);
+  color: var(--germina-green-900);
+}
+
+.card-germina {
+  background: var(--germina-surface);
+  border: 1px solid var(--germina-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-germina:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.badge-xp {
+  background: var(--germina-amber-100);
+  color: var(--germina-amber-600);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.progress-germina {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--germina-green-100);
+  overflow: hidden;
+}
+.progress-germina > div {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--germina-green-500),
+    var(--germina-blue-500)
+  );
+  border-radius: var(--radius-pill);
+  transition: width 0.5s ease;
+}
+
+.navbar-germina {
+  background: var(--germina-surface);
+  border-bottom: 1px solid var(--germina-border);
+}
+
+.raridade-rara {
+  color: var(--germina-amber-600);
+  font-weight: 700;
+}
