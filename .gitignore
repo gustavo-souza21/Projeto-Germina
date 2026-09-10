@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+build/
+.env*.local
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+.vercel
+.env*
+
+# O .env.example documenta as variaveis necessarias e nao tem valor
+# nenhum preenchido - sem esta excecao o padrao .env* o ignoraria.
+!.env.example

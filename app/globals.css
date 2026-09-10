@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   GERMINA — DESIGN TOKENS (GER-UI-07)
+
+   Fonte da verdade: protótipos oficiais de Sarah Batista de Freitas.
+   Os hex abaixo NÃO foram estimados a olho — foram amostrados por pixel das
+   capturas de referência. Cada token registra em comentário onde ele aparece
+   no protótipo, para que qualquer alteração futura possa ser conferida contra
+   a imagem original.
+
+   REGRA: nenhum hex solto em componente. Sempre `bg-blue-main`, nunca
+   `bg-[#12294e]`. O Tailwind v4 gera as utilidades automaticamente a partir
+   do namespace --color-*.
+   ========================================================================= */
+@theme {
+  /* ---- Superfícies ------------------------------------------------------ */
+  /* Off-white NEUTRO quente. O valor antigo (#f3f6f0) era esverdeado e puxava
+     a tela inteira para o verde, reduzindo o contraste dos cards brancos. */
+  --color-bg-base: #f9f8f6;      /* fundo de todas as telas internas */
+  --color-bg-auth: #ebeae6;      /* fundo das telas de login/splash */
+  --color-card-bg: #ffffff;      /* superfície de card */
+  --color-surface-alt: #f1f5ec;  /* pílulas e blocos leves (XP, tags) */
+
+  /* ---- Azul profundo — AÇÃO PRIMÁRIA e navegação ------------------------ */
+  /* Amostrado em: botão "ENTRAR" (#0b2349), "ENVIAR RESPOSTA" (#192851),
+     FAB central da bottom nav (#112c4a). É a cor de "avançar no fluxo". */
+  --color-blue-deep: #0b2349;    /* estado pressed + texto azul sobre claro */
+  --color-blue-main: #12294e;    /* fundo padrão do botão primário */
+  --color-blue-soft: #1d2c4d;    /* hover e bordas de ênfase */
+
+  /* ---- Verde botânico — NATUREZA e SUCESSO ------------------------------ */
+  /* Amostrado em: "VER RECOMPENSAS" (#1f4c38), marcador de nível concluído
+     na timeline (#378328), tag "Estudada" nos canteiros (#d4e5af). */
+  --color-green-deep: #1f4c38;   /* fundo do botão secundário */
+  --color-green-main: #378328;   /* progresso, checks, confirmação */
+  --color-green-soft: #d4e5af;   /* tags de status e fundos leves */
+  --color-green-muted: #8fb996;  /* LEGADO: bordas herdadas do protótipo AI
+                                    Studio. Não usar em código novo — existe
+                                    só para a migração incremental das ~40
+                                    bordas `border-[#8fb996]/30` (GER-UI-04). */
+
+  /* ---- Neutros e estados ------------------------------------------------ */
+  --color-locked: #b8b8b8;       /* níveis e canteiros bloqueados */
+  --color-locked-deep: #8a8a8a;  /* base do gradiente do hexágono bloqueado
+                                    (BadgeHexagonal) — antes hex solto */
+  --color-ink: #1a2a1e;          /* texto corrido */
+  --color-ink-muted: #64748b;    /* texto de apoio, legendas */
+
+  /* ---- Acabamentos de medalha (GER-UI-10) --------------------------------
+     Usados por MedalhaConquista.tsx e reaproveitados onde a mesma cor de
+     "ouro" aparece fora do componente (ex.: ícone de moedas na loja do
+     Jardim). Migrados de hex soltos para token — mesmos valores, sem
+     mudança visual. */
+  --color-medalha-bronze-anel: #b87333;
+  --color-medalha-bronze-fundo: #f5e6d8;
+  --color-medalha-bronze-icone: #8a5222;
+  --color-medalha-prata-anel: #9aa5ad;
+  --color-medalha-prata-fundo: #eef1f3;
+  --color-medalha-prata-icone: #5b6870;
+  --color-medalha-ouro-anel: #d4a017;
+  --color-medalha-ouro-fundo: #fbf1d6;
+  --color-medalha-ouro-icone: #8a6a06;
+
+  /* ---- Tipografia (GER-UI-08) ------------------------------------------- */
+  /* --font-germina é injetada pelo next/font em app/layout.tsx. */
+  --font-sans: var(--font-germina), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* ---- Elevação --------------------------------------------------------- */
+  /* Nos protótipos o card é definido pela SOMBRA, não pela borda. Duas camadas
+     (uma difusa + uma de contato) dão profundidade sem escurecer o off-white. */
+  --shadow-card: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --shadow-fab: 0 8px 20px rgba(17, 44, 74, 0.28);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  /* Evita o "pulo" de layout quando uma página tem scroll e a seguinte não. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-base);
+  color: var(--color-ink);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Foco visível e consistente em todo o app. Antes cada componente usava
+   `focus:outline-none` sem repor nada, deixando a navegação por teclado sem
+   indicação nenhuma. */
+:focus-visible {
+  outline: 2px solid var(--color-blue-main);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Acessibilidade: respeita quem pediu menos movimento no sistema. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbar discreta, alinhada aos neutros da referência. */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d6d9d2;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-green-muted);
+}
+
+/* ============================================================================
+   TEMAS VISUAIS (Preferências → Tema Visual)
+
+   O tema ativo (game_state.tema_ativo) vira o atributo data-tema na tag
+   <html>. Cada bloco abaixo SOBRESCREVE só as variáveis de cor do @theme
+   original — qualquer componente que já usa bg-blue-main, text-green-deep
+   etc. muda de cor automaticamente, sem precisar tocar em nenhum componente.
+   ========================================================================= */
+
+/* Amazônia Profunda → "Floresta Densa": copa fechada, verdes mais saturados
+   e escuros, azul mais profundo. */
+[data-tema="Amazonia Profunda"] {
+  --color-bg-base: #f5f3ec;
+  --color-bg-auth: #e8e4d6;
+  --color-blue-deep: #071a33;
+  --color-blue-main: #0d1f3d;
+  --color-blue-soft: #16294a;
+  --color-green-deep: #163d2b;
+  --color-green-main: #2c6b1f;
+  --color-green-soft: #c3dba0;
+  --color-green-muted: #7aa682;
+}
+
+/* Floresta Encantada → "Bioluminescente": verde-ciano vibrante de destaque,
+   azul petróleo, fundo mais frio pra o brilho ressaltar. */
+[data-tema="Floresta Encantada"] {
+  --color-bg-base: #f4f9f7;
+  --color-bg-auth: #e4eeea;
+  --color-blue-deep: #072a3d;
+  --color-blue-main: #0f3f57;
+  --color-blue-soft: #155770;
+  --color-green-deep: #0d5c4a;
+  --color-green-main: #14c98c;
+  --color-green-soft: #b9f4de;
+  --color-green-muted: #7fd9b9;
+}
+
+/* Rio Negro: água escura cor de chá, quase preta — azul muito profundo,
+   verde musgo discreto, fundo mais quente por contraste. */
+[data-tema="Rio Negro"] {
+  --color-bg-base: #f7f5f0;
+  --color-bg-auth: #e9e4da;
+  --color-blue-deep: #050c14;
+  --color-blue-main: #0a1620;
+  --color-blue-soft: #14222f;
+  --color-green-deep: #24331f;
+  --color-green-main: #4c6b32;
+  --color-green-soft: #cdd6b8;
+  --color-green-muted: #8a9678;
+}

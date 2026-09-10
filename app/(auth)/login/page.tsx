@@ -1,0 +1,184 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Mail, Lock, Eye, EyeOff, Sprout } from 'lucide-react';
+import { createClient } from '../../../lib/supabase/client';
+import { traduzErroAuth } from '../../../lib/auth-errors';
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+
+  const irParaProximaTela = async (userId: string) => {
+    // Primeiro acesso (tutorial_concluido = false) cai no walkthrough do core
+    // loop; quem já concluiu vai direto pro Dashboard. Fonte de verdade é
+    // sempre profiles.tutorial_concluido — nunca localStorage (não
+    // sincroniza entre dispositivos, e um "Limpar dados do navegador"
+    // reabriria o tutorial pra sempre num usuário que já passou por ele).
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('tutorial_concluido')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      // Falha na consulta não deve travar o login. Cai no caminho mais
+      // seguro: mostrar o tutorial de novo pra quem já viu é inofensivo;
+      // pular um tutorial pendente por engano seria pior.
+      console.error('Falha ao verificar tutorial_concluido:', error.message);
+      router.push('/tutorial');
+      return;
+    }
+
+    router.push(data.tutorial_concluido ? '/inicio' : '/tutorial');
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErro(null);
+    setCarregando(true);
+
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
+
+    if (error || !data.user) {
+      setErro(error ? traduzErroAuth(error.message) : 'Não foi possível entrar. Tente novamente.');
+      setCarregando(false);
+      return;
+    }
+
+    // Não precisa de setCarregando(false) aqui: a navegação a seguir
+    // desmonta esta tela, então "travar" o botão em carregando até lá evita
+    // um segundo clique acidental durante o redirect (e durante a consulta a
+    // profiles.tutorial_concluido, que agora acontece antes de navegar).
+    await irParaProximaTela(data.user.id);
+  };
+
+  const handleGoogleLogin = async () => {
+    const supabase = createClient();
+    // signInWithOAuth já faz o navegador sair da SPA e ir pro Google — não há
+    // resultado síncrono pra tratar aqui. O retorno do Google cai em
+    // /auth/callback, que troca o code pela sessão e só então navega pra
+    // /inicio (ver app/auth/callback/route.ts).
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback?next=/inicio` },
+    });
+    if (error) setErro(traduzErroAuth(error.message));
+  };
+
+  const handleModoDemo = () => {
+    // Caminho já sinalizado como órfão no relatório de status (fora do
+    // escopo desta mutação): o middleware exige sessão real (A8) e vai
+    // redirecionar de volta pra /login no primeiro acesso a qualquer rota
+    // protegida. Sem um usuário real não há profiles.tutorial_concluido pra
+    // consultar, então isto vai direto pro tutorial em vez de chamar
+    // irParaProximaTela (que agora exige um userId de verdade).
+    router.push('/tutorial');
+  };
+
+  return (
+    <main className="min-h-screen flex flex-col justify-center px-6 py-12 bg-[var(--color-bg-base)]">
+      <div className="w-full max-w-sm mx-auto flex flex-col gap-6">
+        <div className="flex flex-col items-center gap-2 mb-2">
+          <div className="w-14 h-14 rounded-2xl bg-[var(--color-card-bg)] shadow-sm border border-[var(--color-green-soft)]/40 flex items-center justify-center">
+            <Sprout className="w-7 h-7 text-[var(--color-green-main)]" strokeWidth={1.75} />
+          </div>
+          <h1 className="text-2xl font-bold text-[var(--color-green-deep)]">Entrar</h1>
+        </div>
+
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--color-blue-deep)]">E-mail</label>
+            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[var(--color-card-bg)] border border-[var(--color-blue-main)]/20 focus-within:border-[var(--color-blue-main)]">
+              <Mail className="w-4 h-4 text-[var(--color-blue-main)]/60" />
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="seuemail@exemplo.com"
+                className="flex-1 bg-transparent outline-none text-sm text-[var(--color-blue-deep)] placeholder:text-[var(--color-blue-deep)]/40"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--color-blue-deep)]">Senha</label>
+            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[var(--color-card-bg)] border border-[var(--color-blue-main)]/20 focus-within:border-[var(--color-blue-main)]">
+              <Lock className="w-4 h-4 text-[var(--color-blue-main)]/60" />
+              <input
+                type={mostrarSenha ? 'text' : 'password'}
+                required
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                placeholder="Sua senha"
+                className="flex-1 bg-transparent outline-none text-sm text-[var(--color-blue-deep)] placeholder:text-[var(--color-blue-deep)]/40"
+              />
+              <button
+                type="button"
+                onClick={() => setMostrarSenha((v) => !v)}
+                className="text-[var(--color-blue-main)]/60"
+                aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {mostrarSenha ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-end -mt-1">
+            <Link href="/recuperar-senha" className="text-sm text-[var(--color-blue-main)] font-medium">
+              Esqueci a senha
+            </Link>
+          </div>
+
+          {erro && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+              {erro}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={carregando}
+            className="w-full py-3.5 rounded-2xl font-semibold text-white bg-[var(--color-green-main)] active:bg-[var(--color-green-deep)] transition-colors disabled:opacity-60"
+          >
+            {carregando ? 'Entrando...' : 'Entrar'}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full py-3.5 rounded-2xl font-semibold text-[var(--color-blue-deep)] bg-[var(--color-card-bg)] border border-[var(--color-blue-main)]/30"
+          >
+            Entrar com Google
+          </button>
+        </form>
+
+        <div className="flex flex-col items-center gap-3 mt-1">
+          <p className="text-sm text-[var(--color-blue-deep)]/70">
+            Não tem conta?{' '}
+            <Link href="/cadastro" className="text-[var(--color-green-main)] font-semibold">
+              Criar conta
+            </Link>
+          </p>
+
+          <button
+            type="button"
+            onClick={handleModoDemo}
+            className="text-xs text-[var(--color-blue-deep)]/50 underline"
+          >
+            Entrar em modo demonstração (offline)
+          </button>
+        </div>
+      </div>
+    </main>
+  );
+}
