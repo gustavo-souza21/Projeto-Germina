@@ -22,8 +22,10 @@ import { Leaf, Bell } from 'lucide-react';
    ========================================================================= */
 
 interface HeaderProps {
-  profile: Profile;
-  gameState: GameState;
+  /** `null` = visitante navegando sem conta (Fase 4). */
+  profile: Profile | null;
+  /** `null` = visitante: sem XP para exibir na pílula. */
+  gameState: GameState | null;
   nivelNome: string;
   onOpenNotifications: () => void;
 }
@@ -34,8 +36,13 @@ export const Header: React.FC<HeaderProps> = ({
   nivelNome,
   onOpenNotifications,
 }) => {
-  const primeiroNome = profile.nome_completo.split(' ')[0];
-  const inicial = profile.nome_completo.charAt(0).toUpperCase();
+  // Fase 4 — modo visitante. O header continua existindo (marca, navegação de
+  // volta), mas troca XP/avatar/notificações por um botão de entrar: pílula de
+  // XP zerada e sino de notificações são promessas de um estado de conta que o
+  // visitante não tem.
+  const visitante = profile === null || gameState === null;
+  const primeiroNome = profile?.nome_completo.split(' ')[0] ?? '';
+  const inicial = profile?.nome_completo.charAt(0).toUpperCase() ?? '';
 
   return (
     <header className="sticky top-0 z-30 bg-card-bg/95 backdrop-blur-md border-b border-black/[0.06]">
@@ -56,6 +63,20 @@ export const Header: React.FC<HeaderProps> = ({
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+          {visitante ? (
+            <>
+              <span className="hidden sm:block text-[11px] text-ink-muted">
+                Navegando sem conta
+              </span>
+              <Link
+                href="/login"
+                className="text-[13px] font-semibold text-white bg-green-deep hover:bg-green-main transition-colors px-4 py-2 rounded-xl"
+              >
+                Entrar
+              </Link>
+            </>
+          ) : (
+            <>
           {/* Pílula de XP — único indicador de progresso do header, como na referência */}
           <div
             className="flex items-center gap-1.5 bg-surface-alt rounded-full px-3 py-1.5"
@@ -97,6 +118,8 @@ export const Header: React.FC<HeaderProps> = ({
               {inicial}
             </div>
           </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

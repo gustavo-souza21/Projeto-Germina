@@ -53,6 +53,15 @@ export async function getDesafios(): Promise<DesafioDiario[]> {
 }
 
 export async function getPlantasEstudadasCount(): Promise<number> {
+  // Fase 4 (modo visitante): chamada pelo layout de `(app)`, que agora monta
+  // também para quem não tem conta. Sem sessão o número honesto é 0 — e sem
+  // consulta ao banco, já que `user_colecao` não concede nada ao role `anon`.
+  const supabaseVisitante = await createClient();
+  const {
+    data: { user: usuarioSessao },
+  } = await supabaseVisitante.auth.getUser();
+  if (!usuarioSessao) return 0;
+
   const { supabase, user } = await getAuthUser();
 
   const { count, error } = await supabase

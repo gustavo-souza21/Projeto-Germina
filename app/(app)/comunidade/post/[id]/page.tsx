@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPostPorId, getRespostas } from '../../../../../lib/queries/comunidade';
-import { getPerfil } from '../../../../../lib/queries/perfil';
+import { getPerfilOpcional } from '../../../../../lib/queries/perfil';
 import { PostDetalheClient } from '../../../../../components/comunidade/PostDetalheClient';
 
 interface PageProps {
@@ -30,7 +30,9 @@ export default async function PostDetalhePage({ params }: PageProps) {
     notFound();
   }
 
-  const [respostas, profile] = await Promise.all([getRespostas(id), getPerfil()]);
+  // Fase 4: o detalhe do post é público em leitura, como o mural.
+  // `getPerfilOpcional()` devolve null para visitante em vez de estourar.
+  const [respostas, profile] = await Promise.all([getRespostas(id), getPerfilOpcional()]);
 
   return <PostDetalheClient post={post} respostasIniciais={respostas} profile={profile} />;
 }

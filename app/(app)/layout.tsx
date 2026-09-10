@@ -1,4 +1,4 @@
-import { getPerfil, getGameState } from '../../lib/queries/perfil';
+import { getPerfilOpcional, getGameStateOpcional } from '../../lib/queries/perfil';
 import { getPlantasEstudadasCount } from '../../lib/queries/dashboard';
 import { NIVEIS_EVOLUCAO, PLANTAS_CATALOGO, calcularNivel } from '../../data/plantasData';
 import { HeaderBar } from '../../components/HeaderBar';
@@ -15,21 +15,38 @@ import { TemaAplicador } from '../../components/TemaAplicador';
 // `md`, BottomNav abaixo disso. Antes a barra de celular era exibida em
 // qualquer largura.
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  /* --------------------------------------------------------------------------
+     Fase 4 — modo visitante.
+
+     Este layout envolve TODAS as telas internas, inclusive /biblioteca e
+     /comunidade, que agora abrem sem login. As versões `...Opcional`
+     devolvem `null` sem sessão em vez de lançar exceção: com as originais,
+     um visitante quebrava aqui, na montagem do shell, antes de qualquer
+     conteúdo de página aparecer — o erro não seria "faça login", seria uma
+     tela de erro do Next.
+
+     `getPlantasEstudadasCount()` também precisou virar tolerante a visitante
+     (devolve 0 sem sessão) — ela lançava exceção pelo mesmo motivo e teria
+     quebrado este layout do mesmo jeito.
+     ----------------------------------------------------------------------- */
   const [profile, gameState, plantasEstudadas] = await Promise.all([
-    getPerfil(),
-    getGameState(),
+    getPerfilOpcional(),
+    getGameStateOpcional(),
     getPlantasEstudadasCount(),
   ]);
 
   // Estado Derivado: nível não é persistido, é sempre recalculado do XP corrente.
-  const nivelInfo = NIVEIS_EVOLUCAO.find((n) => n.nivel === calcularNivel(gameState.xp).nivel);
+  const nivelInfo = gameState
+    ? NIVEIS_EVOLUCAO.find((n) => n.nivel === calcularNivel(gameState.xp).nivel)
+    : undefined;
   const nivelNome = nivelInfo?.nome ?? 'Semente do Saber';
 
   const especiesRenisus = PLANTAS_CATALOGO.filter((p) => p.is_renisus).length;
 
   return (
     <div className="min-h-screen bg-bg-base md:flex">
-      <TemaAplicador tema={gameState.tema_ativo} />
+      {/* Sem conta não há tema comprado — cai no padrão. */}
+      <TemaAplicador tema={gameState?.tema_ativo ?? 'Padrao'} />
 
       <Sidebar
         profile={profile}

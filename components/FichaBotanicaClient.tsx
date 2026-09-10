@@ -5,6 +5,7 @@ import { FichaBotanicaPlanta } from './FichaBotanicaPlanta';
 import { GameState, PlantaCatalogo, UserColecao } from '../lib/types';
 import { aplicarGanho, mapGameStateRow } from '../lib/gamificacao';
 import { createClient } from '../lib/supabase/client';
+import { ExigeLoginModal } from './ExigeLoginModal';
 
 export function FichaBotanicaClient({
   planta,
@@ -13,18 +14,29 @@ export function FichaBotanicaClient({
 }: {
   planta: PlantaCatalogo;
   colecaoInicial: UserColecao[];
-  /** Vem do Server Component pai (getGameState()) — dá `user_id` e o XP/
-   *  moedas/sementes atuais, necessários pra calcular o ganho com
-   *  aplicarGanho() sem mais uma volta ao banco. */
-  gameStateInicial: GameState;
+  /** Vem do Server Component pai (getGameStateOpcional()) — dá `user_id` e o
+   *  XP/moedas/sementes atuais, necessários pra calcular o ganho com
+   *  aplicarGanho() sem mais uma volta ao banco.
+   *  `null` = visitante sem conta (Fase 4): a ficha é legível, estudar não. */
+  gameStateInicial: GameState | null;
 }) {
   const [colecao, setColecao] = useState(colecaoInicial);
   const [gameState, setGameState] = useState(gameStateInicial);
   const [estudando, setEstudando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [pedindoLogin, setPedindoLogin] = useState(false);
   const jaEstudada = colecao.some((c) => c.planta_id === planta.id);
 
   const handleEstudarPlanta = async (p: PlantaCatalogo) => {
+    /* Fase 4 — gate de login. Sem `gameState` não há conta, e sem conta não
+       há onde creditar o XP. A RPC `estudar_planta` já recusaria (ela resolve
+       o usuário por `auth.uid()`, que viria nulo), mas o visitante veria só
+       um erro genérico; aqui ele vê o convite. */
+    if (!gameState) {
+      setPedindoLogin(true);
+      return;
+    }
+
     // Guarda contra duplo clique/duplo disparo: sem isto, dois cliques antes
     // da primeira resposta voltar tentariam persistir e conceder XP duas
     // vezes — o upsert em user_colecao é inofensivo a isso, mas o ganho de
@@ -110,6 +122,12 @@ export function FichaBotanicaClient({
         onEstudarPlanta={handleEstudarPlanta}
       />
       {erro && <p className="text-xs text-red-600 font-semibold text-center mt-3">{erro}</p>}
+
+      <ExigeLoginModal
+        aberto={pedindoLogin}
+        onFechar={() => setPedindoLogin(false)}
+        acao={`estudar ${planta.nome_popular} e ganhar ${planta.xp_recompensa} XP`}
+      />
     </>
   );
 }

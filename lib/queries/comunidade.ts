@@ -86,7 +86,19 @@ export async function getPosts(): Promise<PostComunidade[]> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) throw new Error('Usuário não autenticado.');
+
+  /* Fase 4 (modo visitante): a ausência de sessão deixou de ser erro.
+     O `throw new Error('Usuário não autenticado.')` que ficava aqui barrava
+     cedo demais — o mural inteiro (posts, autores, contagens) é informação
+     pública desde a Migration 11; o ÚNICO campo desta função que depende de
+     identidade é `curtido_pelo_usuario`, e para quem não tem conta ele é
+     `false` por definição, não indeterminado.
+
+     A leitura em si é garantida pelo banco, não por esta função: sem sessão,
+     a requisição chega ao Supabase como role `anon`, que só alcança as
+     tabelas liberadas na Migration 11. Se um dia alguém apontar esta query
+     para uma tabela sem policy de `anon`, ela volta vazia — não vaza. */
+  const usuarioId = user?.id ?? null;
 
   const { data, error } = await supabase
     .from('comunidade_posts')
@@ -119,7 +131,9 @@ export async function getPosts(): Promise<PostComunidade[]> {
       conteudo: post.conteudo,
       tag: post.tag,
       curtidas: post.post_curtidas.length,
-      curtido_pelo_usuario: post.post_curtidas.some((c) => c.user_id === user.id),
+      // Visitante nunca curtiu nada — `false`, não indeterminado.
+      curtido_pelo_usuario:
+        usuarioId !== null && post.post_curtidas.some((c) => c.user_id === usuarioId),
       respostas_count: post.respostas_post[0]?.count ?? 0,
       criado_em: post.criado_em,
       imagem: post.imagem ?? undefined,

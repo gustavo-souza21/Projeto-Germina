@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPlantasCatalogo, getColecao } from '../../../../lib/queries/colecao';
-import { getGameState } from '../../../../lib/queries/perfil';
+import { getGameStateOpcional } from '../../../../lib/queries/perfil';
 import { slugify } from '../../../../lib/slug';
 import { FichaBotanicaClient } from '../../../../components/FichaBotanicaClient';
 
@@ -54,9 +54,11 @@ export default async function FichaBotanicaPage({ params }: PageProps) {
     notFound();
   }
 
-  // Em paralelo: getColecao() e getGameState() são leituras independentes do
-  // mesmo usuário autenticado — não há motivo pra serializar.
-  const [colecao, gameState] = await Promise.all([getColecao(), getGameState()]);
+  // Em paralelo: leituras independentes, não há motivo pra serializar.
+  // Fase 4: a ficha é visível a visitante, então as duas precisam tolerar
+  // ausência de sessão — `getColecao()` devolve lista vazia (nada estudado) e
+  // `getGameStateOpcional()` devolve `null` (não existe XP sem conta).
+  const [colecao, gameState] = await Promise.all([getColecao(), getGameStateOpcional()]);
 
   return <FichaBotanicaClient planta={planta} colecaoInicial={colecao} gameStateInicial={gameState} />;
 }

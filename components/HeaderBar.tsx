@@ -8,8 +8,9 @@ export function HeaderBar({
   gameState,
   nivelNome,
 }: {
-  profile: Profile;
-  gameState: GameState;
+  /** `null` = visitante navegando sem conta (Fase 4). */
+  profile: Profile | null;
+  gameState: GameState | null;
   nivelNome: string;
 }) {
   return (

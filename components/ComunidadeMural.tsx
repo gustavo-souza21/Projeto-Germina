@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation';
 import { PostComunidade, Profile, ItemTroca } from '../lib/types';
 import { MessageSquare, Heart, Share2, Send, Users, Sprout } from 'lucide-react';
 import { TrocaModal } from './comunidade/TrocaModal';
+import { ExigeLoginModal } from './ExigeLoginModal';
 import { createClient } from '../lib/supabase/client';
 
 interface ComunidadeMuralProps {
-  profile: Profile;
+  /** `null` = visitante lendo o mural sem conta (Fase 4). */
+  profile: Profile | null;
   postsIniciais: PostComunidade[];
   trocas: ItemTroca[];
 }
@@ -23,6 +25,8 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
   const [copiadoId, setCopiadoId] = useState<string | null>(null);
   const [publicando, setPublicando] = useState(false);
   const [erroPost, setErroPost] = useState<string | null>(null);
+  // Fase 4: qual ação o visitante tentou. `null` = modal fechado.
+  const [acaoExigindoLogin, setAcaoExigindoLogin] = useState<string | null>(null);
 
   // `posts` só é inicializado a partir de `postsIniciais` no primeiro render
   // (comportamento normal do useState) — sem este efeito, o router.refresh()
@@ -35,6 +39,14 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
 
   const handlePublicarPost = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Gate de login (Fase 4). O RLS de `comunidade_posts` já recusaria o
+    // insert de um visitante; o que ele não faz é explicar por quê.
+    if (!profile) {
+      setAcaoExigindoLogin('publicar no mural');
+      return;
+    }
+
     const conteudo = novoPostTexto.trim();
     if (!conteudo || publicando) return;
 
@@ -68,6 +80,14 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
   };
 
   const handleToggleCurtida = async (post: PostComunidade) => {
+    // Gate antes da atualização otimista: sem esta guarda, o visitante veria
+    // o coração acender e apagar sozinho meio segundo depois, quando o RLS
+    // recusasse a escrita e o rollback rodasse.
+    if (!profile) {
+      setAcaoExigindoLogin('curtir este post');
+      return;
+    }
+
     const curtidoAntes = post.curtido_pelo_usuario;
     const curtidasAntes = post.curtidas;
 
@@ -153,10 +173,13 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
           <div className="bg-card-bg rounded-2xl p-4 sm:p-5 border border-black/[0.04] shadow-card space-y-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-green-soft text-green-deep font-bold flex items-center justify-center text-sm">
-                {profile.nome_completo.charAt(0)}
+                {/* Visitante não tem nome para a inicial (Fase 4). */}
+                {profile ? profile.nome_completo.charAt(0) : '?'}
               </div>
               <div>
-                <p className="text-xs font-bold text-green-deep">{profile.nome_completo}</p>
+                <p className="text-xs font-bold text-green-deep">
+                  {profile ? profile.nome_completo : 'Visitante'}
+                </p>
                 {/* A linha de instituição saiu daqui na Fase 2 (achados #3/#4).
                     Este bloco é a prévia de como o post vai aparecer no Mural —
                     e o Mural não mostra mais instituição de ninguém. Mostrar o
@@ -165,7 +188,9 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
                     hardcoded 'UFAM' — ou seja, rotulava como UFAM todo usuário
                     que nunca preencheu o campo, que é 100% deles no primeiro
                     acesso, bem no instante anterior a publicar algo público. */}
-                <p className="text-[10px] text-ink-muted">Publicando no Mural</p>
+                <p className="text-[10px] text-ink-muted">
+                  {profile ? 'Publicando no Mural' : 'Entre para publicar'}
+                </p>
               </div>
             </div>
 
@@ -312,7 +337,13 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
                   </div>
                   <p className="text-ink-muted text-[11px]">Procura: {item.procura}</p>
                   <button
-                    onClick={() => setTrocaSelecionada(item)}
+                    onClick={() =>
+                      // Fase 4: o anúncio é público (o visitante vê o que a
+                      // comunidade está trocando), propor não é.
+                      profile
+                        ? setTrocaSelecionada(item)
+                        : setAcaoExigindoLogin('propor uma troca')
+                    }
                     className="w-full mt-1 bg-green-deep text-white text-[11px] font-bold py-1 rounded-lg hover:bg-green-main transition-colors"
                   >
                     Propor Troca
@@ -343,6 +374,12 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
           onFechar={() => setTrocaSelecionada(null)}
         />
       )}
+
+      <ExigeLoginModal
+        aberto={acaoExigindoLogin !== null}
+        onFechar={() => setAcaoExigindoLogin(null)}
+        acao={acaoExigindoLogin ?? ''}
+      />
     </div>
   );
 };

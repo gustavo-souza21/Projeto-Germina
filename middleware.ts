@@ -28,13 +28,46 @@ const ROTAS_PUBLICAS = [
   '/privacidade',
 ];
 
+/* ----------------------------------------------------------------------------
+   Fase 4 — MODO VISITANTE.
+
+   Categoria nova, deliberadamente separada de ROTAS_PUBLICAS acima. As duas
+   deixam passar sem sessão, mas significam coisas diferentes, e juntá-las
+   numa lista só apagaria a distinção que importa:
+
+     • ROTAS_PUBLICAS são telas de AUTENTICAÇÃO e institucionais (login,
+       cadastro, termos). Não têm shell do app, e quem está logado é
+       redirecionado para fora de algumas delas (ROTAS_SOMENTE_DESLOGADO).
+     • ROTAS_PUBLICAS_LEITURA são telas DO APP que qualquer um pode ver, mas
+       só ler: montam o shell completo, servem tanto visitante quanto usuário
+       logado (para quem, aliás, não muda nada), e as ações de escrita dentro
+       delas são barradas individualmente, pelo gate de login no cliente e
+       pelo RLS no banco.
+
+   O escopo é o confirmado com o Gustavo (seção 8.2 do relatório de
+   auditoria): catálogo de plantas e mural da comunidade. `/scanner` fica
+   FORA de propósito, mesmo sendo "só olhar" — é o único endpoint que gasta
+   API paga por chamada (achado #6), e abri-lo ao anônimo transformaria uma
+   dívida limitada a "qualquer usuário autenticado" em "qualquer pessoa na
+   internet".
+   ------------------------------------------------------------------------- */
+const ROTAS_PUBLICAS_LEITURA = ['/biblioteca', '/comunidade'];
+
 // Rotas de auth "reversas": só fazem sentido pra quem NÃO está logado. Um
 // usuário já autenticado que aterrissa aqui (link antigo, aba esquecida) é
 // mandado direto pro dashboard em vez de ver a tela de login de novo.
 const ROTAS_SOMENTE_DESLOGADO = ['/splash', '/login', '/cadastro'];
 
+function casaComAlguma(pathname: string, rotas: string[]): boolean {
+  return rotas.some((rota) => pathname === rota || pathname.startsWith(`${rota}/`));
+}
+
 function ehRotaPublica(pathname: string): boolean {
-  return ROTAS_PUBLICAS.some((rota) => pathname === rota || pathname.startsWith(`${rota}/`));
+  return casaComAlguma(pathname, ROTAS_PUBLICAS);
+}
+
+function ehRotaPublicaLeitura(pathname: string): boolean {
+  return casaComAlguma(pathname, ROTAS_PUBLICAS_LEITURA);
 }
 
 export async function middleware(request: NextRequest) {
@@ -78,9 +111,25 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (!user && !ehRotaPublica(pathname)) {
+  if (!user && !ehRotaPublica(pathname) && !ehRotaPublicaLeitura(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
+
+    /* `?next=` — Fase 4.
+
+       Antes, o visitante que tentasse abrir /jardim era jogado em /login e,
+       depois de entrar, caía em /inicio: o destino se perdia no caminho e ele
+       tinha que navegar de novo até onde queria. Com o modo visitante isso
+       deixa de ser um detalhe e vira o percurso NORMAL do app — a pessoa
+       explora sem conta, esbarra numa tela que exige login, entra, e o certo
+       é continuar de onde parou.
+
+       Só o path e a query da própria requisição entram aqui (nunca uma URL
+       recebida de fora), e /login valida o valor antes de usar — um `next`
+       apontando para outro domínio seria um open redirect. */
+    const destino = pathname + request.nextUrl.search;
+    url.search = `next=${encodeURIComponent(destino)}`;
+
     return NextResponse.redirect(url);
   }
 

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { BookOpen, Sprout, Trophy, ChevronRight } from 'lucide-react';
 import { createClient } from '../../../lib/supabase/client';
+import { destinoPosLogin } from '../../../lib/rota-retorno';
 
 const SLIDES = [
   {
@@ -23,8 +24,28 @@ const SLIDES = [
   },
 ];
 
+// useSearchParams() exige fronteira de Suspense (mesmo padrão de /login e
+// /redefinir-senha) — sem ela o build de produção falha nesta página.
 export default function TutorialPage() {
+  return (
+    <Suspense fallback={null}>
+      <TutorialConteudo />
+    </Suspense>
+  );
+}
+
+function TutorialConteudo() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  /* Fase 4 — o tutorial deixou de ser um beco para o `?next=`.
+     O visitante que tenta abrir /jardim é mandado para /login?next=/jardim;
+     se ele criar conta ali, cai primeiro no tutorial (que tem precedência,
+     porque ninguém deve pular o walkthrough no primeiro acesso) — e, antes
+     desta mudança, o destino morria aqui: ele terminava o tutorial e ia parar
+     em /inicio, tendo que procurar de novo o que já tinha achado. Justo o
+     percurso mais comum de quem acabou de vir do modo visitante. */
+  const destinoFinal = destinoPosLogin(searchParams.get('next'));
   const [slideAtual, setSlideAtual] = useState(0);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -66,7 +87,7 @@ export default function TutorialPage() {
     // servidor por irParaProximaTela() (app/(auth)/login) — sem
     // localStorage: aquele caminho antigo não sincronizava entre
     // dispositivos e já foi substituído do lado da leitura desde o A8.
-    router.push('/inicio');
+    router.push(destinoFinal);
   };
 
   return (

@@ -12,7 +12,16 @@ export async function getColecao(): Promise<UserColecao[]> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) throw new Error('Usuário não autenticado.');
+
+  // Fase 4 (modo visitante): sem sessão, devolve coleção vazia em vez de
+  // lançar exceção. /biblioteca é uma das duas rotas abertas em leitura, e a
+  // coleção aqui só serve para marcar quais fichas o usuário já estudou —
+  // para quem não tem conta, a resposta honesta é "nenhuma", não um erro.
+  //
+  // Não há consulta ao banco neste caminho: `user_colecao` não concede nada
+  // ao role `anon` (Migration 11 deixa essa tabela de fora de propósito), e
+  // uma consulta que só poderia voltar vazia é ida de rede desperdiçada.
+  if (!user) return [];
 
   const { data, error } = await supabase
     .from('user_colecao')

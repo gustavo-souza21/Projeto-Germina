@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { PostComunidade, RespostaPost, Profile } from '../../lib/types';
 import { ArrowLeft, Heart, Send } from 'lucide-react';
 import { createClient } from '../../lib/supabase/client';
+import { ExigeLoginModal } from '../ExigeLoginModal';
 
 export function PostDetalheClient({
   post,
@@ -13,7 +14,8 @@ export function PostDetalheClient({
 }: {
   post: PostComunidade;
   respostasIniciais: RespostaPost[];
-  profile: Profile;
+  /** `null` = visitante lendo o post sem conta (Fase 4). */
+  profile: Profile | null;
 }) {
   const router = useRouter();
   const [curtido, setCurtido] = useState(post.curtido_pelo_usuario);
@@ -22,6 +24,8 @@ export function PostDetalheClient({
   const [novaResposta, setNovaResposta] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [erroResposta, setErroResposta] = useState<string | null>(null);
+  // Fase 4: qual ação o visitante tentou. `null` = modal fechado.
+  const [acaoExigindoLogin, setAcaoExigindoLogin] = useState<string | null>(null);
 
   // Mesmo motivo do ComunidadeMural: sem isto, o router.refresh() disparado
   // depois de responder (abaixo) não teria efeito visível aqui — `respostas`
@@ -31,6 +35,13 @@ export function PostDetalheClient({
   }, [respostasIniciais]);
 
   const handleToggleCurtida = async () => {
+    // Gate antes da atualização otimista (Fase 4): sem isto o visitante
+    // veria o coração acender e apagar sozinho quando o RLS recusasse.
+    if (!profile) {
+      setAcaoExigindoLogin('curtir este post');
+      return;
+    }
+
     const curtidoAntes = curtido;
     const curtidasAntes = curtidas;
 
@@ -53,6 +64,12 @@ export function PostDetalheClient({
 
   const handleResponder = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!profile) {
+      setAcaoExigindoLogin('responder neste post');
+      return;
+    }
+
     const conteudo = novaResposta.trim();
     if (!conteudo || enviando) return;
 
@@ -181,6 +198,12 @@ export function PostDetalheClient({
           <p className="text-xs text-ink-muted text-center py-4">Seja o primeiro a responder este post.</p>
         )}
       </div>
+
+      <ExigeLoginModal
+        aberto={acaoExigindoLogin !== null}
+        onFechar={() => setAcaoExigindoLogin(null)}
+        acao={acaoExigindoLogin ?? ''}
+      />
     </div>
   );
 }

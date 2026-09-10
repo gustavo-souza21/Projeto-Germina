@@ -61,9 +61,18 @@ export function ContaTab({ profile, gameState }: { profile: Profile; gameState: 
         <ChevronRight className="w-4 h-4 text-locked" />
       </Link>
 
+      {/* ACHADO #10 — de rótulo estático a status real.
+          Dizia "Modo Demonstração Offline com Sincronização Local" para todo
+          mundo, sempre, enquanto o app roda 100% online contra o Supabase —
+          nunca houve modo offline nem sincronização local. A Fase 4 não
+          removeu a frase: substituiu-a pelo estado que ela fingia descrever.
+          Como /perfil exige login, quem chega aqui está necessariamente
+          autenticado — daí o texto ser afirmativo, e não condicional. O
+          equivalente para visitante ("Navegando sem conta") vive na Sidebar e
+          no HeaderBar, que são os que ele de fato enxerga. */}
       <div className="flex items-center gap-2 text-[11px] text-ink-muted px-1">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-        <span>Modo Demonstração Offline com Sincronização Local</span>
+        <span>Conta conectada — seu progresso é salvo automaticamente</span>
       </div>
     </div>
   );

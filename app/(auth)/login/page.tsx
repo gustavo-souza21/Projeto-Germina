@@ -1,14 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail, Lock, Eye, EyeOff, Sprout } from 'lucide-react';
 import { createClient } from '../../../lib/supabase/client';
 import { traduzErroAuth } from '../../../lib/auth-errors';
+import { rotaInternaSegura } from '../../../lib/rota-retorno';
 
+// useSearchParams() exige fronteira de Suspense (mesmo padrão já usado em
+// /redefinir-senha) — sem ela o build de produção falha nesta página.
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginConteudo />
+    </Suspense>
+  );
+}
+
+function LoginConteudo() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  /* Fase 4: para onde voltar depois de entrar.
+     Chega de duas origens — do middleware, quando o visitante tenta abrir uma
+     rota protegida, e dos links de "Entrar" que o próprio app monta com o
+     destino embutido. Sempre validado antes de usar (ver lib/rota-retorno.ts):
+     um `next` apontando para fora do domínio seria um open redirect, e esta
+     tela é justamente a que recebe o valor vindo da URL. */
+  const destinoAposLogin = rotaInternaSegura(searchParams.get('next'));
+
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -33,11 +54,31 @@ export default function LoginPage() {
       // seguro: mostrar o tutorial de novo pra quem já viu é inofensivo;
       // pular um tutorial pendente por engano seria pior.
       console.error('Falha ao verificar tutorial_concluido:', error.message);
-      router.push('/tutorial');
+      router.push(
+        destinoAposLogin
+          ? `/tutorial?next=${encodeURIComponent(destinoAposLogin)}`
+          : '/tutorial'
+      );
       return;
     }
 
-    router.push(data.tutorial_concluido ? '/inicio' : '/tutorial');
+    // O tutorial tem precedência sobre o `?next=`: quem nunca viu o
+    // walkthrough do core loop passa por ele antes, mesmo tendo pedido uma
+    // tela específica. Só depois o destino guardado vale — e para quem já
+    // concluiu, ele leva direto aonde a pessoa tentou ir.
+    if (!data.tutorial_concluido) {
+      // O destino viaja junto: o tutorial o reaplica no fim (ver
+      // app/(auth)/tutorial/page.tsx). Sem isto, quem veio do modo visitante
+      // com um destino em mãos o perderia ao passar pelo walkthrough.
+      router.push(
+        destinoAposLogin
+          ? `/tutorial?next=${encodeURIComponent(destinoAposLogin)}`
+          : '/tutorial'
+      );
+      return;
+    }
+
+    router.push(destinoAposLogin ?? '/inicio');
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -67,21 +108,35 @@ export default function LoginPage() {
     // resultado síncrono pra tratar aqui. O retorno do Google cai em
     // /auth/callback, que troca o code pela sessão e só então navega pra
     // /inicio (ver app/auth/callback/route.ts).
+    // O destino do modo visitante também atravessa o login por Google: sem
+    // isto, entrar com Google a partir de um gate ("entre para curtir") jogaria
+    // a pessoa em /inicio, e só o login por e-mail respeitaria o `?next=`.
+    const destinoOAuth = destinoAposLogin ?? '/inicio';
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=/inicio` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(destinoOAuth)}`,
+      },
     });
     if (error) setErro(traduzErroAuth(error.message));
   };
 
-  const handleModoDemo = () => {
-    // Caminho já sinalizado como órfão no relatório de status (fora do
-    // escopo desta mutação): o middleware exige sessão real (A8) e vai
-    // redirecionar de volta pra /login no primeiro acesso a qualquer rota
-    // protegida. Sem um usuário real não há profiles.tutorial_concluido pra
-    // consultar, então isto vai direto pro tutorial em vez de chamar
-    // irParaProximaTela (que agora exige um userId de verdade).
-    router.push('/tutorial');
+  /* ACHADO #7 — de botão órfão a porta de entrada.
+
+     Este botão era "Modo demonstração (offline)" e levava a `/tutorial`, de
+     onde o middleware devolvia a pessoa para `/login` no primeiro passo:
+     um caminho que prometia entrar sem conta e não entregava. A auditoria o
+     classificou como 🟡 e o Gustavo pediu explicitamente para REAPROVEITÁ-LO
+     em vez de removê-lo — a intenção original (deixar olhar sem cadastro)
+     estava certa, faltava o app suportá-la.
+
+     Agora ele faz exatamente o que anunciava, e sem "modo demonstração": não
+     há dado falso nem sincronização local nenhuma — é o app real, lendo o
+     banco real, com as duas rotas que fazem sentido sem conta. Vai para a
+     Biblioteca porque é a que se explica sozinha: 15 fichas de curadoria,
+     sem depender de haver movimento na comunidade. */
+  const handleExplorarSemConta = () => {
+    router.push('/biblioteca');
   };
 
   return (
@@ -172,11 +227,15 @@ export default function LoginPage() {
 
           <button
             type="button"
-            onClick={handleModoDemo}
-            className="text-xs text-[var(--color-blue-deep)]/50 underline"
+            onClick={handleExplorarSemConta}
+            className="text-sm font-semibold text-[var(--color-green-main)] underline underline-offset-2"
           >
-            Entrar em modo demonstração (offline)
+            Explorar sem criar conta
           </button>
+          <p className="text-[11px] text-center text-[var(--color-blue-deep)]/50 -mt-1 max-w-[16rem]">
+            Você pode ver o catálogo de plantas e o mural da comunidade. Plantar, estudar e
+            publicar precisam de conta.
+          </p>
         </div>
       </div>
     </main>

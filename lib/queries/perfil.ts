@@ -19,6 +19,45 @@ async function getAuthUser() {
   return { supabase, user };
 }
 
+/**
+ * Versões que devolvem `null` em vez de lançar exceção quando não há sessão
+ * (Fase 4 — modo visitante).
+ *
+ * POR QUE EXISTEM DUAS VARIANTES, EM VEZ DE AFROUXAR AS ORIGINAIS
+ *
+ * `getPerfil()` e `getGameState()` lançarem exceção sem usuário é a coisa
+ * CERTA para /inicio, /jardim, /perfil, /configuracoes e /desafio-diario:
+ * essas telas não têm o que mostrar sem uma conta, e uma exceção alta e
+ * clara é melhor do que renderizar um perfil vazio como se fosse um estado
+ * legítimo. Se eu simplesmente passasse as originais a devolver `null`, todo
+ * chamador teria de lembrar de tratar isso — e o dia em que alguém
+ * esquecesse, a tela mostraria "0 XP" para um usuário real com um erro de
+ * sessão, em vez de estourar.
+ *
+ * Então o `null` fica restrito a quem de fato sabe conviver com ele: o
+ * layout de `(app)`, que precisa montar o shell (Sidebar/HeaderBar) tanto
+ * para visitante quanto para quem está logado.
+ */
+export async function getPerfilOpcional(): Promise<Profile | null> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  return getPerfil();
+}
+
+export async function getGameStateOpcional(): Promise<GameState | null> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  return getGameState();
+}
+
 export async function getPerfil(): Promise<Profile> {
   const { supabase, user } = await getAuthUser();
 
