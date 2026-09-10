@@ -1,9 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI, Type } from "@google/genai";
+import { createClient } from "../../../lib/supabase/server";
 
 // Portado de server.ts (Express) do protótipo AI Studio.
 // Lógica idêntica, apenas adaptada para o formato de Route Handler do App Router.
 export async function POST(req: NextRequest) {
+  /* --------------------------------------------------------------------------
+     Achado #6 da auditoria (Fase 3, 09/09/2026) — checagem própria de sessão.
+
+     Antes, esta rota não verificava autenticação em lugar nenhum: dependia
+     100% do `middleware.ts` como única camada. Duas razões pra isso não
+     bastar:
+
+       1. É a única rota do app que gasta dinheiro por chamada (Gemini). Uma
+          camada só de proteção para um endpoint pago é pouco — qualquer
+          mudança futura no matcher do middleware (uma exclusão de path mal
+          escrita, por exemplo) abriria um endpoint de custo direto para a
+          internet inteira, sem nada por baixo pra segurar.
+       2. A Fase 4 vai introduzir visitante sem sessão navegando pelo app. A
+          partir dali, "o middleware garante que só passa gente logada" deixa
+          de ser verdade por construção — o middleware vai passar a deixar
+          visitante entrar de propósito. Esta checagem é pré-requisito
+          daquela fase, não um extra.
+
+     Padrão idêntico ao de `app/api/conta/route.ts`: o usuário vem sempre de
+     `auth.getUser()` sobre os cookies da própria requisição, nunca de algo
+     enviado no corpo.
+     ----------------------------------------------------------------------- */
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
+  }
+
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     const { imageBase64, mimeType, description } = await req.json();

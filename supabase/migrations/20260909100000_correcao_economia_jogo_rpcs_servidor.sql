@@ -156,6 +156,25 @@ grant select on public.catalogo_desafios to authenticated;
 --     authenticated no fim deste arquivo — com invoker, a própria função
 --     perderia o privilégio de escrever.
 -- ----------------------------------------------------------------------------
+-- ATENÇÃO — este DROP é parte da correção, não limpeza cosmética.
+--
+-- A versão vulnerável da Migration 7 tem OUTRA assinatura
+-- (p_user_id, p_terreno_id, p_planta_id, p_xp, p_moedas, p_sementes,
+-- p_texto_atividade, p_icone_atividade). No Postgres, `create or replace
+-- function` só substitui quando a lista de argumentos é idêntica — com
+-- assinatura diferente, ele CRIA UMA SOBRECARGA e deixa a antiga viva ao
+-- lado da nova.
+--
+-- Sem este DROP, a função que aceita p_xp/p_moedas/p_sementes do chamador
+-- continuaria existindo e chamável (`.rpc('realizar_colheita', { p_user_id,
+-- p_xp, ... })`) — ou seja, o achado #2 continuaria aberto por trás de uma
+-- correção que parecia aplicada. Descoberto ao rodar as 10 migrations em
+-- sequência num Postgres 16 limpo, na Fase 3; o erro que denunciou isso foi
+-- o `comment on function` abaixo falhando com "function name is not unique".
+drop function if exists public.realizar_colheita(
+  uuid, smallint, text, int, int, int, text, text
+);
+
 create or replace function public.realizar_colheita(p_terreno_id smallint)
 returns setof public.game_state
 language plpgsql
@@ -221,7 +240,9 @@ begin
 end;
 $$;
 
-comment on function public.realizar_colheita is
+-- Assinatura explícita no COMMENT (e nos demais deste arquivo): sem ela, o
+-- Postgres recusa se houver qualquer homônima, e o erro é obscuro.
+comment on function public.realizar_colheita(smallint) is
   'Colheita atômica — recompensa fixa calculada aqui dentro (nunca recebida do chamador), exige planta_id ocupado e tempo de crescimento decorrido. Substitui a versão da Migration 7, que confiava em p_xp/p_moedas/p_sementes do cliente.';
 
 revoke all on function public.realizar_colheita(smallint) from public;
@@ -310,7 +331,7 @@ begin
 end;
 $$;
 
-comment on function public.plantar_semente is
+comment on function public.plantar_semente(smallint, text) is
   'Debita 1 semente e ocupa o terreno — plantado_em é sempre now() (nunca recebido do cliente), e o nível do usuário é validado contra catalogo_niveis antes de liberar o canteiro.';
 
 revoke all on function public.plantar_semente(smallint, text) from public;
@@ -364,7 +385,7 @@ begin
 end;
 $$;
 
-comment on function public.adubar_terreno is
+comment on function public.adubar_terreno(smallint) is
   'Debita 1 adubo e soma o bônus de tempo ao terreno — valor do bônus fixo aqui dentro, nunca recebido do cliente.';
 
 revoke all on function public.adubar_terreno(smallint) from public;
@@ -424,7 +445,7 @@ begin
 end;
 $$;
 
-comment on function public.comprar_item_loja is
+comment on function public.comprar_item_loja(text) is
   'Debita o custo e credita o recurso do item comprado — preço/quantidade sempre lidos de catalogo_itens_loja, nunca do cliente (fecha a mesma classe de bug do QA-03, agora também no servidor).';
 
 revoke all on function public.comprar_item_loja(text) from public;
@@ -483,7 +504,7 @@ begin
 end;
 $$;
 
-comment on function public.estudar_planta is
+comment on function public.estudar_planta(text, text) is
   'Credita XP e registra a planta como estudada — recusa repetir a mesma planta (antes só a UI evitava isso), recompensa sempre lida de catalogo_plantas_xp. p_planta_nome é só cosmético (texto do log de atividade), não influencia o valor creditado.';
 
 revoke all on function public.estudar_planta(text, text) from public;
@@ -591,7 +612,7 @@ begin
 end;
 $$;
 
-comment on function public.concluir_desafio_diario is
+comment on function public.concluir_desafio_diario(text, int, int) is
   'Registra a conclusão do Desafio Diário, credita xp/moedas (sempre limitado ao teto de catalogo_desafios) e recalcula a ofensiva no servidor. "Hoje" é sempre calculado aqui (fuso America/Manaus), nunca recebido do cliente. NÃO valida as respostas do quiz em si — ver nota no topo do arquivo.';
 
 revoke all on function public.concluir_desafio_diario(text, int, int) from public;

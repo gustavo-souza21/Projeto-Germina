@@ -673,6 +673,23 @@ export type Database = {
           xp: number
         }[]
       }
+      // Migration 10 (20260909140000_trocas_propostas_status_servidor.sql).
+      // Ainda sem chamador na UI — não existe tela de aceitar/recusar troca.
+      // Está aqui porque este arquivo espelha o schema: quem for escrever
+      // essa tela depois encontra o tipo pronto, em vez de um erro de
+      // compilação que convide a afrouxar a tipagem.
+      responder_proposta_troca: {
+        Args: { p_proposta_id: string; p_status: string }
+        Returns: {
+          criado_em: string
+          id: string
+          item_troca_id: string
+          mensagem: string | null
+          oferta_texto: string
+          proponente_user_id: string
+          status: string
+        }[]
+      }
       uuid_generate_v1: { Args: never; Returns: string }
       uuid_generate_v1mc: { Args: never; Returns: string }
       uuid_generate_v3: {

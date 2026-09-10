@@ -86,6 +86,17 @@ export const ScannerIA: React.FC<ScannerIAProps> = ({ onEstudarScan }) => {
         }),
       });
 
+      // Sessão ausente/expirada tem tratamento próprio: desde a Fase 3 a rota
+      // /api/scan-plant valida a sessão por conta própria (achado #6) e
+      // responde 401. Cair no catch genérico aqui diria "verifique sua
+      // conexão" para quem está só deslogado — mesma classe de problema que
+      // este componente já corrigiu antes (a tela dizendo algo que não é o
+      // que está de fato acontecendo).
+      if (response.status === 401) {
+        setErrorMessage('Sua sessão expirou. Entre de novo para usar o Scanner com IA.');
+        return;
+      }
+
       const json = await response.json();
 
       if (json.data) {

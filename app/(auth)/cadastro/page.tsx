@@ -6,15 +6,11 @@ import { useRouter } from 'next/navigation';
 import { User, Mail, Phone, Lock, Eye, EyeOff, Check, X, Sprout } from 'lucide-react';
 import { createClient } from '../../../lib/supabase/client';
 import { traduzErroAuth } from '../../../lib/auth-errors';
-
-// Regras de senha combinadas: 1 maiúscula, 1 minúscula, 1 número, 1 caractere especial, mín. 8
-const REGRAS_SENHA = [
-  { id: 'tamanho', label: 'Mínimo de 8 caracteres', teste: (s: string) => s.length >= 8 },
-  { id: 'maiuscula', label: 'Uma letra maiúscula', teste: (s: string) => /[A-Z]/.test(s) },
-  { id: 'minuscula', label: 'Uma letra minúscula', teste: (s: string) => /[a-z]/.test(s) },
-  { id: 'numero', label: 'Um número', teste: (s: string) => /[0-9]/.test(s) },
-  { id: 'especial', label: 'Um caractere especial (!@#$...)', teste: (s: string) => /[^A-Za-z0-9]/.test(s) },
-];
+// Fase 3, achado #5: as regras de senha viviam copiadas aqui E em
+// redefinir-senha. Agora vêm de um lugar só — ver lib/senha.ts para o limite
+// desta validação (é feedback de UI, não defesa; o servidor tem a política
+// dele, no painel do Supabase).
+import { avaliarSenha } from '../../../lib/senha';
 
 export default function CadastroPage() {
   const router = useRouter();
@@ -30,10 +26,7 @@ export default function CadastroPage() {
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
-  const validacoesSenha = useMemo(
-    () => REGRAS_SENHA.map((r) => ({ ...r, ok: r.teste(senha) })),
-    [senha]
-  );
+  const validacoesSenha = useMemo(() => avaliarSenha(senha), [senha]);
   const senhaValida = validacoesSenha.every((r) => r.ok);
   const senhasConferem = senha.length > 0 && senha === confirmarSenha;
   const formValido =

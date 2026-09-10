@@ -6,15 +6,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { KeyRound, Lock, Eye, EyeOff, Check, X, ArrowLeft, Sprout } from 'lucide-react';
 import { createClient } from '../../../lib/supabase/client';
 import { traduzErroAuth } from '../../../lib/auth-errors';
-
-// Mesmas regras usadas no Cadastro — senha nova precisa seguir o mesmo padrão
-const REGRAS_SENHA = [
-  { id: 'tamanho', label: 'Mínimo de 8 caracteres', teste: (s: string) => s.length >= 8 },
-  { id: 'maiuscula', label: 'Uma letra maiúscula', teste: (s: string) => /[A-Z]/.test(s) },
-  { id: 'minuscula', label: 'Uma letra minúscula', teste: (s: string) => /[a-z]/.test(s) },
-  { id: 'numero', label: 'Um número', teste: (s: string) => /[0-9]/.test(s) },
-  { id: 'especial', label: 'Um caractere especial (!@#$...)', teste: (s: string) => /[^A-Za-z0-9]/.test(s) },
-];
+// "Mesmas regras usadas no Cadastro" agora é literal, não uma promessa em
+// comentário: as duas telas importam a MESMA lista (Fase 3, achado #5).
+// Antes eram duas cópias que só por sorte continuavam iguais — e esta aqui,
+// se ficasse para trás, viraria o caminho para contornar um endurecimento
+// feito no cadastro.
+import { avaliarSenha } from '../../../lib/senha';
 
 export default function RedefinirSenhaPage() {
   return (
@@ -41,10 +38,7 @@ function RedefinirSenhaConteudo() {
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState(false);
 
-  const validacoesSenha = useMemo(
-    () => REGRAS_SENHA.map((r) => ({ ...r, ok: r.teste(novaSenha) })),
-    [novaSenha]
-  );
+  const validacoesSenha = useMemo(() => avaliarSenha(novaSenha), [novaSenha]);
   const senhaValida = validacoesSenha.every((r) => r.ok);
   const senhasConferem = novaSenha.length > 0 && novaSenha === confirmarSenha;
   const formValido = codigo.trim().length > 0 && senhaValida && senhasConferem;
