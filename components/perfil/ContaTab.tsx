@@ -17,7 +17,17 @@ export function ContaTab({ profile, gameState }: { profile: Profile; gameState: 
           </div>
           <div>
             <span className="text-[10px] text-ink-muted block">Instituição</span>
-            <span className="font-bold text-green-deep">{profile.instituicao || 'UFAM'}</span>
+            {/* Fase 2 (achado #3): o fallback era 'UFAM' — ou seja, todo
+                usuário que nunca preencheu o campo (100% deles, já que o
+                cadastro nunca coletou isso) aparecia como sendo da UFAM.
+                Campo vazio agora se assume vazio. Esta tela é o perfil
+                privado do próprio usuário; o dado não aparece mais para
+                terceiros em lugar nenhum. */}
+            {profile.instituicao ? (
+              <span className="font-bold text-green-deep">{profile.instituicao}</span>
+            ) : (
+              <span className="font-bold text-locked italic">Não informada</span>
+            )}
           </div>
           <div>
             <span className="text-[10px] text-ink-muted block">Localização</span>

@@ -105,7 +105,17 @@ export function PostDetalheClient({
                   {post.autor_nivel}
                 </span>
               </div>
-              <p className="text-[11px] text-ink-muted">{post.autor_instituicao}</p>
+              {/* Instituição do autor removida na Fase 2 (achados #3/#4 da
+                  auditoria): texto livre, sem verificação, exibido como se
+                  fosse credencial acadêmica. No lugar, a data da publicação —
+                  que o detalhe do post não mostrava em canto nenhum. */}
+              <p className="text-[11px] text-ink-muted">
+                {new Date(post.criado_em).toLocaleDateString('pt-BR', {
+                  day: '2-digit',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </p>
             </div>
           </div>
           <span className="text-[10px] font-bold bg-blue-main/10 text-blue-main px-2 py-0.5 rounded-md">

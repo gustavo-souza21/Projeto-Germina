@@ -166,7 +166,21 @@ export interface PostComunidade {
   id: string;
   autor_nome: string;
   autor_nivel: string;
-  autor_instituicao: string;
+  /**
+   * `autor_instituicao` foi REMOVIDO daqui na Fase 2 da correção de
+   * autenticação/autorização (achados #3 e #4 da auditoria de 09/09/2026).
+   *
+   * O motivo não é técnico, é de veracidade: `profiles.instituicao` é texto
+   * livre, nunca coletado no cadastro e sem nenhuma verificação de domínio ou
+   * afiliação — qualquer pessoa podia digitar "UFAM" (ou "Harvard") e o Mural
+   * exibia isso ao lado do nome como se fosse credencial acadêmica conferida.
+   * A decisão de produto foi tirar o campo da exibição pública em vez de
+   * inventar um selo de verificação que o app não tem como sustentar: a
+   * instituição continua existindo em `profiles` (perfil privado do próprio
+   * usuário + dado de pesquisa da dissertação), só não é mais apresentada a
+   * terceiros. Se algum dia houver verificação real por e-mail institucional,
+   * este campo volta — junto com o selo que o justifique, nunca sozinho.
+   */
   conteudo: string;
   tag: string;
   curtidas: number;

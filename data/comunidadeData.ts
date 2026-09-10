@@ -1,11 +1,21 @@
 import { PostComunidade, RespostaPost, ItemTroca } from '../lib/types';
 
+/**
+ * ⚠️ ARQUIVO MORTO — nenhum import aponta para cá (confirmado por grep em
+ * `app/`, `components/`, `lib/` e `data/`). É o mock da Comunidade de antes de
+ * `lib/queries/comunidade.ts` passar a ler do Supabase (A7). Continua sendo
+ * compilado, então na Fase 2 (09/09/2026) o campo `autor_instituicao` foi
+ * removido daqui junto com o resto — não por ser exibido em algum lugar, mas
+ * porque `PostComunidade` deixou de ter esse campo e este arquivo quebraria o
+ * `tsc`. Candidato a exclusão num lote de limpeza; deixado no lugar aqui para
+ * não misturar remoção de arquivo com correção de segurança.
+ */
+
 export const POSTS_INICIAIS: PostComunidade[] = [
   {
     id: 'p1',
     autor_nome: 'Profa. Sarah Batista de Freitas',
     autor_nivel: 'Nível 5 - Árvore',
-    autor_instituicao: 'UFAM - Ciências Biológicas',
     conteudo: 'Iniciamos hoje o mapeamento das 7 espécies medicinais da lista RENISUS no campus. O Crajiru (Pariri) apresentou excelente concentração de flavonoides no extrato!',
     tag: '#RENISUS',
     curtidas: 24,
@@ -17,7 +27,6 @@ export const POSTS_INICIAIS: PostComunidade[] = [
     id: 'p2',
     autor_nome: 'Manoel da Silva (Ribeirinho)',
     autor_nivel: 'Nível 4 - Flores',
-    autor_instituicao: 'Comunidade Rio Negro',
     conteudo: 'O chá de Capim Santo com Hortelã pimenta preparado na infusão tradicional tem ajudado muito os vizinhos para febre e calmante natural nesta semana.',
     tag: '#SaberesTradicionais',
     curtidas: 18,
@@ -29,7 +38,6 @@ export const POSTS_INICIAIS: PostComunidade[] = [
     id: 'p3',
     autor_nome: 'Lucas Andrade',
     autor_nivel: 'Nível 2 - Broto',
-    autor_instituicao: 'Estudante de Farmácia',
     conteudo: 'Alguém teria 2 sementes de Cumaru para troca? Posso oferecer adubo orgânico preparado no minhocário da faculdade!',
     tag: '#TrocaDeSementes',
     curtidas: 9,

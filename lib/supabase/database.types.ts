@@ -582,7 +582,17 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      // Migration 9 (20260909120000_perfis_publicos_view.sql). Escrito à mão,
+      // como o resto deste arquivo desde a Fase 1 — ainda não há projeto
+      // Supabase real para rodar `supabase gen types`.
+      perfis_publicos: {
+        Row: {
+          id: string
+          nome_completo: string
+          xp: number
+        }
+        Relationships: []
+      }
     }
     Functions: {
       adubar_terreno: {

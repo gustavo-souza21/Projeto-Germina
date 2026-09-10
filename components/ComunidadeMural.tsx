@@ -157,7 +157,15 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
               </div>
               <div>
                 <p className="text-xs font-bold text-green-deep">{profile.nome_completo}</p>
-                <p className="text-[10px] text-ink-muted">{profile.instituicao || 'UFAM'}</p>
+                {/* A linha de instituição saiu daqui na Fase 2 (achados #3/#4).
+                    Este bloco é a prévia de como o post vai aparecer no Mural —
+                    e o Mural não mostra mais instituição de ninguém. Mostrar o
+                    campo só aqui daria a impressão errada de que ele acompanha
+                    a publicação. Antes, além disso, esta linha caía no fallback
+                    hardcoded 'UFAM' — ou seja, rotulava como UFAM todo usuário
+                    que nunca preencheu o campo, que é 100% deles no primeiro
+                    acesso, bem no instante anterior a publicar algo público. */}
+                <p className="text-[10px] text-ink-muted">Publicando no Mural</p>
               </div>
             </div>
 
@@ -220,7 +228,16 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
                           {post.autor_nivel}
                         </span>
                       </div>
-                      <p className="text-[11px] text-ink-muted">{post.autor_instituicao}</p>
+                      {/* Instituição do autor removida na Fase 2 (achados #3/#4):
+                          era texto livre sem verificação nenhuma, exibido como
+                          credencial. O nível continua — esse sim é derivado do
+                          XP real, não autodeclarado. */}
+                      <p className="text-[11px] text-ink-muted">
+                        {new Date(post.criado_em).toLocaleDateString('pt-BR', {
+                          day: '2-digit',
+                          month: 'short',
+                        })}
+                      </p>
                     </div>
                   </div>
 

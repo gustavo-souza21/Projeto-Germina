@@ -60,7 +60,22 @@ export function EditarPerfilModal({
         </div>
         <div>
           <label className="text-xs font-bold text-ink-muted block mb-1">Instituição</label>
-          <input value={instituicao} onChange={(e) => setInstituicao(e.target.value)} className={inputClasses} />
+          <input
+            value={instituicao}
+            onChange={(e) => setInstituicao(e.target.value)}
+            className={inputClasses}
+            placeholder="Opcional"
+          />
+          {/* Fase 2 (achados #3/#4): o campo continua texto livre, sem
+              validação de domínio nem allowlist — o que mudou é que ele
+              deixou de ser exibido publicamente, então texto livre parou de
+              ser um problema de veracidade. Dizer isso aqui é parte da
+              correção: o usuário precisa saber que o que ele digita não é
+              conferido por ninguém e não vira credencial no Mural. */}
+          <p className="text-[10px] text-ink-muted mt-1 leading-snug">
+            Autodeclarada e visível só para você. Não aparece no Mural nem nos seus posts — é usada
+            como dado da pesquisa acadêmica do projeto.
+          </p>
         </div>
         <button type="submit" className="w-full py-3 rounded-2xl font-bold text-white bg-green-deep hover:bg-green-main">
           Salvar alterações

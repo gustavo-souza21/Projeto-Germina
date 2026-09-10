@@ -41,7 +41,13 @@ export const PerfilEConfiguracoes: React.FC<PerfilEConfiguracoesProps> = ({
   const conquistasDesbloqueadas = conquistas.filter((c) => c.desbloqueada).length;
 
   const handleShareProgress = async () => {
-    const texto = `Conheça o GERMINA! Já alcancei o Nível ${nivelAtual} (${nivelAtualInfo.nome}) com ${gameState.xp} XP estudando plantas medicinais da Amazônia na UFAM!`;
+    /* Fase 2 (achado #3) — este texto não estava no grep de `instituicao`
+       porque escrevia "na UFAM" como literal, mas é o mesmo problema na sua
+       forma mais pública: qualquer usuário que apertasse "Compartilhar"
+       enviava a terceiros uma frase afirmando que ele estuda na UFAM. O app
+       nunca soube disso de ninguém. O progresso (nível e XP) é real e
+       derivado do banco, então continua; a afiliação sai. */
+    const texto = `Conheça o GERMINA! Já alcancei o Nível ${nivelAtual} (${nivelAtualInfo.nome}) com ${gameState.xp} XP estudando plantas medicinais da Amazônia!`;
 
     if (navigator.share) {
       try {
@@ -83,9 +89,13 @@ export const PerfilEConfiguracoes: React.FC<PerfilEConfiguracoesProps> = ({
             </div>
 
             <p className="text-xs text-ink-muted font-bold">@{profile.nickname}</p>
-            <p className="text-xs text-emerald-800 font-bold">
-              {profile.instituicao || 'UFAM - Ciências Biológicas'}
-            </p>
+            {/* Fase 2 (achado #3): o fallback 'UFAM - Ciências Biológicas'
+                inventava um curso e uma instituição para quem nunca preencheu
+                nada — e como o cadastro nunca coletou o campo, isso valia para
+                todo mundo. Sem valor real, a linha simplesmente não existe. */}
+            {profile.instituicao && (
+              <p className="text-xs text-emerald-800 font-bold">{profile.instituicao}</p>
+            )}
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-ink-muted pt-1">
               <span>📧 {profile.email}</span>

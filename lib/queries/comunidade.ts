@@ -10,33 +10,73 @@ import { calcularNivel, PLANTAS_CATALOGO } from '../../data/plantasData';
  * autor_nivel em especial NUNCA pode vir de coluna, porque persistido ficaria
  * congelado no nível que o autor tinha ao publicar (mesma classe de bug do
  * QA-02, só que na Comunidade em vez do Jardim).
+ *
+ * Fase 2 da correção de autenticação/autorização (09/09/2026): `instituicao`
+ * saiu do embed. Não basta parar de RENDERIZAR o campo — enquanto ele viesse
+ * no SELECT, a instituição autodeclarada de todo autor continuaria trafegando
+ * para o navegador de qualquer usuário logado (visível no payload da
+ * requisição, mesmo sem aparecer na tela). Como a decisão foi que o dado é
+ * privado do dono, ele para de sair do banco aqui, não na camada de exibição.
  */
 
-// PostgREST embute relação 1:1 (FK com PK compartilhada, caso de
-// game_state.user_id) como objeto único — mas o formato exato pode variar
-// por versão da lib. Este helper deixa o código do lado de cá indiferente a
-// isso, aceitando tanto o objeto quanto um array de 1 posição.
-function unwrapToOne<T>(value: T | T[] | null | undefined): T | null {
-  if (Array.isArray(value)) return value[0] ?? null;
-  return value ?? null;
-}
+// `unwrapToOne` vivia aqui para normalizar o formato do embed 1:1 do
+// PostgREST (objeto vs. array de 1 posição, que varia por versão da lib).
+// Removido na Migration 9: não há mais embed de profiles/game_state neste
+// arquivo — a identidade do autor vem da view `perfis_publicos`, em query
+// própria e já no formato final.
 
 function rotuloNivel(xp: number): string {
   const info = calcularNivel(xp);
   return `Nível ${info.nivel} - ${info.nome}`;
 }
 
+/**
+ * Identidade pública dos autores de um conjunto de posts/respostas/trocas.
+ *
+ * POR QUE ISTO NÃO É MAIS UM EMBED (Migration 9, 09/09/2026)
+ *
+ * Até aqui, autor_nome/autor_nivel vinham de
+ * `profiles ( nome_completo, game_state ( xp ) )` — embed do PostgREST, que no
+ * banco vira LEFT JOIN. Só que RLS se aplica a CADA tabela do JOIN, e tanto
+ * `profiles` (`profiles_leitura_propria`) quanto `game_state`
+ * (`game_state_isolamento_total`) liberam exatamente uma linha por usuário: a
+ * dele. Reproduzido num Postgres 16 local: todo post de outra pessoa voltava
+ * com o embed `null` e caía nos fallbacks — o Mural inteiro apareceria como
+ * "Usuário GERMINA — Nível 1 - Semente" para qualquer post que não fosse do
+ * próprio usuário logado. Nunca tinha aparecido porque ainda não há Supabase
+ * real conectado.
+ *
+ * A view `perfis_publicos` é o recorte do que é público sobre um autor (id,
+ * nome, xp — nada de telefone/endereco/idade/instituicao). Busca em duas
+ * etapas em vez de embed: a resolução de relacionamento do PostgREST sobre
+ * VIEW depende de inferência que não dá para testar sem o Supabase de
+ * verdade, e aqui não vale trocar previsibilidade por uma ida a menos ao
+ * banco — o mural cabe numa página só hoje.
+ */
+async function buscarAutores(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userIds: string[]
+): Promise<Map<string, { nome: string; xp: number }>> {
+  const unicos = [...new Set(userIds)];
+  if (unicos.length === 0) return new Map();
+
+  const { data, error } = await supabase
+    .from('perfis_publicos')
+    .select('id, nome_completo, xp')
+    .in('id', unicos);
+
+  if (error) throw new Error(`Falha ao buscar perfis_publicos: ${error.message}`);
+
+  return new Map((data ?? []).map((a) => [a.id, { nome: a.nome_completo, xp: a.xp }]));
+}
+
 type PostRow = {
   id: string;
+  user_id: string;
   conteudo: string;
   tag: string;
   imagem: string | null;
   criado_em: string;
-  profiles: {
-    nome_completo: string;
-    instituicao: string | null;
-    game_state: { xp: number } | { xp: number }[] | null;
-  } | null;
   post_curtidas: { user_id: string }[];
   respostas_post: { count: number }[];
 };
@@ -52,8 +92,7 @@ export async function getPosts(): Promise<PostComunidade[]> {
     .from('comunidade_posts')
     .select(
       `
-      id, conteudo, tag, imagem, criado_em,
-      profiles!comunidade_posts_user_id_fkey ( nome_completo, instituicao, game_state ( xp ) ),
+      id, user_id, conteudo, tag, imagem, criado_em,
       post_curtidas ( user_id ),
       respostas_post ( count )
     `
@@ -63,16 +102,20 @@ export async function getPosts(): Promise<PostComunidade[]> {
 
   if (error) throw new Error(`Falha ao buscar comunidade_posts: ${error.message}`);
 
+  const autores = await buscarAutores(
+    supabase,
+    (data ?? []).map((p) => p.user_id)
+  );
+
   return (data ?? []).map((post) => {
-    const xpAutor = unwrapToOne(post.profiles?.game_state)?.xp ?? 0;
+    const autor = autores.get(post.user_id);
 
     return {
       id: post.id,
-      autor_nome: post.profiles?.nome_completo ?? 'Usuário GERMINA',
+      autor_nome: autor?.nome ?? 'Usuário GERMINA',
       // Calculado agora, não lido de coluna — reflete o nível ATUAL do autor,
       // nunca o que ele tinha no instante da publicação.
-      autor_nivel: rotuloNivel(xpAutor),
-      autor_instituicao: post.profiles?.instituicao ?? '',
+      autor_nivel: rotuloNivel(autor?.xp ?? 0),
       conteudo: post.conteudo,
       tag: post.tag,
       curtidas: post.post_curtidas.length,
@@ -95,12 +138,9 @@ export async function getPostPorId(id: string): Promise<PostComunidade | undefin
 type RespostaRow = {
   id: string;
   post_id: string;
+  user_id: string;
   conteudo: string;
   criado_em: string;
-  profiles: {
-    nome_completo: string;
-    game_state: { xp: number } | { xp: number }[] | null;
-  } | null;
 };
 
 export async function getRespostas(postId: string): Promise<RespostaPost[]> {
@@ -108,34 +148,37 @@ export async function getRespostas(postId: string): Promise<RespostaPost[]> {
 
   const { data, error } = await supabase
     .from('respostas_post')
-    .select(
-      `
-      id, post_id, conteudo, criado_em,
-      profiles!respostas_post_user_id_fkey ( nome_completo, game_state ( xp ) )
-    `
-    )
+    .select('id, post_id, user_id, conteudo, criado_em')
     .eq('post_id', postId)
     .order('criado_em', { ascending: true })
     .returns<RespostaRow[]>();
 
   if (error) throw new Error(`Falha ao buscar respostas_post: ${error.message}`);
 
-  return (data ?? []).map((r) => ({
-    id: r.id,
-    post_id: r.post_id,
-    autor_nome: r.profiles?.nome_completo ?? 'Usuário GERMINA',
-    autor_nivel: rotuloNivel(unwrapToOne(r.profiles?.game_state)?.xp ?? 0),
-    conteudo: r.conteudo,
-    criado_em: r.criado_em,
-  }));
+  const autores = await buscarAutores(
+    supabase,
+    (data ?? []).map((r) => r.user_id)
+  );
+
+  return (data ?? []).map((r) => {
+    const autor = autores.get(r.user_id);
+    return {
+      id: r.id,
+      post_id: r.post_id,
+      autor_nome: autor?.nome ?? 'Usuário GERMINA',
+      autor_nivel: rotuloNivel(autor?.xp ?? 0),
+      conteudo: r.conteudo,
+      criado_em: r.criado_em,
+    };
+  });
 }
 
 type ItemTrocaRow = {
   id: string;
+  user_id: string;
   planta_id: string;
   quantidade_disponivel: number;
   procura: string;
-  profiles: { nome_completo: string } | null;
 };
 
 export async function getTrocas(): Promise<ItemTroca[]> {
@@ -143,19 +186,27 @@ export async function getTrocas(): Promise<ItemTroca[]> {
 
   const { data, error } = await supabase
     .from('itens_troca')
-    .select('id, planta_id, quantidade_disponivel, procura, profiles!itens_troca_user_id_fkey ( nome_completo )')
+    .select('id, user_id, planta_id, quantidade_disponivel, procura')
     .eq('ativo', true)
     .order('criado_em', { ascending: false })
     .returns<ItemTrocaRow[]>();
 
   if (error) throw new Error(`Falha ao buscar itens_troca: ${error.message}`);
 
+  // Mesmo motivo do getPosts: o embed em profiles não sobrevive ao RLS para
+  // itens de outras pessoas — e um mural de trocas onde todo anúncio é de
+  // "Usuário GERMINA" não serve pra nada.
+  const autores = await buscarAutores(
+    supabase,
+    (data ?? []).map((i) => i.user_id)
+  );
+
   return (data ?? []).map((item) => {
     const planta = PLANTAS_CATALOGO.find((p) => p.id === item.planta_id);
 
     return {
       id: item.id,
-      autor_nome: item.profiles?.nome_completo ?? 'Usuário GERMINA',
+      autor_nome: autores.get(item.user_id)?.nome ?? 'Usuário GERMINA',
       // item_nome e is_renisus não são colunas (G6, migration A2) — vêm do
       // catálogo em código a partir de planta_id, na leitura.
       item_nome: planta?.nome_popular ?? 'Espécie desconhecida',
