@@ -20,6 +20,12 @@ export interface CanteiroProps {
   estado: EstadoCanteiro;
   /** Rótulo acessível do canteiro (ex.: "Canteiro 3"). */
   identificacao: string;
+  /**
+   * Chave de destaque do guia da Sarah (`data-guia`). Só o primeiro canteiro
+   * recebe hoje, para ela ter onde apontar ao apresentar o Jardim — ver
+   * components/guia/BalaoSarah.tsx.
+   */
+  chaveGuia?: string;
 
   // --- Estado vazio ---
   /** Espécies já estudadas — a escolha acontece dentro do próprio canteiro. */
@@ -38,6 +44,7 @@ export interface CanteiroProps {
 export function Canteiro({
   estado,
   identificacao,
+  chaveGuia,
   especiesDisponiveis = [],
   podePlantar = false,
   motivoPlantarBloqueado,
@@ -51,7 +58,7 @@ export function Canteiro({
   // campo. A antiga <li> com fundo branco e borda era herança do grid de cards
   // e destruía a ilusão de horta contínua.
   return (
-    <li className="relative w-full" aria-label={identificacao}>
+    <li className="relative w-full" aria-label={identificacao} data-guia={chaveGuia}>
       {conteudo()}
     </li>
   );

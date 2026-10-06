@@ -1,5 +1,7 @@
 import { getPerfilOpcional, getGameStateOpcional } from '../../lib/queries/perfil';
 import { getPlantasEstudadasCount } from '../../lib/queries/dashboard';
+import { getEstadoGuia } from '../../lib/queries/guia';
+import { GuiaSarah } from '../../components/guia/GuiaSarah';
 import { NIVEIS_EVOLUCAO, PLANTAS_CATALOGO, calcularNivel } from '../../data/plantasData';
 import { HeaderBar } from '../../components/HeaderBar';
 import { BottomNav } from '../../components/BottomNav';
@@ -29,10 +31,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
      (devolve 0 sem sessão) — ela lançava exceção pelo mesmo motivo e teria
      quebrado este layout do mesmo jeito.
      ----------------------------------------------------------------------- */
-  const [profile, gameState, plantasEstudadas] = await Promise.all([
+  const [profile, gameState, plantasEstudadas, estadoGuia] = await Promise.all([
     getPerfilOpcional(),
     getGameStateOpcional(),
     getPlantasEstudadasCount(),
+    getEstadoGuia(),
   ]);
 
   // Estado Derivado: nível não é persistido, é sempre recalculado do XP corrente.
@@ -78,6 +81,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </div>
 
       <BottomNav />
+
+      {/* A Sarah fica fora do <main> de propósito: ela é sobreposta, ancorada
+          na viewport, e não deve participar do fluxo nem da largura máxima do
+          conteúdo. Montada aqui, no layout, ela sobrevive à navegação entre
+          seções — é o que permite falar na primeira visita a cada uma. */}
+      <GuiaSarah
+        logado={estadoGuia.logado}
+        falasVistasIniciais={estadoGuia.falasVistas}
+        diasSemAtividade={estadoGuia.diasSemAtividade}
+      />
     </div>
   );
 }

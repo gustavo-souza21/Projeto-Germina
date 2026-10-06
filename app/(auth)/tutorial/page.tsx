@@ -2,27 +2,20 @@
 
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { BookOpen, Sprout, Trophy, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { createClient } from '../../../lib/supabase/client';
 import { destinoPosLogin } from '../../../lib/rota-retorno';
+import { TUTORIAL_SARAH } from '../../../data/guiaSarah';
+import { resolverIcone } from '../../../lib/icones';
+import { RetratoSarah } from '../../../components/guia/RetratoSarah';
 
-const SLIDES = [
-  {
-    icone: BookOpen,
-    titulo: 'Estude as plantas',
-    texto: 'Explore o Herbário Digital, conheça os usos tradicionais de cada espécie amazônica e responda os desafios diários pra aprender de verdade.',
-  },
-  {
-    icone: Sprout,
-    titulo: 'Ganhe sementes e XP',
-    texto: 'Cada planta estudada e cada desafio concluído rendem XP, sementes e moedas — sua evolução no Germina.',
-  },
-  {
-    icone: Trophy,
-    titulo: 'Cuide do seu Jardim',
-    texto: 'Use as sementes pra plantar no Jardim do Conhecimento, adube pra acelerar o crescimento e desbloqueie novos terrenos conforme sobe de nível.',
-  },
-];
+/* O roteiro do tutorial saiu daqui e virou TUTORIAL_SARAH, em
+   data/guiaSarah.ts, junto com as demais falas da personagem (05/10/2026).
+
+   Dois motivos: a Sarah passou a ser a voz do onboarding — não fazia sentido
+   ela narrar as dicas dentro do app e o tutorial falar num "nós" sem dono —
+   e texto para revisão humana (dela, da Leitura Sensível, do Comitê) deve
+   ficar num arquivo de conteúdo, não no meio de JSX. */
 
 // useSearchParams() exige fronteira de Suspense (mesmo padrão de /login e
 // /redefinir-senha) — sem ela o build de produção falha nesta página.
@@ -49,9 +42,9 @@ function TutorialConteudo() {
   const [slideAtual, setSlideAtual] = useState(0);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-  const ultimoSlide = slideAtual === SLIDES.length - 1;
-  const slide = SLIDES[slideAtual];
-  const Icone = slide.icone;
+  const ultimoSlide = slideAtual === TUTORIAL_SARAH.length - 1;
+  const slide = TUTORIAL_SARAH[slideAtual];
+  const Icone = resolverIcone(slide.icone);
 
   const finalizarTutorial = async () => {
     if (salvando) return;
@@ -100,17 +93,35 @@ function TutorialConteudo() {
         Pular
       </button>
 
-      <div className="flex flex-col items-center text-center gap-5 max-w-sm mx-auto">
-        <div className="w-24 h-24 rounded-3xl bg-[var(--color-card-bg)] shadow-sm border border-[var(--color-green-soft)]/40 flex items-center justify-center">
-          <Icone className="w-12 h-12 text-[var(--color-green-main)]" strokeWidth={1.5} />
+      {/* A Sarah apresenta o app em pessoa. Antes era um ícone solto acima de
+          um parágrafo sem dono; agora o tutorial é uma conversa com a
+          curadora do acervo — e a mesma personagem segue acompanhando o
+          usuário dentro do app (components/guia/GuiaSarah.tsx). */}
+      <div className="flex flex-col items-center text-center gap-4 max-w-sm mx-auto">
+        <div className="relative">
+          <RetratoSarah className="w-28 h-[9.33rem] drop-shadow-md" />
+          <div className="absolute -bottom-1 -right-2 w-11 h-11 rounded-2xl bg-[var(--color-card-bg)] shadow-sm border border-[var(--color-green-soft)]/60 flex items-center justify-center">
+            <Icone className="w-5 h-5 text-[var(--color-green-main)]" strokeWidth={1.75} />
+          </div>
         </div>
+
         <h1 className="text-2xl font-bold text-[var(--color-green-deep)]">{slide.titulo}</h1>
-        <p className="text-sm text-[var(--color-blue-deep)]/70">{slide.texto}</p>
+
+        <div className="space-y-2.5">
+          {slide.baloes.map((fala, i) => (
+            <p
+              key={i}
+              className="text-sm text-[var(--color-blue-deep)]/80 bg-[var(--color-card-bg)] rounded-2xl px-4 py-2.5 border border-[var(--color-green-soft)]/40 shadow-sm"
+            >
+              {fala}
+            </p>
+          ))}
+        </div>
       </div>
 
       <div className="w-full max-w-sm mx-auto flex flex-col gap-4">
         <div className="flex items-center justify-center gap-2">
-          {SLIDES.map((_, i) => (
+          {TUTORIAL_SARAH.map((_, i) => (
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all ${

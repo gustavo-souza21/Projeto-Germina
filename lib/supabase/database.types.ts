@@ -263,6 +263,33 @@ export type Database = {
           },
         ]
       }
+      // Migration 12 (20261005100000_guia_sarah_falas_vistas.sql) — escrito à
+      // mão, como o resto deste arquivo desde a Fase 1.
+      guia_falas_vistas: {
+        Row: {
+          fala_id: string
+          user_id: string
+          visto_em: string
+        }
+        Insert: {
+          fala_id: string
+          user_id: string
+          visto_em?: string
+        }
+        Update: {
+          fala_id?: string
+          user_id?: string
+          visto_em?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guia_falas_vistas_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       itens_troca: {
         Row: {
           ativo: boolean

@@ -185,6 +185,8 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
                       key={terreno.id}
                       estado={estado}
                       identificacao={`Canteiro ${terreno.id}`}
+                      // Alvo do destaque da Sarah ao apresentar o Jardim.
+                      chaveGuia={terreno.id === 1 ? 'canteiro-1' : undefined}
                       especiesDisponiveis={plantasPlantaveis}
                       podePlantar={!semEspecie && !semSemente}
                       motivoPlantarBloqueado={
