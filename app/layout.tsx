@@ -33,6 +33,18 @@ const fonteGermina = Inter({
 });
 
 export const metadata: Metadata = {
+  /* Base para resolver URLs relativas de Open Graph e Twitter card.
+     Sem isto o Next cai em http://localhost:3000 e avisa no build — e o
+     sintoma só aparece fora do app: quem compartilha o link no WhatsApp,
+     e-mail ou numa apresentação recebe um cartão de preview quebrado,
+     apontando para localhost. Importa especialmente aqui, porque o link é
+     distribuído para a banca e para alunos.
+
+     Lê de NEXT_PUBLIC_SITE_URL quando definida (permite que previews da
+     Vercel resolvam para si mesmas), com a produção como padrão. */
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://germina-next.vercel.app'
+  ),
   title: {
     default: 'GERMINA — Saberes da Amazônia',
     template: '%s · GERMINA',
