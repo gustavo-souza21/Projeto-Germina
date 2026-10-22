@@ -1,7 +1,7 @@
 /* ============================================================================
    RETRATO DA SARAH — PLACEHOLDER
 
-   ⚠️ PONTO ÚNICO DE TROCA DA ARTE
+   ATENÇÃO: PONTO ÚNICO DE TROCA DA ARTE
 
    Este é o ÚNICO arquivo que precisa mudar quando a ilustração real da Sarah
    existir. Nenhum outro componente sabe como ela é desenhada — todos só
