@@ -120,6 +120,8 @@ export interface Atividade {
   icone: string; // Nome do ícone lucide
   texto: string;
   xp_ganho: number;
+  /** Moedas ganhas (positivo) ou gastas (negativo) neste evento — Migration 14. */
+  moedas_delta: number;
   criado_em: string;
 }
 
@@ -148,6 +150,10 @@ export interface UserColecao {
   planta_id: string;
   status_crescimento: 'semente' | 'broto' | 'muda' | 'flores' | 'colhida';
   desbloqueada_em?: string;
+  /** Sementes disponíveis DESTA espécie (Migration 14). A primeira vem de concluir o estudo. */
+  sementes: number;
+  /** Último dia (America/Manaus) em que a revisão desta espécie rendeu moedas. */
+  ultima_revisao_em?: string;
 }
 
 export interface DesafioDiario {

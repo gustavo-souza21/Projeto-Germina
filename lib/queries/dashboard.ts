@@ -18,8 +18,11 @@ export async function getAtividades(): Promise<Atividade[]> {
 
   const { data, error } = await supabase
     .from('atividades')
-    .select('id, user_id, icone, texto, xp_ganho, criado_em')
+    .select('id, user_id, icone, texto, xp_ganho, moedas_delta, criado_em')
     .eq('user_id', user.id)
+    // Linhas contábeis (abertura do histórico de moedas, conversões) servem
+    // para conferir o saldo, não são eventos do jogo: ficam fora do feed.
+    .neq('icone', 'Registro')
     .order('criado_em', { ascending: false })
     .limit(20); // usa o índice (user_id, criado_em desc) da migration C6
 

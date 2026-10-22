@@ -46,15 +46,10 @@ export const ITENS_LOJA: ItemLoja[] = [
     recurso: 'adubo',
     unidade: { singular: 'adubo', plural: 'adubos' },
   },
-  {
-    id: 'semente',
-    nome: 'Pacote de Sementes Nativas',
-    descricao: 'Sementes de espécies medicinais da Amazônia.',
-    custo: 50,
-    quantidade: 5,
-    recurso: 'sementes',
-    unidade: { singular: 'semente', plural: 'sementes' },
-  },
+  // O pacote de 5 sementes genéricas saiu (Migration 14): sementes agora são
+  // por espécie. A primeira vem do estudo (plantio gratuito); as seguintes da
+  // colheita ou compradas uma a uma na hora de plantar, com o preço visível
+  // no próprio canteiro (ECONOMIA.semente_preco).
   {
     id: 'tema',
     nome: 'Tema Amazônia Profunda',

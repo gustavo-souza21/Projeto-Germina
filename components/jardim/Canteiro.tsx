@@ -1,5 +1,5 @@
 import { EstadoCanteiro } from '../../lib/jardim';
-import { PlantaCatalogo } from '../../lib/types';
+import { OpcaoPlantio } from './CanteiroVazio';
 import { CanteiroBloqueado } from './CanteiroBloqueado';
 import { CanteiroVazio } from './CanteiroVazio';
 import { CanteiroCultivado } from './CanteiroCultivado';
@@ -22,11 +22,13 @@ export interface CanteiroProps {
   identificacao: string;
 
   // --- Estado vazio ---
-  /** Espécies já estudadas — a escolha acontece dentro do próprio canteiro. */
-  especiesDisponiveis?: PlantaCatalogo[];
+  /** Espécies já estudadas e suas sementes — a escolha acontece dentro do próprio canteiro. */
+  opcoesPlantio?: OpcaoPlantio[];
+  /** Saldo de moedas, para habilitar a compra de semente na hora de plantar. */
+  moedas?: number;
   podePlantar?: boolean;
   motivoPlantarBloqueado?: string;
-  onPlantar?: (plantaId: string) => void;
+  onPlantar?: (plantaId: string, comprar: boolean) => void;
 
   // --- Estado cultivado ---
   podeAdubar?: boolean;
@@ -38,7 +40,8 @@ export interface CanteiroProps {
 export function Canteiro({
   estado,
   identificacao,
-  especiesDisponiveis = [],
+  opcoesPlantio = [],
+  moedas = 0,
   podePlantar = false,
   motivoPlantarBloqueado,
   onPlantar,
@@ -64,10 +67,11 @@ export function Canteiro({
       case 'vazio':
         return (
           <CanteiroVazio
-            especiesDisponiveis={especiesDisponiveis}
+            opcoes={opcoesPlantio}
+            moedas={moedas}
             podePlantar={podePlantar}
             motivoBloqueio={motivoPlantarBloqueado}
-            onPlantar={(plantaId) => onPlantar?.(plantaId)}
+            onPlantar={(plantaId, comprar) => onPlantar?.(plantaId, comprar)}
           />
         );
 

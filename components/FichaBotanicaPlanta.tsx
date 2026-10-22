@@ -3,23 +3,33 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PlantaCatalogo } from '../lib/types';
-import { ArrowLeft, Award, ShieldAlert, HeartHandshake, Sparkles, Check, Images } from 'lucide-react';
+import { ArrowLeft, Award, ShieldAlert, HeartHandshake, Sparkles, Check, Images, Sprout } from 'lucide-react';
+import { ECONOMIA } from '../lib/economia';
 import { CreditoFoto } from './CreditoFoto';
 import { NomeCientifico } from './ui/NomeCientifico';
 
+/** Em que ponto do estudo (ficha + quiz) o usuário está nesta espécie. */
+export type EtapaEstudo = 'nao_iniciado' | 'ficha_lida' | 'concluido';
+
 interface FichaBotanicaPlantaProps {
   planta: PlantaCatalogo;
-  jaEstudada: boolean;
-  /** Otimista: fica `true` só durante a janela entre o clique e a resposta do Supabase. */
-  estudando?: boolean;
-  onEstudarPlanta: (planta: PlantaCatalogo) => void;
+  etapa: EtapaEstudo;
+  /** Sementes desta espécie no inventário (só faz sentido com o estudo concluído). */
+  sementes: number;
+  /** A revisão desta espécie já rendeu moedas hoje (a conclusão do estudo também conta). */
+  revisaoPagaHoje: boolean;
+  /** `true` enquanto a leitura da ficha está sendo registrada. */
+  salvando?: boolean;
+  onAvancar: () => void;
 }
 
 export function FichaBotanicaPlanta({
   planta,
-  jaEstudada,
-  estudando = false,
-  onEstudarPlanta,
+  etapa,
+  sementes,
+  revisaoPagaHoje,
+  salvando = false,
+  onAvancar,
 }: FichaBotanicaPlantaProps) {
   const router = useRouter();
 
@@ -109,14 +119,14 @@ export function FichaBotanicaPlanta({
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-ink-muted uppercase tracking-wider">Descrição Botânica</h4>
+            <h4 className="text-sm font-bold text-ink-muted">Descrição botânica</h4>
             <p className="text-sm text-ink-muted leading-relaxed mt-0.5">{planta.descricao}</p>
           </div>
 
           <div className="bg-surface-alt p-4 rounded-xl border border-black/[0.04]">
-            <h4 className="text-xs font-bold text-green-deep uppercase tracking-wider flex items-center gap-1.5 mb-2">
+            <h4 className="text-sm font-bold text-green-deep flex items-center gap-1.5 mb-2">
               <HeartHandshake className="w-4 h-4 text-green-main" />
-              <span>Usos Tradicionais na Amazônia</span>
+              <span>Usos tradicionais na Amazônia</span>
             </h4>
             <ul className="space-y-1 text-xs sm:text-sm text-ink-muted">
               {planta.usos_tradicionais.map((uso, i) => (
@@ -130,7 +140,7 @@ export function FichaBotanicaPlanta({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-emerald-50/60 p-3.5 rounded-xl border border-emerald-200/60 text-xs">
-              <h5 className="font-bold text-emerald-900 mb-1">Modo de Preparo Tradicional</h5>
+              <h5 className="font-bold text-emerald-900 mb-1">Modo de preparo tradicional</h5>
               <p className="text-emerald-800/90 leading-relaxed">{planta.preparo}</p>
             </div>
 
@@ -142,14 +152,14 @@ export function FichaBotanicaPlanta({
 
           <div className="space-y-2 text-xs">
             <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
-              <h5 className="font-bold text-blue-900">Composição Fitoquímica / Evidências</h5>
+              <h5 className="font-bold text-blue-900">Composição fitoquímica e evidências</h5>
               <p className="text-blue-800 mt-0.5">{planta.evidencias}</p>
             </div>
 
             <div className="bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-start gap-2">
               <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <div>
-                <h5 className="font-bold text-amber-900">Segurança e Precauções</h5>
+                <h5 className="font-bold text-amber-900">Segurança e precauções</h5>
                 <p className="text-amber-800 mt-0.5">{planta.seguranca}</p>
               </div>
             </div>
@@ -175,27 +185,64 @@ export function FichaBotanicaPlanta({
           </div>
         </div>
 
-        {/* Rodapé de ação */}
-        <div className="p-4 bg-surface-alt border-t border-black/10 flex items-center justify-between sticky bottom-0">
-          <span className="text-xs text-ink-muted font-semibold">
-            Recompensa: <strong className="text-emerald-700">+{planta.xp_recompensa} XP</strong>
-          </span>
+        {/* Rodapé de ação — estudo em duas etapas: ficha e quiz (spec 1.1).
+            A recompensa é anunciada ANTES da atividade (spec 1.3). */}
+        <div className="p-4 bg-surface-alt border-t border-black/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sticky bottom-0">
+          <div className="text-xs text-ink-muted space-y-1">
+            {etapa === 'concluido' ? (
+              <>
+                <p className="font-semibold text-emerald-800 flex items-center gap-1.5">
+                  <Check className="w-4 h-4" aria-hidden />
+                  Estudo concluído
+                  <span className="text-ink-muted font-medium">
+                    · {sementes} {sementes === 1 ? 'semente' : 'sementes'} de {planta.nome_popular}
+                  </span>
+                </p>
+                <p>
+                  {revisaoPagaHoje ? (
+                    <>A revisão de hoje já foi paga. Amanhã revisar rende <strong className="text-emerald-700">+{ECONOMIA.revisao_moedas} moedas</strong> de novo.</>
+                  ) : (
+                    <>Revisar hoje com o quiz rende <strong className="text-emerald-700">+{ECONOMIA.revisao_moedas} moedas</strong> (uma vez por dia).</>
+                  )}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="font-semibold text-ink">
+                  <span className={etapa === 'ficha_lida' ? 'text-emerald-700' : ''}>
+                    {etapa === 'ficha_lida' ? '1. Ficha lida' : '1. Ler a ficha'}
+                  </span>
+                  {'  ·  '}2. Responder o quiz
+                </p>
+                <p>
+                  Ao concluir: <strong className="text-emerald-700">+{planta.xp_recompensa} XP</strong>,{' '}
+                  <strong className="text-emerald-700">+{ECONOMIA.estudo_moedas} moedas</strong> e a{' '}
+                  <strong className="text-emerald-700">semente de {planta.nome_popular}</strong> para o primeiro plantio gratuito.
+                </p>
+              </>
+            )}
+          </div>
 
-          {jaEstudada ? (
-            <span className="bg-emerald-100 text-emerald-800 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl flex items-center gap-2">
-              <Check className="w-4 h-4" />
-              Já estudada
+          <button
+            onClick={onAvancar}
+            disabled={salvando}
+            className="bg-green-deep hover:bg-green-main text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow hover:shadow-md flex items-center justify-center gap-2 disabled:opacity-60 shrink-0"
+          >
+            {etapa === 'concluido' ? (
+              <Sprout className="w-4 h-4" aria-hidden />
+            ) : (
+              <Sparkles className="w-4 h-4 text-amber-300" aria-hidden />
+            )}
+            <span>
+              {salvando
+                ? 'Salvando...'
+                : etapa === 'nao_iniciado'
+                  ? 'Li a ficha, ir para o quiz'
+                  : etapa === 'ficha_lida'
+                    ? 'Responder o quiz'
+                    : 'Revisar com o quiz'}
             </span>
-          ) : (
-            <button
-              onClick={() => onEstudarPlanta(planta)}
-              disabled={estudando}
-              className="bg-green-deep hover:bg-green-main text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow hover:shadow-md flex items-center gap-2 disabled:opacity-60"
-            >
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>{estudando ? 'Salvando...' : 'Estudar & Adicionar à Coleção'}</span>
-            </button>
-          )}
+          </button>
         </div>
       </div>
     </div>

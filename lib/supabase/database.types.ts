@@ -14,6 +14,7 @@ export type Database = {
           criado_em: string
           icone: string
           id: string
+          moedas_delta: number
           texto: string
           user_id: string
           xp_ganho: number
@@ -22,6 +23,7 @@ export type Database = {
           criado_em?: string
           icone: string
           id?: string
+          moedas_delta?: number
           texto: string
           user_id: string
           xp_ganho?: number
@@ -30,6 +32,7 @@ export type Database = {
           criado_em?: string
           icone?: string
           id?: string
+          moedas_delta?: number
           texto?: string
           user_id?: string
           xp_ganho?: number
@@ -559,19 +562,25 @@ export type Database = {
         Row: {
           desbloqueada_em: string
           planta_id: string
+          sementes: number
           status_crescimento: string
+          ultima_revisao_em: string | null
           user_id: string
         }
         Insert: {
           desbloqueada_em?: string
           planta_id: string
+          sementes?: number
           status_crescimento?: string
+          ultima_revisao_em?: string | null
           user_id: string
         }
         Update: {
           desbloqueada_em?: string
           planta_id?: string
+          sementes?: number
           status_crescimento?: string
+          ultima_revisao_em?: string | null
           user_id?: string
         }
         Relationships: [
@@ -582,6 +591,19 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      // Migration 14 (20261023100000_estudo_por_especie_sementes_moedas.sql).
+      config_economia: {
+        Row: { chave: string; descricao: string; valor: number }
+        Insert: { chave: string; descricao: string; valor: number }
+        Update: { chave?: string; descricao?: string; valor?: number }
+        Relationships: []
+      }
+      fichas_lidas: {
+        Row: { lida_em: string; planta_id: string; user_id: string }
+        Insert: { lida_em?: string; planta_id: string; user_id: string }
+        Update: { lida_em?: string; planta_id?: string; user_id?: string }
+        Relationships: []
       }
     }
     Views: {
@@ -598,6 +620,29 @@ export type Database = {
       }
     }
     Functions: {
+      // Migration 14
+      concluir_quiz_especie: {
+        Args: { p_planta_id: string; p_planta_nome?: string }
+        Returns: Json
+      }
+      plantar_especie: {
+        Args: { p_terreno_id: number; p_planta_id: string; p_comprar?: boolean }
+        Returns: {
+          adubo: number
+          maior_streak: number
+          moedas: number
+          sementes: number
+          streak: number
+          tema_ativo: string
+          ultimo_desafio_em: string | null
+          user_id: string
+          xp: number
+        }[]
+      }
+      registrar_leitura_ficha: {
+        Args: { p_planta_id: string }
+        Returns: undefined
+      }
       adubar_terreno: {
         Args: { p_terreno_id: number }
         Returns: {

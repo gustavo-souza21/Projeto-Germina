@@ -16,6 +16,7 @@ export interface DadosExportados {
   herbario: Database['public']['Tables']['user_colecao']['Row'][];
   atividades: Database['public']['Tables']['atividades']['Row'][];
   desafios_concluidos: Database['public']['Tables']['desafios_diarios_concluidos']['Row'][];
+  fichas_lidas: Database['public']['Tables']['fichas_lidas']['Row'][];
 }
 
 async function coletarDadosUsuario(): Promise<DadosExportados> {
@@ -27,9 +28,9 @@ async function coletarDadosUsuario(): Promise<DadosExportados> {
   } = await supabase.auth.getUser();
   if (authError || !user) throw new Error('Usuário não autenticado.');
 
-  // Em paralelo: são 5 leituras independentes do mesmo user_id, cada uma já
+  // Em paralelo: são 6 leituras independentes do mesmo user_id, cada uma já
   // isolada por RLS — não há motivo pra serializar.
-  const [perfilRes, progressoRes, herbarioRes, atividadesRes, desafiosRes] = await Promise.all([
+  const [perfilRes, progressoRes, herbarioRes, atividadesRes, desafiosRes, fichasRes] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase.from('game_state').select('*').eq('user_id', user.id).single(),
     supabase.from('user_colecao').select('*').eq('user_id', user.id),
@@ -39,9 +40,17 @@ async function coletarDadosUsuario(): Promise<DadosExportados> {
       .select('*')
       .eq('user_id', user.id)
       .order('data', { ascending: false }),
+    supabase.from('fichas_lidas').select('*').eq('user_id', user.id),
   ]);
 
-  const erros = [perfilRes.error, progressoRes.error, herbarioRes.error, atividadesRes.error, desafiosRes.error];
+  const erros = [
+    perfilRes.error,
+    progressoRes.error,
+    herbarioRes.error,
+    atividadesRes.error,
+    desafiosRes.error,
+    fichasRes.error,
+  ];
   const primeiroErro = erros.find((e): e is NonNullable<typeof e> => e !== null);
   if (primeiroErro) {
     throw new Error(`Falha ao buscar dados para exportação: ${primeiroErro.message}`);
@@ -54,6 +63,7 @@ async function coletarDadosUsuario(): Promise<DadosExportados> {
     herbario: herbarioRes.data ?? [],
     atividades: atividadesRes.data ?? [],
     desafios_concluidos: desafiosRes.data ?? [],
+    fichas_lidas: fichasRes.data ?? [],
   };
 }
 

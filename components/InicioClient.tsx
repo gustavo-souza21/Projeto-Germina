@@ -13,6 +13,7 @@ export function InicioClient({
   conquistasDesbloqueadas,
   conquistasTotal,
   ofensiva,
+  sementes,
 }: {
   profile: Profile;
   gameStateInicial: GameState;
@@ -22,6 +23,8 @@ export function InicioClient({
   conquistasDesbloqueadas: number;
   conquistasTotal: number;
   ofensiva: number;
+  /** Soma das sementes de todas as espécies (não existe mais contador único). */
+  sementes: number;
 }) {
   const router = useRouter();
 
@@ -50,6 +53,7 @@ export function InicioClient({
       conquistasDesbloqueadas={conquistasDesbloqueadas}
       conquistasTotal={conquistasTotal}
       ofensiva={ofensiva}
+      sementes={sementes}
       onConcluirDesafio={handleConcluirDesafio}
     />
   );

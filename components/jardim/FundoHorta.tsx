@@ -14,9 +14,12 @@ const CORES_FLOR_SILVESTRE = Object.values(P.flor);
    caro num Android de entrada, que é o aparelho do público em Itacoatiara.
    Todo o relevo aqui é `<path>` + gradiente, que o GPU compõe sem custo extra.
 
-   A profundidade atmosférica (montanhas azuladas ao fundo, terra quente na
-   frente) é obtida por VARIAÇÃO DE MATIZ E SATURAÇÃO entre as camadas, não por
-   desfoque — é assim que a pintura resolve, e sai de graça em SVG.
+   PROFUNDIDADE SEM HORIZONTE (pedido da Sarah, 22/10/2026)
+   O cenário não tem mais céu nem montanhas: a base é um chão verde contínuo.
+   A sensação de profundidade vem só de VARIAÇÃO DE TOM E DE ESCALA — gramado
+   mais claro e frio ao fundo (topo), mais escuro e quente à frente; folhagens
+   pequenas e claras atrás, maiores e mais escuras perto do observador. É
+   assim que a pintura resolve, e sai de graça em SVG, sem desfoque.
 
    ARQUITETURA (diretriz 2)
    Todo o cenário vive aqui. O JardimConhecimento não conhece nenhuma div de
@@ -35,12 +38,6 @@ export function FundoHorta({ className }: { className?: string }) {
       focusable="false"
     >
       <defs>
-        <linearGradient id="fh-ceu" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={P.ceu.topo} />
-          <stop offset="55%" stopColor={P.ceu.meio} />
-          <stop offset="100%" stopColor={P.ceu.horizonte} />
-        </linearGradient>
-
         {/* Gramado: mais claro e frio ao fundo, mais escuro e quente à frente. */}
         <linearGradient id="fh-campo" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={P.grama.fundo} />
@@ -60,44 +57,22 @@ export function FundoHorta({ className }: { className?: string }) {
         </radialGradient>
       </defs>
 
-      {/* ---- Céu ----
-             Horizonte alto de propósito: o céu ocupa ~25% da altura, não 40%.
-             A referência é quase toda jardim, e área grande de céu (matiz de
-             baixa saturação por natureza) derruba a vivacidade percebida da
-             cena inteira. Subir o horizonte devolve espaço ao verde.
-             Todo o bloco de fundo é deslocado por um único transform — para
-             reverter, basta trocar o valor abaixo. ---- */}
-      <rect y="-90" width="1200" height="300" fill="url(#fh-ceu)" />
+      {/* ---- Gramado: chão verde contínuo, da borda de cima à de baixo ---- */}
+      <rect width="1200" height="760" fill="url(#fh-campo)" />
 
-      <g transform="translate(0,-90)">
-      {/* ---- Montanhas: azul-ardósia, a distante mais clara ---- */}
-      <path
-        d="M0 246 L120 214 L214 240 L318 202 L430 238 L512 218 L604 244 L700 208 L806 240 L910 216 L1024 242 L1120 222 L1200 244 L1200 300 L0 300 Z"
-        fill={P.montanha.distante}
-      />
-      <path
-        d="M0 266 L96 240 L206 262 L300 234 L410 260 L520 242 L640 266 L742 238 L860 262 L980 240 L1100 264 L1200 244 L1200 310 L0 310 Z"
-        fill={P.montanha.proxima}
-      />
-
-      {/* ---- Linha de árvores ---- */}
-      <g fill={P.arvores.distante}>
-        {[40, 130, 215, 300, 390, 470, 560, 650, 740, 830, 915, 1000, 1090, 1170].map(
-          (x, i) => (
-            <ellipse key={x} cx={x} cy={286 - (i % 3) * 6} rx={46} ry={30} />
-          )
-        )}
-      </g>
-      <g fill={P.arvores.proxima}>
-        {[85, 175, 258, 345, 430, 515, 605, 695, 785, 872, 958, 1045, 1132].map((x, i) => (
-          <ellipse key={x} cx={x} cy={298 - (i % 2) * 5} rx={40} ry={26} />
+      {/* ---- Folhagem do fundo: faixa irregular de moitas baixas e claras no
+             topo, no lugar da antiga linha de árvores sob as montanhas. Dá o
+             "fundo" da cena sem criar horizonte. ---- */}
+      <g fill={P.arvores.distante} opacity="0.55">
+        {[30, 120, 210, 300, 395, 480, 570, 660, 750, 840, 930, 1020, 1110, 1190].map((x, i) => (
+          <ellipse key={x} cx={x} cy={18 + (i % 3) * 7} rx={52} ry={26} />
         ))}
       </g>
-
+      <g fill={P.arvores.proxima} opacity="0.45">
+        {[75, 165, 255, 350, 440, 525, 615, 705, 795, 885, 975, 1065, 1150].map((x, i) => (
+          <ellipse key={x} cx={x} cy={40 + (i % 2) * 6} rx={34} ry={18} />
+        ))}
       </g>
-
-      {/* ---- Gramado ---- */}
-      <rect y="206" width="1200" height="554" fill="url(#fh-campo)" />
 
       {/* ---- Caminhos de terra ---- */}
       <path
@@ -114,8 +89,8 @@ export function FundoHorta({ className }: { className?: string }) {
       {/* ---- Arbustos: densidade e escuridão crescem em direção ao observador ---- */}
       <g fill={P.arbusto.distante} opacity="0.9">
         {[
-          [70, 268, 15], [250, 262, 12], [430, 274, 14], [610, 264, 11],
-          [790, 276, 15], [960, 266, 12], [1130, 274, 14],
+          [70, 158, 15], [250, 150, 12], [430, 164, 14], [610, 152, 11],
+          [790, 166, 15], [960, 154, 12], [1130, 162, 14],
         ].map(([cx, cy, r]) => (
           <ellipse key={`${cx}-${cy}`} cx={cx} cy={cy} rx={r} ry={r * 0.6} />
         ))}
@@ -141,9 +116,9 @@ export function FundoHorta({ className }: { className?: string }) {
              Distribuição pseudoaleatória DETERMINÍSTICA — Math.random() geraria
              markup diferente no servidor e no cliente, quebrando a hidratação. */}
       <g stroke={P.capim} strokeWidth="2.5" strokeLinecap="round" opacity="0.6">
-        {Array.from({ length: 90 }, (_, i) => {
+        {Array.from({ length: 120 }, (_, i) => {
           const x = ((i * 137) % 1200) + ((i % 7) * 9);
-          const y = 250 + ((i * 61) % 490);
+          const y = 70 + ((i * 61) % 670);
           const h = 6 + ((i * 13) % 9);
           return <path key={i} d={`M${x} ${y} l${(i % 3) - 1} -${h}`} />;
         })}
@@ -157,7 +132,7 @@ export function FundoHorta({ className }: { className?: string }) {
       <g opacity="0.85">
         {Array.from({ length: 46 }, (_, i) => {
           const x = ((i * 173) % 1200) + ((i % 5) * 11);
-          const y = 250 + ((i * 97) % 480);
+          const y = 80 + ((i * 97) % 650);
           const r = 3 + (i % 3);
           const cor = CORES_FLOR_SILVESTRE[i % CORES_FLOR_SILVESTRE.length];
           return (

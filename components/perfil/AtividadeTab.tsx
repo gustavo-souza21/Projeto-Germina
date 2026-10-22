@@ -42,9 +42,16 @@ export function AtividadeTab({ atividades }: { atividades: Atividade[] }) {
               <p className="text-xs text-ink-muted font-medium">{atividade.texto}</p>
               <p className="text-[10px] text-ink-muted">{tempoRelativo(atividade.criado_em)}</p>
             </div>
-            {atividade.xp_ganho > 0 && (
-              <span className="text-xs font-bold text-emerald-700 shrink-0">+{atividade.xp_ganho} XP</span>
-            )}
+            <div className="flex flex-col items-end shrink-0">
+              {atividade.xp_ganho > 0 && (
+                <span className="text-xs font-bold text-emerald-700">+{atividade.xp_ganho} XP</span>
+              )}
+              {atividade.moedas_delta !== 0 && (
+                <span className="text-[11px] font-bold text-amber-800 tabular-nums">
+                  {atividade.moedas_delta > 0 ? '+' : ''}{atividade.moedas_delta} moedas
+                </span>
+              )}
+            </div>
           </div>
         );
       })}

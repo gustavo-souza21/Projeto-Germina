@@ -25,7 +25,7 @@ export async function getColecao(): Promise<UserColecao[]> {
 
   const { data, error } = await supabase
     .from('user_colecao')
-    .select('user_id, planta_id, status_crescimento, desbloqueada_em')
+    .select('user_id, planta_id, status_crescimento, desbloqueada_em, sementes, ultima_revisao_em')
     .eq('user_id', user.id);
 
   if (error) throw new Error(`Falha ao buscar user_colecao: ${error.message}`);
@@ -39,5 +39,28 @@ export async function getColecao(): Promise<UserColecao[]> {
     // porque a CHECK constraint já impede qualquer outro valor de existir.
     status_crescimento: c.status_crescimento as UserColecao['status_crescimento'],
     desbloqueada_em: c.desbloqueada_em ?? undefined,
+    sementes: c.sementes,
+    ultima_revisao_em: c.ultima_revisao_em ?? undefined,
   }));
+}
+
+/**
+ * Espécies cuja ficha o usuário já marcou como lida — primeiro requisito do
+ * estudo (o segundo é concluir o quiz). Lista vazia para visitante.
+ */
+export async function getFichasLidas(): Promise<string[]> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return [];
+
+  const { data, error } = await supabase
+    .from('fichas_lidas')
+    .select('planta_id')
+    .eq('user_id', user.id);
+
+  if (error) throw new Error(`Falha ao buscar fichas_lidas: ${error.message}`);
+  return (data ?? []).map((f) => f.planta_id);
 }

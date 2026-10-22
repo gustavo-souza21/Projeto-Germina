@@ -4,6 +4,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Plus, Star, X } from 'lucide-react';
 import { PlantaCatalogo } from '../../lib/types';
 import { AneisCanteiro } from './AneisCanteiro';
+import { ECONOMIA } from '../../lib/economia';
+
+/** Uma espécie estudada e quantas sementes dela o usuário tem. */
+export interface OpcaoPlantio {
+  planta: PlantaCatalogo;
+  sementes: number;
+}
 
 /**
  * ESTADO 2 — VAZIO
@@ -17,16 +24,19 @@ import { AneisCanteiro } from './AneisCanteiro';
  * elipses de ~120px, um botão dentro do anel ficaria minúsculo no celular.
  */
 export function CanteiroVazio({
-  especiesDisponiveis,
+  opcoes,
+  moedas,
   podePlantar,
   motivoBloqueio,
   onPlantar,
 }: {
-  especiesDisponiveis: PlantaCatalogo[];
+  opcoes: OpcaoPlantio[];
+  moedas: number;
   podePlantar: boolean;
   motivoBloqueio?: string;
-  onPlantar: (plantaId: string) => void;
+  onPlantar: (plantaId: string, comprar: boolean) => void;
 }) {
+  const podeComprar = moedas >= ECONOMIA.semente_preco;
   const [escolhendo, setEscolhendo] = useState(false);
   const painelRef = useRef<HTMLDivElement>(null);
 
@@ -91,7 +101,7 @@ export function CanteiroVazio({
           tabIndex={-1}
           role="group"
           aria-label="Escolher espécie para plantar"
-          className="absolute z-30 left-1/2 -translate-x-1/2 top-0 w-44 max-h-52 overflow-y-auto bg-card-bg rounded-xl shadow-card-hover border border-black/[0.06] p-2"
+          className="absolute z-30 left-1/2 -translate-x-1/2 top-0 w-56 max-h-64 overflow-y-auto bg-card-bg rounded-xl shadow-card-hover border border-black/[0.06] p-2"
         >
           <div className="flex items-center justify-between gap-2 mb-1.5 px-0.5">
             <p className="text-[11px] font-semibold text-green-deep">O que plantar?</p>
@@ -105,28 +115,44 @@ export function CanteiroVazio({
             </button>
           </div>
 
+          {/* Custo SEMPRE visível antes da confirmação (spec 1.3 e 1.4): com
+              semente, plantar é gratuito; sem semente, a opção mostra o preço. */}
           <ul className="space-y-0.5">
-            {especiesDisponiveis.map((especie) => (
-              <li key={especie.id}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onPlantar(especie.id);
-                    setEscolhendo(false);
-                  }}
-                  className="w-full text-left text-[11px] font-medium text-green-deep px-2 py-1.5 rounded-lg hover:bg-surface-alt flex items-center gap-1.5"
-                >
-                  <span className="truncate">{especie.nome_popular}</span>
-                  {especie.is_renisus && (
-                    <Star
-                      className="w-3 h-3 text-green-main shrink-0 ml-auto"
-                      fill="currentColor"
-                      aria-label="Espécie RENISUS"
-                    />
-                  )}
-                </button>
-              </li>
-            ))}
+            {opcoes.map(({ planta: especie, sementes }) => {
+              const temSemente = sementes >= 1;
+              const desabilitado = !temSemente && !podeComprar;
+              return (
+                <li key={especie.id}>
+                  <button
+                    type="button"
+                    disabled={desabilitado}
+                    onClick={() => {
+                      onPlantar(especie.id, !temSemente);
+                      setEscolhendo(false);
+                    }}
+                    className="w-full text-left text-[11px] font-medium text-green-deep px-2 py-1.5 rounded-lg hover:bg-surface-alt disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <span className="truncate">{especie.nome_popular}</span>
+                      {especie.is_renisus && (
+                        <Star
+                          className="w-3 h-3 text-green-main shrink-0"
+                          fill="currentColor"
+                          aria-label="Espécie RENISUS"
+                        />
+                      )}
+                    </span>
+                    <span className="block text-[10px] text-ink-muted font-normal">
+                      {temSemente
+                        ? `Plantio gratuito · ${sementes} ${sementes === 1 ? 'semente' : 'sementes'}`
+                        : podeComprar
+                          ? `Sem semente · comprar por ${ECONOMIA.semente_preco} moedas`
+                          : `Sem semente · custa ${ECONOMIA.semente_preco} moedas`}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

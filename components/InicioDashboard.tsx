@@ -21,6 +21,8 @@ interface InicioDashboardProps {
   conquistasTotal: number;
   /** Ofensiva já validada por data (ofensivaVigente) — 0 se a sequência quebrou. */
   ofensiva: number;
+  /** Soma das sementes de todas as espécies estudadas. */
+  sementes: number;
   onConcluirDesafio: (desafioId: string) => void;
 }
 
@@ -33,6 +35,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
   conquistasDesbloqueadas,
   conquistasTotal,
   ofensiva,
+  sementes,
   onConcluirDesafio,
 }) => {
   // Estado Derivado: nível não é persistido, é sempre recalculado do XP corrente.
@@ -210,7 +213,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
           </div>
           <div>
             <p className="text-xs text-ink-muted font-medium">Sementes</p>
-            <p className="text-lg font-bold text-green-800">{gameState.sementes}</p>
+            <p className="text-lg font-bold text-green-800">{sementes}</p>
           </div>
         </Link>
 
@@ -258,11 +261,18 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
                   </p>
                 </div>
               </div>
-              {act.xp_ganho > 0 && (
-                <span className="font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-lg text-xs">
-                  +{act.xp_ganho} XP
-                </span>
-              )}
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                {act.xp_ganho > 0 && (
+                  <span className="font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-lg text-xs">
+                    +{act.xp_ganho} XP
+                  </span>
+                )}
+                {act.moedas_delta !== 0 && (
+                  <span className="font-bold text-amber-800 text-[11px] tabular-nums">
+                    {act.moedas_delta > 0 ? '+' : ''}{act.moedas_delta} moedas
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>

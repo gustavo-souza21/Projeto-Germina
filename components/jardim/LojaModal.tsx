@@ -5,6 +5,8 @@ import { X, ShoppingBag, Coins } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { GameState } from '../../lib/types';
 import { ITENS_LOJA, mensagemSucesso, rotuloRetorno } from '../../lib/loja';
+import { ECONOMIA } from '../../lib/economia';
+import { ComoGanharMoedas } from '../gamificacao/ComoGanharMoedas';
 
 /* ============================================================================
    GER-UI-16 — LOJA EM MODAL
@@ -152,9 +154,15 @@ export function LojaModal({
           })}
         </ul>
 
-        <p className="px-5 pb-5 text-[11px] text-ink-muted leading-relaxed">
-          Moedas são ganhas colhendo plantas do seu jardim e completando desafios.
+        <p className="px-5 pb-4 text-[11px] text-ink-muted leading-relaxed">
+          Sementes não são vendidas em pacote: a primeira de cada espécie vem do estudo (plantio
+          gratuito) e as seguintes vêm da colheita ou custam {ECONOMIA.semente_preco} moedas, pagas na
+          hora de plantar, no próprio canteiro.
         </p>
+
+        <div className="mx-5 mb-5 p-4 rounded-xl bg-surface-alt">
+          <ComoGanharMoedas />
+        </div>
       </div>
     </div>
   );

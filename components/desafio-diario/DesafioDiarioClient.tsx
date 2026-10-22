@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GameState, PerguntaQuiz, EixoTematico } from '../../lib/types';
+import { GameState, PerguntaQuiz, EixoTematico, UserColecao } from '../../lib/types';
+import { slugify } from '../../lib/slug';
 import { aplicarGanho, mapGameStateRow } from '../../lib/gamificacao';
 import { lerOfensiva, registrarConclusao, ofensivaVigente } from '../../lib/ofensiva';
 import { PLANTAS_COM_QUIZ } from '../../data/desafioDiarioQuiz';
@@ -15,10 +16,10 @@ import { createClient } from '../../lib/supabase/client';
 // nunca aos demais desafios do catálogo (esses são concluídos por outros
 // fluxos, fora deste componente).
 const ID_DESAFIO_QUIZ = 'd0';
-import { StartScreen } from './StartScreen';
+import { StartScreen, SituacaoEstudo } from './StartScreen';
 import { QuestionScreen } from './QuestionScreen';
 import { FeedbackScreen } from './FeedbackScreen';
-import { ResultScreen, StatusRecompensa } from './ResultScreen';
+import { ResultScreen, StatusRecompensa, ResultadoEstudo } from './ResultScreen';
 
 type Letra = 'A' | 'B' | 'C' | 'D';
 const LETRAS: Letra[] = ['A', 'B', 'C', 'D'];
@@ -87,9 +88,21 @@ async function registrarRespostaQuiz(
 
 type Tela = 'start' | 'question' | 'feedback' | 'result';
 
+/** Resposta de concluir_quiz_especie (jsonb). */
+interface RespostaQuizEspecie {
+  status: Exclude<ResultadoEstudo['status'], 'pendente' | 'falhou'>;
+  xp_ganho: number;
+  moedas_ganho: number;
+  sementes_ganhas: number;
+  game_state: Parameters<typeof mapGameStateRow>[0];
+}
+
 export function DesafioDiarioClient({
   gameStateInicial,
   hoje,
+  plantaInicialId,
+  colecaoInicial,
+  fichasLidasIniciais,
 }: {
   gameStateInicial: GameState;
   /**
@@ -99,19 +112,39 @@ export function DesafioDiarioClient({
    * ofensiva testável sem mock de relógio.
    */
   hoje: string;
+  /** Espécie já selecionada ao chegar pela ficha (`/desafio-diario?planta=4`). */
+  plantaInicialId?: string;
+  /** Espécies com estudo concluído. */
+  colecaoInicial: UserColecao[];
+  /** Espécies com a ficha já lida (1ª etapa do estudo). */
+  fichasLidasIniciais: string[];
 }) {
   const router = useRouter();
 
+  const indiceInicial = Math.max(
+    0,
+    PLANTAS_COM_QUIZ.findIndex((p) => p.planta_id === plantaInicialId)
+  );
+
   const [gameState, setGameState] = useState<GameState>(gameStateInicial);
-  const [selectedPlantIndex, setSelectedPlantIndex] = useState(0);
+  const [concluidas, setConcluidas] = useState<Set<string>>(
+    () => new Set(colecaoInicial.map((c) => c.planta_id))
+  );
+  const fichasLidas = useMemo(() => new Set(fichasLidasIniciais), [fichasLidasIniciais]);
+  // Espécies cuja revisão já rendeu moedas hoje (ultima_revisao_em === hoje).
+  const [revisadasHoje, setRevisadasHoje] = useState<Set<string>>(
+    () => new Set(colecaoInicial.filter((c) => c.ultima_revisao_em === hoje).map((c) => c.planta_id))
+  );
+  const [selectedPlantIndex, setSelectedPlantIndex] = useState(indiceInicial);
   const [tela, setTela] = useState<Tela>('start');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<'A' | 'B' | 'C' | 'D' | null>(null);
   const [userAnswers, setUserAnswers] = useState<Array<'A' | 'B' | 'C' | 'D'>>([]);
   const [pointsEarnedThisSession, setPointsEarnedThisSession] = useState(0);
-  // O que a tela de resultado pode afirmar sobre a recompensa (ver ResultScreen).
+  // O que a tela de resultado pode afirmar sobre cada recompensa (ver ResultScreen).
   const [recompensa, setRecompensa] = useState<StatusRecompensa>('pendente');
   const [xpCreditado, setXpCreditado] = useState(0);
+  const [estudo, setEstudo] = useState<ResultadoEstudo>({ status: 'pendente', xp: 0, moedas: 0 });
   const [nivelNovo, setNivelNovo] = useState<string | null>(null);
   /* QA-05: antes era `useState(false)` — recarregar a página zerava a flag e o
      usuário incrementava a ofensiva infinitas vezes no mesmo dia. Agora é
@@ -128,10 +161,16 @@ export function DesafioDiarioClient({
     return embaralharAlternativas(original, `${currentPlantData.planta_id}-${currentQuestionIndex}`);
   }, [currentPlantData, currentQuestionIndex]);
 
-  // RENISUS vem SEMPRE do catálogo, nunca duplicado no banco de perguntas —
-  // a duplicação já causou divergência antes (caso Amora).
-  const isRenisus =
-    PLANTAS_CATALOGO.find((p) => p.id === currentPlantData.planta_id)?.is_renisus ?? false;
+  // RENISUS e XP vêm SEMPRE do catálogo, nunca duplicados no banco de
+  // perguntas — a duplicação já causou divergência antes (caso Amora).
+  const plantaCatalogo = PLANTAS_CATALOGO.find((p) => p.id === currentPlantData.planta_id);
+  const isRenisus = plantaCatalogo?.is_renisus ?? false;
+  const hrefFicha = plantaCatalogo ? `/biblioteca/${slugify(plantaCatalogo.nome_popular)}` : '/biblioteca';
+  const desafioCatalogo = DESAFIOS_INICIAIS.find((d) => d.id === ID_DESAFIO_QUIZ);
+  const moedasDesafio = desafioCatalogo?.moedas_recompensa ?? 0;
+
+  const situacaoDe = (plantaId: string): SituacaoEstudo =>
+    concluidas.has(plantaId) ? 'concluido' : fichasLidas.has(plantaId) ? 'ficha_lida' : 'nao_iniciado';
 
   const handleStart = () => {
     setCurrentQuestionIndex(0);
@@ -140,6 +179,7 @@ export function DesafioDiarioClient({
     setPointsEarnedThisSession(0);
     setRecompensa('pendente');
     setXpCreditado(0);
+    setEstudo({ status: 'pendente', xp: 0, moedas: 0 });
     setNivelNovo(null);
     setTela('question');
   };
@@ -161,6 +201,15 @@ export function DesafioDiarioClient({
     );
   };
 
+  /**
+   * Fim do quiz. Dois eventos INDEPENDENTES, cada um com sua RPC e sua regra
+   * de repetição:
+   *   1. Desafio do dia (concluir_desafio_diario): o primeiro quiz do dia, de
+   *      qualquer espécie. Refazer no mesmo dia é treino.
+   *   2. Estudo da espécie (concluir_quiz_especie): na primeira conclusão,
+   *      com a ficha lida, rende XP + moedas + a semente da espécie; depois,
+   *      revisão com moedas uma vez por dia (decisão de 22/10/2026).
+   */
   const handleNextStep = async () => {
     if (currentQuestionIndex < currentPlantData.desafios.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
@@ -169,97 +218,86 @@ export function DesafioDiarioClient({
       return;
     }
 
-    // Guarda importante: StartScreen deixa "Refazer" mesmo depois de
-    // jaCompletouHoje ser true. Sem esta guarda, refazer o quiz no mesmo dia
-    // continuaria concedendo XP/moedas e reescrevendo o registro de hoje em
-    // desafios_diarios_concluidos — furando exatamente o "uma vez por dia"
-    // que a existência da linha, sozinha, deveria garantir. A tela de
-    // resultado desta sessão continua funcionando (o placar é sempre real,
-    // calculado das respostas locais); só a recompensa não se repete.
+    const supabase = createClient();
+    const gameStateAnterior = gameState;
+    let estadoFinal = gameState;
+    setEstudo({ status: 'pendente', xp: 0, moedas: 0 });
+
+    // ---- 1. Desafio do dia ------------------------------------------------
     if (jaCompletouHoje) {
+      // StartScreen deixa refazer depois de concluído; sem esta guarda o
+      // "uma vez por dia" dependeria só do servidor e a tela anunciaria XP.
       setRecompensa('treino');
       setTela('result');
-      return;
+    } else {
+      // QA-02: o ganho passa por aplicarGanho (recalcula o nível pelo XP).
+      const xpGanho = pointsEarnedThisSession * 5;
+      const resultado = aplicarGanho(gameState, { xp: xpGanho, moedas: moedasDesafio });
+      // QA-05: a ofensiva é recalculada por data.
+      const ofensiva = registrarConclusao(gameState.streak, gameState.ultimo_desafio_em, hoje);
+      setGameState({ ...resultado.estado, ...ofensiva });
+      setRecompensa('pendente');
+      setXpCreditado(xpGanho);
+      setTela('result');
+
+      // O servidor recalcula a data (America/Manaus) e limita xp/moedas ao
+      // teto de catalogo_desafios — nunca aceita o valor cru do cliente.
+      const { data, error } = await supabase.rpc('concluir_desafio_diario', {
+        p_desafio_id: ID_DESAFIO_QUIZ,
+        p_xp_ganho: xpGanho,
+        p_moedas_ganho: moedasDesafio,
+      });
+
+      if (error || !data?.[0]) {
+        setGameState(gameStateAnterior);
+        setRecompensa('falhou');
+        console.error('Falha ao registrar desafio concluído:', error?.message);
+      } else {
+        estadoFinal = mapGameStateRow(data[0]);
+        setGameState(estadoFinal);
+        // A RPC devolve o estado sem creditar quando o desafio de hoje já
+        // existe no banco; todo desafio concluído rende pelo menos 100 XP.
+        const xpReal = estadoFinal.xp - gameStateAnterior.xp;
+        if (xpReal <= 0) {
+          setRecompensa('treino');
+        } else {
+          setXpCreditado(xpReal);
+          setRecompensa('creditada');
+        }
+      }
     }
 
-    // Desafio da planta terminou — soma XP e streak.
-    // QA-02: o ganho passa por aplicarGanho, que recalcula o nível a partir
-    // do XP (Estado Derivado). Antes somava XP direto, então concluir
-    // desafios nunca fazia o usuário subir de nível.
-    const xpGanho = pointsEarnedThisSession * 5;
-    // moedas_recompensa vem do catálogo (DESAFIOS_INICIAIS), não de um
-    // número novo inventado aqui — mesmo raciocínio de QA-03 na loja: a
-    // recompensa anunciada e a creditada têm que ser o mesmo dado. O código
-    // anterior não concedia moeda nenhuma ao concluir o quiz, apesar do
-    // catálogo prometer 35 — corrigido aqui, sinalizando a mudança.
-    const moedasGanho = DESAFIOS_INICIAIS.find((d) => d.id === ID_DESAFIO_QUIZ)?.moedas_recompensa ?? 0;
-    const resultado = aplicarGanho(gameState, { xp: xpGanho, moedas: moedasGanho });
-
-    // QA-05: a ofensiva é recalculada por data. Refazer o desafio no mesmo dia
-    // não incrementa (coberto pela guarda acima); um dia de falta reinicia a
-    // sequência em 1.
-    const ofensiva = registrarConclusao(
-      gameState.streak,
-      gameState.ultimo_desafio_em,
-      hoje
-    );
-
-    const gameStateAnterior = gameState;
-    const novoEstado: GameState = { ...resultado.estado, ...ofensiva };
-    setGameState(novoEstado);
-    setRecompensa('pendente');
-    setXpCreditado(xpGanho);
-    setTela('result');
-
-    // concluir_desafio_diario (Migration 8 — GERMINA_Auditoria_
-    // Autenticacao_Autorizacao.md, Fase 1) substitui os três passos
-    // sequenciais que existiam aqui (upsert em desafios_diarios_concluidos +
-    // insert em atividades + update em game_state) por uma única transação
-    // no servidor. Fecha o exploit de replay por data forjada: "hoje" era
-    // este mesmo `hoje` recebido como prop (calculado no servidor no
-    // primeiro render, mas controlado pelo CLIENTE em qualquer chamada
-    // direta subsequente à API) — agora a função recalcula a data no
-    // servidor (fuso America/Manaus) e ignora qualquer data que o cliente
-    // tente mandar. xp/moedas continuam informados aqui (baseados no placar
-    // real das respostas), mas o servidor SEMPRE limita ao teto do catálogo
-    // (catalogo_desafios) antes de creditar — nunca aceita o valor cru.
-    const supabase = createClient();
-    const { data, error } = await supabase.rpc('concluir_desafio_diario', {
-      p_desafio_id: ID_DESAFIO_QUIZ,
-      p_xp_ganho: xpGanho,
-      p_moedas_ganho: moedasGanho,
+    // ---- 2. Estudo da espécie ---------------------------------------------
+    const { data: respostaEstudo, error: erroEstudo } = await supabase.rpc('concluir_quiz_especie', {
+      p_planta_id: currentPlantData.planta_id,
+      p_planta_nome: currentPlantData.planta,
     });
 
-    if (error || !data?.[0]) {
-      // Reverte xp/moedas/streak — o placar na tela de resultado continua
-      // exibido (é real, independe da persistência), só a recompensa é
-      // desfeita porque não foi confirmada pelo servidor.
-      setGameState(gameStateAnterior);
-      setRecompensa('falhou');
-      console.error('Falha ao registrar desafio concluído:', error?.message);
-      return;
+    if (erroEstudo || !respostaEstudo) {
+      setEstudo({ status: 'falhou', xp: 0, moedas: 0 });
+      console.error('Falha ao registrar o estudo da espécie:', erroEstudo?.message);
+    } else {
+      const r = respostaEstudo as unknown as RespostaQuizEspecie;
+      setEstudo({ status: r.status, xp: r.xp_ganho, moedas: r.moedas_ganho });
+      estadoFinal = mapGameStateRow(r.game_state);
+      setGameState(estadoFinal);
+      if (r.status === 'estudo_concluido') {
+        setConcluidas((prev) => new Set(prev).add(currentPlantData.planta_id));
+      }
+      // A conclusão e a revisão paga ocupam a revisão do dia (regra do servidor).
+      if (r.status === 'estudo_concluido' || r.status === 'revisao_recompensada') {
+        setRevisadasHoje((prev) => new Set(prev).add(currentPlantData.planta_id));
+      }
     }
-
-    // Substitui o palpite otimista (aplicarGanho + registrarConclusao
-    // locais) pelo xp/moedas/streak autoritativos devolvidos pela RPC.
-    const confirmado = mapGameStateRow(data[0]);
-    setGameState(confirmado);
-
-    // A RPC devolve o estado sem creditar quando o desafio de hoje já existe
-    // no banco. O único sinal disso é o XP não ter mudado — e todo desafio
-    // concluído rende pelo menos 100 XP, então a comparação é segura.
-    const xpReal = confirmado.xp - gameStateAnterior.xp;
-    if (xpReal <= 0) {
-      setRecompensa('treino');
-      return;
-    }
-    setXpCreditado(xpReal);
-    setRecompensa('creditada');
 
     // Subir de nível era anunciado só no Jardim; aqui passava em silêncio.
     const nivelAntes = calcularNivel(gameStateAnterior.xp);
-    const nivelDepois = calcularNivel(confirmado.xp);
+    const nivelDepois = calcularNivel(estadoFinal.xp);
     if (nivelDepois.nivel > nivelAntes.nivel) setNivelNovo(nivelDepois.nome);
+
+    // Cabeçalho e menu lateral vêm do layout, renderizado no servidor; sem
+    // isto continuariam mostrando o XP e o nível de antes (spec 6.3).
+    router.refresh();
   };
 
   // Compara com o gabarito JÁ EMBARALHADO de cada pergunta — comparar com o
@@ -278,14 +316,20 @@ export function DesafioDiarioClient({
         <StartScreen
           plantaData={currentPlantData}
           isRenisus={isRenisus}
+          xpEstudo={plantaCatalogo?.xp_recompensa ?? 0}
+          hrefFicha={hrefFicha}
           allPlants={PLANTAS_COM_QUIZ}
           selectedPlantIndex={selectedPlantIndex}
           onSelectPlant={(idx) => {
             setSelectedPlantIndex(idx);
             setCurrentQuestionIndex(0);
           }}
+          situacaoDe={situacaoDe}
+          revisaoPagaHoje={(id) => revisadasHoje.has(id)}
           ofensiva={ofensivaVigente(gameState, hoje)}
           jaCompletouHoje={jaCompletouHoje}
+          xpDesafio={desafioCatalogo?.xp_recompensa ?? 0}
+          moedasDesafio={moedasDesafio}
           onStart={handleStart}
         />
       )}
@@ -324,6 +368,9 @@ export function DesafioDiarioClient({
           pointsEarned={pointsEarnedThisSession}
           recompensa={recompensa}
           xpGanho={xpCreditado}
+          moedasDesafio={moedasDesafio}
+          estudo={estudo}
+          hrefFicha={hrefFicha}
           ofensiva={ofensivaVigente(gameState, hoje)}
           nivelNovo={nivelNovo}
           onHome={() => router.push('/inicio')}

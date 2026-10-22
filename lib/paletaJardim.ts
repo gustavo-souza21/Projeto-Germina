@@ -17,17 +17,8 @@
    a cena e produzia o aspecto de camuflagem.
    ========================================================================= */
 export const PALETA_JARDIM = {
-  ceu: {
-    topo: '#a4c8e1',
-    meio: '#cfe3ee',
-    horizonte: '#f2f7f9',
-  },
-
-  /** Montanhas: azul-ardósia. A da frente é mais escura e saturada. */
-  montanha: {
-    distante: '#7ca1b4',
-    proxima: '#638c9f',
-  },
+  // Céu e montanhas saíram em 22/10/2026 (pedido da Sarah): o cenário é um
+  // chão verde contínuo, e a profundidade vem só dos tons de verde abaixo.
 
   /**
    * Linha de árvores. A sugestão original trazia um verde único (#428c5c);

@@ -228,7 +228,7 @@ export const HerbarioVirtual: React.FC<HerbarioVirtualProps> = ({
                   </span>
 
                   <span className="text-xs font-bold text-green-deep group-hover:text-green-main flex items-center gap-1">
-                    <span>Ver Ficha Botânica</span>
+                    <span>Ver ficha botânica</span>
                     <span>&rarr;</span>
                   </span>
                 </div>

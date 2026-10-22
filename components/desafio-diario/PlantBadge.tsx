@@ -8,6 +8,24 @@ interface PlantBadgeProps {
   eixo: EixoTematico;
 }
 
+/* Rótulos de EXIBIÇÃO, em capitalização convencional (pedido da Sarah sobre a
+   curadoria). Os valores internos (`facil`, 'Indicação Terapêutica'...) não
+   mudam: são gravados em respostas_quiz e usados para contar a conquista
+   Curador Atento. Antes o nível aparecia como "FACIL", sem acento. */
+const ROTULO_NIVEL: Record<NivelDificuldade, string> = {
+  facil: 'Fácil',
+  medio: 'Médio',
+  dificil: 'Difícil',
+};
+
+const ROTULO_EIXO: Record<EixoTematico, string> = {
+  'Indicação Terapêutica': 'Indicação terapêutica',
+  'Preparo Tradicional': 'Preparo tradicional',
+  'Segurança e Contraindicação': 'Segurança e contraindicação',
+  'Identificação Botânica': 'Identificação botânica',
+  'Curiosidade ODS': 'Curiosidade ODS',
+};
+
 export function PlantBadge({ plantaName, isRenisus, nivel, eixo }: PlantBadgeProps) {
   const difficultyConfig = {
     facil: 'bg-green-soft/40 text-green-deep border-green-soft',
@@ -33,7 +51,7 @@ export function PlantBadge({ plantaName, isRenisus, nivel, eixo }: PlantBadgePro
 
       {isRenisus && (
         <span
-          className="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-teal-100 text-teal-800 border border-teal-200 px-2 py-1 rounded"
+          className="inline-flex items-center gap-1 text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200 px-2 py-1 rounded"
           title="Relação Nacional de Plantas Medicinais de Interesse ao SUS"
         >
           <ShieldCheck className="w-3 h-3 text-teal-700" />
@@ -41,13 +59,13 @@ export function PlantBadge({ plantaName, isRenisus, nivel, eixo }: PlantBadgePro
         </span>
       )}
 
-      <span className={`inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-1 rounded border ${difficultyConfig}`}>
-        {nivel}
+      <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-1 rounded border ${difficultyConfig}`}>
+        {ROTULO_NIVEL[nivel]}
       </span>
 
-      <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase bg-blue-main/10 text-blue-main border border-blue-main/25 px-2 py-1 rounded">
+      <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-blue-main/10 text-blue-main border border-blue-main/25 px-2 py-1 rounded">
         {eixoIcon[eixo]}
-        {eixo}
+        {ROTULO_EIXO[eixo]}
       </span>
     </div>
   );

@@ -27,7 +27,7 @@ export function FeedbackBanner({
           14,45:1 para 17,4:1. */}
       <div className={`p-5 text-center text-white ${isCorrect ? 'bg-green-main' : 'bg-blue-deep'}`}>
         <h4 className="text-xl font-bold tracking-tight">
-          {isCorrect ? 'Resposta Correta!' : `A resposta certa é a alternativa ${respostaCorreta}`}
+          {isCorrect ? 'Resposta correta!' : `A resposta certa é a alternativa ${respostaCorreta}`}
         </h4>
       </div>
 
@@ -44,9 +44,13 @@ export function FeedbackBanner({
             ? 'bg-green-soft/40 border-green-soft text-green-deep'
             : 'bg-blue-main/10 border-blue-main/25 text-blue-deep'
         }`}>
-          <span>{modoTreino ? 'Treino:' : 'Você ganhou:'}</span>
+          <span>{modoTreino ? 'Pontos desta rodada:' : 'Você ganhou:'}</span>
           <span className="text-sm font-bold">
-            {modoTreino ? 'sem XP hoje' : isCorrect ? '+10 pts (+50 XP)' : '+5 pts (+25 XP)'}
+            {modoTreino
+              ? `+${isCorrect ? 10 : 5} pts (desafio de hoje já pago)`
+              : isCorrect
+                ? '+10 pts (+50 XP)'
+                : '+5 pts (+25 XP)'}
           </span>
         </div>
 
@@ -56,7 +60,7 @@ export function FeedbackBanner({
           onClick={onNext}
           className="w-full py-3.5 bg-blue-main hover:bg-blue-deep text-white rounded-xl font-bold transition-colors active:scale-[0.98]"
         >
-          {isLastQuestion ? 'VER RESULTADO FINAL' : 'PRÓXIMA PERGUNTA'}
+          {isLastQuestion ? 'Ver resultado final' : 'Próxima pergunta'}
         </button>
       </div>
     </div>

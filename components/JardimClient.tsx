@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { JardimConhecimento } from './JardimConhecimento';
 import { GameState, TerrenoJardim, UserColecao } from '../lib/types';
 import { aplicarGanho, debitarRecursos, mapGameStateRow } from '../lib/gamificacao';
 import { BONUS_ADUBO_MS, calcularProgresso } from '../lib/jardim';
 import { buscarItemLoja } from '../lib/loja';
+import { ECONOMIA } from '../lib/economia';
 import { createClient } from '../lib/supabase/client';
 
 /** Frequência do relógio. 1s é suficiente para o contador regressivo dos canteiros. */
@@ -28,8 +30,11 @@ export function JardimClient({
    */
   agoraInicial: number;
 }) {
+  const router = useRouter();
   const [gameState, setGameState] = useState(gameStateInicial);
   const [terrenos, setTerrenos] = useState(terrenosIniciais);
+  // Sementes são POR ESPÉCIE (Migration 14) e moram na coleção.
+  const [colecao, setColecao] = useState(colecaoUsuario);
   // Aviso de promoção de nível. Subir de nível libera um canteiro, então a
   // mudança precisa ser anunciada — antes ela acontecia em silêncio.
   const [avisoNivel, setAvisoNivel] = useState<string | null>(null);
@@ -73,13 +78,35 @@ export function JardimClient({
    * autoritativo devolvido pela RPC assim que ela responde — nunca fica só
    * no palpite do cliente.
    */
-  const handlePlantSemente = async (terrenoId: number, plantaId: string): Promise<boolean> => {
-    const estadoDebitado = debitarRecursos(gameState, { sementes: 1 });
-    if (!estadoDebitado) return false; // sem saldo — o botão já vem desabilitado na UI
+  const handlePlantSemente = async (
+    terrenoId: number,
+    plantaId: string,
+    comprar: boolean
+  ): Promise<boolean> => {
+    /* Migration 14: planta-se com a semente DA ESPÉCIE (a primeira vem do
+       estudo — o plantio gratuito). Sem semente, `comprar` paga o preço da
+       configuração e planta na mesma transação no servidor (plantar_especie),
+       então nunca há moeda descontada sem plantio, nem o contrário. */
+    const registro = colecao.find((c) => c.planta_id === plantaId);
+    if (!registro) return false;
+    const usaSemente = registro.sementes >= 1;
+    if (!usaSemente && !comprar) return false;
+
+    const estadoDebitado = usaSemente
+      ? gameState
+      : debitarRecursos(gameState, { moedas: ECONOMIA.semente_preco });
+    if (!estadoDebitado) return false; // sem moedas — a opção já vem desabilitada na UI
 
     const terrenosAnteriores = terrenos;
     const gameStateAnterior = gameState;
+    const colecaoAnterior = colecao;
     const agoraPlantio = Date.now();
+
+    if (usaSemente) {
+      setColecao((prev) =>
+        prev.map((c) => (c.planta_id === plantaId ? { ...c, sementes: c.sementes - 1 } : c))
+      );
+    }
 
     setTerrenos((prev) =>
       prev.map((t) =>
@@ -99,14 +126,16 @@ export function JardimClient({
     setGameState(estadoDebitado);
 
     const supabase = createClient();
-    const { data, error } = await supabase.rpc('plantar_semente', {
+    const { data, error } = await supabase.rpc('plantar_especie', {
       p_terreno_id: terrenoId,
       p_planta_id: plantaId,
+      p_comprar: !usaSemente,
     });
 
     if (error || !data?.[0]) {
       setTerrenos(terrenosAnteriores);
       setGameState(gameStateAnterior);
+      setColecao(colecaoAnterior);
       console.error('Falha ao plantar semente:', error?.message);
       return false;
     }
@@ -164,6 +193,14 @@ export function JardimClient({
     // já foi atualizada de forma otimista (abaixo) antes da resposta do servidor.
     const terrenosAnteriores = terrenos;
     const gameStateAnterior = gameState;
+    const colecaoAnterior = colecao;
+
+    // A colheita devolve semente da MESMA espécie, para replantar.
+    setColecao((prev) =>
+      prev.map((c) =>
+        c.planta_id === plantaIdColhida ? { ...c, sementes: c.sementes + ECONOMIA.colheita_sementes } : c
+      )
+    );
 
     setTerrenos((prev) =>
       prev.map((t) =>
@@ -182,7 +219,10 @@ export function JardimClient({
     // QA-02: o ganho passa por aplicarGanho, que recalcula o nível a partir do
     // XP (Estado Derivado) — antes somava XP direto e o nível ficava
     // congelado, travando o desbloqueio dos canteiros 6, 7 e 8.
-    const resultado = aplicarGanho(gameState, { xp: 40, moedas: 15, sementes: 2 });
+    const resultado = aplicarGanho(gameState, {
+      xp: ECONOMIA.colheita_xp,
+      moedas: ECONOMIA.colheita_moedas,
+    });
     setGameState(resultado.estado);
 
     if (resultado.subiuDeNivel) {
@@ -206,6 +246,7 @@ export function JardimClient({
       // Rollback: desfaz a atualização otimista se o servidor recusou a colheita.
       setTerrenos(terrenosAnteriores);
       setGameState(gameStateAnterior);
+      setColecao(colecaoAnterior);
       setAvisoNivel(null);
       console.error('Falha ao colher planta:', error?.message);
       return false;
@@ -214,6 +255,9 @@ export function JardimClient({
     // Substitui o palpite otimista (aplicarGanho com constantes locais) pelo
     // valor autoritativo devolvido pela RPC.
     setGameState(mapGameStateRow(data[0]));
+    // O XP mudou: cabeçalho e menu lateral (layout do servidor) precisam
+    // acompanhar, senão mostram o nível antigo (spec 6.3).
+    router.refresh();
     return true;
   };
 
@@ -275,7 +319,7 @@ export function JardimClient({
       onDispensarAvisoNivel={() => setAvisoNivel(null)}
       gameState={gameState}
       terrenos={terrenos}
-      colecaoUsuario={colecaoUsuario}
+      colecaoUsuario={colecao}
       onPlantSemente={handlePlantSemente}
       onAdubarTerreno={handleAdubarTerreno}
       onColherPlanta={handleColherPlanta}

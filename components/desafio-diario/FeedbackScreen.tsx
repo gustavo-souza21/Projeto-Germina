@@ -82,7 +82,7 @@ export function FeedbackScreen({
         <div className="flex items-start gap-1.5 pt-1 border-t border-black/[0.06]">
           <BookMarked className="w-3.5 h-3.5 mt-0.5 shrink-0 text-ink-muted" />
           <p className="text-[10px] leading-snug text-ink-muted">
-            <span className="font-bold uppercase tracking-wide">Fonte na curadoria — </span>
+            <span className="font-bold">Fonte na curadoria: </span>
             {desafio.fonte}{' '}
             <span className="opacity-70">
               (Freitas, 2025)

@@ -4,7 +4,8 @@ import { buttonClasses } from '../ui/Button';
 import { BarraXP } from '../gamificacao/BarraXP';
 import { BookMarked, Target, Sprout, BookOpen, Users } from 'lucide-react';
 import { GameState, TerrenoJardim } from '../../lib/types';
-import { calcularNivel } from '../../data/plantasData';
+import { calcularNivel, DESAFIOS_INICIAIS } from '../../data/plantasData';
+import { ComoGanharMoedas } from '../gamificacao/ComoGanharMoedas';
 import { diaLocal, ofensivaVigente } from '../../lib/ofensiva';
 
 /* ============================================================================
@@ -39,6 +40,8 @@ export function PainelJardim({
   const canteirosLiberados = terrenos.filter(
     (t) => nivelAtual >= t.nivel_necessario
   ).length;
+
+  const desafioDia = DESAFIOS_INICIAIS.find((d) => d.id === 'd0');
 
   const missoes = [
     {
@@ -89,7 +92,7 @@ export function PainelJardim({
 
         <div className="flex items-center justify-between gap-3 mt-3">
           <p className="text-[11px] font-semibold text-green-deep">
-            Recompensa: até 200 XP
+            Recompensa: até {desafioDia?.xp_recompensa ?? 0} XP e {desafioDia?.moedas_recompensa ?? 0} moedas
           </p>
           <Link
             href="/desafio-diario"
@@ -136,6 +139,11 @@ export function PainelJardim({
             );
           })}
         </ul>
+      </Card>
+
+      {/* Spec 1.3: o saldo de moedas fica no topo do Jardim; aqui, como ganhá-las. */}
+      <Card padding="md">
+        <ComoGanharMoedas />
       </Card>
     </div>
   );

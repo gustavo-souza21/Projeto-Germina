@@ -1,6 +1,7 @@
+import { diaLocal } from '../../../../lib/ofensiva';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getPlantasCatalogo, getColecao } from '../../../../lib/queries/colecao';
+import { getPlantasCatalogo, getColecao, getFichasLidas } from '../../../../lib/queries/colecao';
 import { getGameStateOpcional } from '../../../../lib/queries/perfil';
 import { slugify } from '../../../../lib/slug';
 import { FichaBotanicaClient } from '../../../../components/FichaBotanicaClient';
@@ -58,7 +59,19 @@ export default async function FichaBotanicaPage({ params }: PageProps) {
   // Fase 4: a ficha é visível a visitante, então as duas precisam tolerar
   // ausência de sessão — `getColecao()` devolve lista vazia (nada estudado) e
   // `getGameStateOpcional()` devolve `null` (não existe XP sem conta).
-  const [colecao, gameState] = await Promise.all([getColecao(), getGameStateOpcional()]);
+  const [colecao, fichasLidas, gameState] = await Promise.all([
+    getColecao(),
+    getFichasLidas(),
+    getGameStateOpcional(),
+  ]);
 
-  return <FichaBotanicaClient planta={planta} colecaoInicial={colecao} gameStateInicial={gameState} />;
+  return (
+    <FichaBotanicaClient
+      planta={planta}
+      colecaoInicial={colecao}
+      fichaLidaInicial={fichasLidas.includes(planta.id)}
+      hoje={diaLocal()}
+      gameStateInicial={gameState}
+    />
+  );
 }

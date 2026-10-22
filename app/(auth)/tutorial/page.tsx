@@ -10,17 +10,17 @@ const SLIDES = [
   {
     icone: BookOpen,
     titulo: 'Estude as plantas',
-    texto: 'Explore o Herbário Digital, conheça os usos tradicionais de cada espécie amazônica e responda os desafios diários pra aprender de verdade.',
+    texto: 'Leia a ficha de uma espécie amazônica na Biblioteca e responda o quiz dela. Ficha e quiz juntos concluem o estudo da espécie.',
   },
   {
     icone: Sprout,
-    titulo: 'Ganhe sementes e XP',
-    texto: 'Cada planta estudada e cada desafio concluído rendem XP, sementes e moedas — sua evolução no Germina.',
+    titulo: 'Ganhe a semente da espécie',
+    texto: 'Cada estudo concluído rende XP, moedas e a semente daquela planta. O Desafio Diário e as revisões rendem mais moedas.',
   },
   {
     icone: Trophy,
     titulo: 'Cuide do seu Jardim',
-    texto: 'Use as sementes pra plantar no Jardim do Conhecimento, adube pra acelerar o crescimento e desbloqueie novos terrenos conforme sobe de nível.',
+    texto: 'O primeiro plantio de cada espécie estudada é gratuito. Use moedas para comprar adubo, acompanhe a planta crescer e libere novos canteiros conforme sobe de nível.',
   },
 ];
 

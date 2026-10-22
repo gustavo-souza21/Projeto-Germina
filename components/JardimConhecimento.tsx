@@ -8,6 +8,8 @@ import { Canteiro } from './jardim/Canteiro';
 import { FundoHorta } from './jardim/FundoHorta';
 import { LojaModal } from './jardim/LojaModal';
 import { PainelJardim } from './jardim/PainelJardim';
+import { ECONOMIA } from '../lib/economia';
+import { totalSementes } from '../lib/sementes';
 import { derivarEstadoCanteiro } from '../lib/jardim';
 
 /**
@@ -29,7 +31,8 @@ interface JardimConhecimentoProps {
   terrenos: TerrenoJardim[];
   colecaoUsuario: UserColecao[];
   /** Resolve `true`/`false` conforme a persistência no Supabase teve sucesso — decide qual toast mostrar. */
-  onPlantSemente: (terrenoId: number, plantaId: string) => Promise<boolean>;
+  /** `comprar`: sem semente da espécie, paga o preço da configuração e planta. */
+  onPlantSemente: (terrenoId: number, plantaId: string, comprar: boolean) => Promise<boolean>;
   onAdubarTerreno: (terrenoId: number) => Promise<boolean>;
   onColherPlanta: (terrenoId: number) => Promise<boolean>;
   /** QA-03: só o id trafega; preço e quantidade vêm do catálogo em lib/loja.ts. */
@@ -53,8 +56,12 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
   onDispensarAvisoNivel,
   agora,
 }) => {
-  const plantasDesbloqueadasIds = new Set(colecaoUsuario.map((c) => c.planta_id));
-  const plantasPlantaveis = PLANTAS_CATALOGO.filter((p) => plantasDesbloqueadasIds.has(p.id));
+  // Espécies estudadas, cada uma com as SUAS sementes (Migration 14).
+  const opcoesPlantio = PLANTAS_CATALOGO.flatMap((planta) => {
+    const registro = colecaoUsuario.find((c) => c.planta_id === planta.id);
+    return registro ? [{ planta, sementes: registro.sementes }] : [];
+  });
+  const sementesTotal = totalSementes(colecaoUsuario);
   // Estado Derivado: nível não é persistido, é sempre recalculado do XP corrente.
   const nivelAtual = calcularNivel(gameState.xp).nivel;
 
@@ -84,7 +91,7 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
 
         <dl className="flex items-center gap-4 bg-card-bg rounded-xl px-4 py-2.5 border border-black/[0.04] shadow-card shrink-0">
           {[
-            { valor: gameState.sementes, label: 'Sementes' },
+            { valor: sementesTotal, label: 'Sementes' },
             { valor: gameState.adubo, label: 'Adubos' },
             { valor: gameState.moedas, label: 'Moedas' },
           ].map((item) => (
@@ -176,8 +183,7 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
 
                   // Regras de "pode agir" ficam no container, que é quem
                   // enxerga o inventário. Os canteiros só refletem a decisão.
-                  const semEspecie = plantasPlantaveis.length === 0;
-                  const semSemente = gameState.sementes <= 0;
+                  const semEspecie = opcoesPlantio.length === 0;
                   const semAdubo = gameState.adubo <= 0;
 
                   return (
@@ -185,25 +191,24 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
                       key={terreno.id}
                       estado={estado}
                       identificacao={`Canteiro ${terreno.id}`}
-                      especiesDisponiveis={plantasPlantaveis}
-                      podePlantar={!semEspecie && !semSemente}
+                      opcoesPlantio={opcoesPlantio}
+                      moedas={gameState.moedas}
+                      podePlantar={!semEspecie}
                       motivoPlantarBloqueado={
-                        semEspecie
-                          ? 'Estude uma planta na Biblioteca'
-                          : semSemente
-                            ? 'Sem sementes'
-                            : undefined
+                        semEspecie ? 'Estude uma espécie para ganhar a semente' : undefined
                       }
-                      onPlantar={async (plantaId) => {
-                        const nome = plantasPlantaveis.find((p) => p.id === plantaId)?.nome_popular;
+                      onPlantar={async (plantaId, comprar) => {
+                        const nome = opcoesPlantio.find((o) => o.planta.id === plantaId)?.planta.nome_popular;
                         // Toast só depois da resposta do Supabase, não antes:
                         // mostrar "plantada com sucesso" otimisticamente e a
                         // escrita falhar deixaria o usuário lido, achando que
                         // funcionou quando o canteiro voltou vazio.
-                        const sucesso = await onPlantSemente(terreno.id, plantaId);
+                        const sucesso = await onPlantSemente(terreno.id, plantaId, comprar);
                         showStatus(
                           sucesso
-                            ? `${nome ?? 'Semente'} plantada com sucesso!`
+                            ? comprar
+                              ? `${nome ?? 'Semente'} plantada! Semente comprada por ${ECONOMIA.semente_preco} moedas.`
+                              : `${nome ?? 'Semente'} plantada com sucesso!`
                             : 'Não foi possível plantar agora. Tente novamente.'
                         );
                       }}
@@ -221,7 +226,7 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
                         const sucesso = await onColherPlanta(terreno.id);
                         showStatus(
                           sucesso
-                            ? 'Colheita concluída! +40 XP, +15 moedas e +2 sementes.'
+                            ? `Colheita concluída! +${ECONOMIA.colheita_xp} XP, +${ECONOMIA.colheita_moedas} moedas e +${ECONOMIA.colheita_sementes} semente para replantar.`
                             : 'Não foi possível colher agora. Tente novamente.'
                         );
                       }}
