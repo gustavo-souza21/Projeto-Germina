@@ -49,7 +49,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
           Início com texto direto sobre o off-white. */}
       <header>
         <h1 className="text-2xl font-bold tracking-tight text-green-deep">
-          Olá, {profile.nome_completo.split(' ')[0]}! 🌿
+          Olá, {profile.nome_completo.split(' ')[0]}!
         </h1>
         <p className="text-sm text-ink-muted mt-1">
           Continue cultivando conhecimento. Seu nível atual é{' '}
@@ -248,9 +248,6 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
               className="flex items-center justify-between p-3 rounded-xl bg-surface-alt border border-black/[0.04] text-xs sm:text-sm"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-green-soft text-green-deep flex items-center justify-center font-bold">
-                  🌱
-                </div>
                 <div>
                   <p className="font-semibold text-ink leading-tight">{act.texto}</p>
                   <p className="text-[11px] text-ink-muted mt-0.5">

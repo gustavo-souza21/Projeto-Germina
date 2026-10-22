@@ -184,7 +184,7 @@ export function ConfiguracoesClient({
       {mensagemErro && (
         <div className="bg-red-50 border border-red-200 text-red-900 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-between shadow-sm">
           <span>{mensagemErro}</span>
-          <button onClick={() => setMensagemErro(null)} className="text-xs font-bold">✕</button>
+          <button onClick={() => setMensagemErro(null)} className="text-xs font-bold">Fechar</button>
         </div>
       )}
 

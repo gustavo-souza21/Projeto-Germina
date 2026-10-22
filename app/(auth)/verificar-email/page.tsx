@@ -74,7 +74,7 @@ function VerificarEmailConteudo() {
             disabled={carregandoReenvio}
             className="w-full py-3.5 rounded-2xl font-semibold text-[var(--color-blue-deep)] bg-[var(--color-card-bg)] border border-[var(--color-blue-main)]/30 disabled:opacity-60"
           >
-            {carregandoReenvio ? 'Reenviando...' : reenviado ? 'E-mail reenviado ✓' : 'Reenviar e-mail'}
+            {carregandoReenvio ? 'Reenviando...' : reenviado ? 'E-mail reenviado' : 'Reenviar e-mail'}
           </button>
 
           {erroReenvio && (

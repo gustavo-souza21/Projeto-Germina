@@ -75,7 +75,7 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-green-deep">
-            Jardim do Conhecimento 🌿
+            Jardim do Conhecimento
           </h1>
           <p className="text-sm text-ink-muted mt-1">
             Cultive conhecimento, colha conquistas e transforme o mundo.
@@ -84,14 +84,14 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
 
         <dl className="flex items-center gap-4 bg-card-bg rounded-xl px-4 py-2.5 border border-black/[0.04] shadow-card shrink-0">
           {[
-            { emoji: '🌱', valor: gameState.sementes, label: 'Sementes' },
-            { emoji: '🧪', valor: gameState.adubo, label: 'Adubos' },
-            { emoji: '🪙', valor: gameState.moedas, label: 'Moedas' },
+            { valor: gameState.sementes, label: 'Sementes' },
+            { valor: gameState.adubo, label: 'Adubos' },
+            { valor: gameState.moedas, label: 'Moedas' },
           ].map((item) => (
             <div key={item.label} className="text-center">
               <dt className="sr-only">{item.label}</dt>
               <dd className="text-sm font-bold text-green-deep tabular-nums">
-                <span aria-hidden>{item.emoji}</span> {item.valor}
+                {item.valor}
               </dd>
               <p className="text-[10px] text-ink-muted mt-0.5" aria-hidden>
                 {item.label}
@@ -112,7 +112,7 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
       {mensagemStatus && (
         <div className="bg-emerald-100 border border-emerald-400 text-emerald-900 px-4 py-2.5 rounded-xl text-xs font-bold animate-in fade-in flex items-center justify-between shadow">
           <span>{mensagemStatus}</span>
-          <button onClick={() => setMensagemStatus('')} className="text-xs font-bold">✕</button>
+          <button onClick={() => setMensagemStatus('')} className="text-xs font-bold">Fechar</button>
         </div>
       )}
 

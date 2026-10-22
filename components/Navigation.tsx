@@ -59,9 +59,6 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-[#8fb996]/30 min-h-[calc(100vh-65px)] p-4 shadow-sm">
         <div className="mb-6 px-3 py-2 bg-[#f3f6f0] rounded-xl border border-[#8fb996]/40">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#2f4d38] text-emerald-300 flex items-center justify-center font-black text-lg">
-              🌱
-            </div>
             <div>
               <h1 className="font-extrabold text-[#2f4d38] text-base leading-tight tracking-wide">
                 GERMINA

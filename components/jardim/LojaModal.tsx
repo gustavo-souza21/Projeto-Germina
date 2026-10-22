@@ -107,10 +107,6 @@ export function LojaModal({
                 key={item.id}
                 className="flex items-center gap-3 p-3 rounded-xl bg-surface-alt"
               >
-                <span className="text-2xl shrink-0" aria-hidden>
-                  {item.emoji}
-                </span>
-
                 <div className="flex-1 min-w-0">
                   <h3 className="text-[13px] font-bold text-green-deep leading-snug">
                     {item.nome}
@@ -149,7 +145,7 @@ export function LojaModal({
                   }}
                   className="shrink-0"
                 >
-                  {item.custo} 🪙
+                  {item.custo} moedas
                 </Button>
               </li>
             );

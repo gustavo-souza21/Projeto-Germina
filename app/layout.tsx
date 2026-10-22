@@ -14,7 +14,7 @@ import './globals.css';
    ao Google em runtime, zero layout shift (o Next injeta métricas de fallback
    automaticamente) e a mesma renderização em qualquer plataforma.
 
-   ⚠️ PONTO ÚNICO DE TROCA DA FONTE
+   ATENÇÃO: PONTO ÚNICO DE TROCA DA FONTE
    Inter é o padrão provisório. A auditoria registrou como pendência confirmar
    com a autora a fonte exata usada no Canva. Quando isso for definido, troque
    APENAS o import e a chamada abaixo — o resto do app consome

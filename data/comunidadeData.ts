@@ -1,7 +1,7 @@
 import { PostComunidade, RespostaPost, ItemTroca } from '../lib/types';
 
 /**
- * ⚠️ ARQUIVO MORTO — nenhum import aponta para cá (confirmado por grep em
+ * ATENÇÃO: ARQUIVO MORTO — nenhum import aponta para cá (confirmado por grep em
  * `app/`, `components/`, `lib/` e `data/`). É o mock da Comunidade de antes de
  * `lib/queries/comunidade.ts` passar a ler do Supabase (A7). Continua sendo
  * compilado, então na Fase 2 (09/09/2026) o campo `autor_instituicao` foi

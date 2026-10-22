@@ -25,7 +25,6 @@ export type RecursoLoja = 'adubo' | 'sementes' | 'tema';
 
 export interface ItemLoja {
   id: string;
-  emoji: string;
   nome: string;
   descricao: string;
   /** Preço em moedas. */
@@ -40,7 +39,6 @@ export interface ItemLoja {
 export const ITENS_LOJA: ItemLoja[] = [
   {
     id: 'adubo',
-    emoji: '🧪',
     nome: 'Pacote de Adubo Orgânico',
     descricao: 'Acelera o cultivo nos canteiros da horta.',
     custo: 40,
@@ -50,7 +48,6 @@ export const ITENS_LOJA: ItemLoja[] = [
   },
   {
     id: 'semente',
-    emoji: '🌱',
     nome: 'Pacote de Sementes Nativas',
     descricao: 'Sementes de espécies medicinais da Amazônia.',
     custo: 50,
@@ -60,7 +57,6 @@ export const ITENS_LOJA: ItemLoja[] = [
   },
   {
     id: 'tema',
-    emoji: '🏞️',
     nome: 'Tema Amazônia Profunda',
     descricao: 'Visual exclusivo inspirado na floresta tropical.',
     custo: 200,

@@ -23,7 +23,6 @@ export function FeedbackBanner({
           competir com nenhum controle. Contraste com texto branco sobe de
           14,45:1 para 17,4:1. */}
       <div className={`p-5 text-center text-white ${isCorrect ? 'bg-green-main' : 'bg-blue-deep'}`}>
-        <div className="text-4xl mb-1">{isCorrect ? '✅' : '💡'}</div>
         <h4 className="text-xl font-bold tracking-tight">
           {isCorrect ? 'Resposta Correta!' : `A resposta certa é a alternativa ${respostaCorreta}`}
         </h4>
@@ -52,7 +51,7 @@ export function FeedbackBanner({
           onClick={onNext}
           className="w-full py-3.5 bg-blue-main hover:bg-blue-deep text-white rounded-xl font-bold transition-colors active:scale-[0.98]"
         >
-          {isLastQuestion ? 'VER RESULTADO FINAL 🏆' : 'PRÓXIMA PERGUNTA ➔'}
+          {isLastQuestion ? 'VER RESULTADO FINAL' : 'PRÓXIMA PERGUNTA'}
         </button>
       </div>
     </div>

@@ -10,7 +10,7 @@ import { resolverIcone } from '../../lib/icones';
 /**
  * GER-UI-10 — Conquistas com medalha real.
  *
- * Antes: TODA conquista renderizava o emoji 🏆 dentro de um quadrado
+ * Antes: TODA conquista renderizava o emoji de troféu dentro de um quadrado
  * arredondado, e o campo `conquista.icone` — que já existia no dado, com
  * valores como 'Sprout', 'Wheat', 'ShieldAlert' — era simplesmente ignorado.
  * O gradiente âmbar→esmeralda do card também não existe na referência.

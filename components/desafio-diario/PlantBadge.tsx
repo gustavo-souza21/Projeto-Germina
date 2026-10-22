@@ -28,7 +28,7 @@ export function PlantBadge({ plantaName, isRenisus, nivel, eixo }: PlantBadgePro
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="inline-flex items-center gap-1.5 font-bold text-xs text-blue-deep bg-surface-alt px-2.5 py-1 rounded-lg border border-black/[0.08]">
-        🌿 {plantaName}
+        {plantaName}
       </span>
 
       {isRenisus && (

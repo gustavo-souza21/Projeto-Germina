@@ -98,9 +98,9 @@ export const PerfilEConfiguracoes: React.FC<PerfilEConfiguracoesProps> = ({
             )}
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-ink-muted pt-1">
-              <span>📧 {profile.email}</span>
-              <span>📍 {profile.endereco}</span>
-              <span>🎂 {profile.idade} anos</span>
+              <span>{profile.email}</span>
+              <span>{profile.endereco}</span>
+              <span>{profile.idade} anos</span>
             </div>
 
             <div className="flex items-center justify-center sm:justify-start gap-1 pt-0.5">

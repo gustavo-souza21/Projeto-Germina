@@ -29,9 +29,9 @@ export function ResultScreen({
   const xpGanho = pointsEarned * 5;
 
   const handleShare = async () => {
-    const texto = `🌿 GERMINA - Desafio Diário sobre ${plantaData.planta}!\n\n` +
-      `🎯 Acertei ${correctAnswersCount}/${totalQuestions} perguntas!\n` +
-      `🔥 Ofensiva diária: ${gameState.streak} dias\n\n` +
+    const texto = `GERMINA - Desafio Diário sobre ${plantaData.planta}!\n\n` +
+      `Acertei ${correctAnswersCount}/${totalQuestions} perguntas!\n` +
+      `Ofensiva diária: ${gameState.streak} ${gameState.streak === 1 ? 'dia' : 'dias'}\n\n` +
       `Aprenda mais sobre plantas medicinais amazônicas no GERMINA!`;
 
     if (navigator.share) {
@@ -54,10 +54,6 @@ export function ResultScreen({
   return (
     <div className="w-full max-w-md mx-auto space-y-4">
       <div className="bg-card-bg rounded-2xl border border-black/[0.08] p-6 flex flex-col items-center text-center">
-        <div className="w-24 h-24 bg-amber-400 rounded-full flex items-center justify-center text-5xl mb-3 border-4 border-white shadow-lg shrink-0">
-          🏆
-        </div>
-
         <h3 className="text-2xl font-bold text-green-deep mb-1">Parabéns!</h3>
         <p className="text-xs text-ink-muted mb-6">
           Você completou o Desafio Diário da planta <strong>{plantaData.planta}</strong>!
@@ -75,7 +71,6 @@ export function ResultScreen({
         </div>
 
         <div className="w-full bg-orange-50 border border-orange-200 p-4 rounded-xl flex items-center gap-3 mb-6">
-          <span className="text-2xl">🔥</span>
           <div className="text-left">
             <div className="text-xs font-bold text-orange-900">Ofensiva Mantida!</div>
             <div className="text-[11px] text-orange-700">

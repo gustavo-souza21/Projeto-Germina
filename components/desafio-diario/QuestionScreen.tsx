@@ -72,7 +72,7 @@ export function QuestionScreen({
               : 'bg-black/[0.04] text-green-deep/70 border border-black/[0.06] cursor-not-allowed'
           }`}
         >
-          {selectedOption ? 'CONFIRMAR RESPOSTA ➔' : 'SELECIONE UMA ALTERNATIVA'}
+          {selectedOption ? 'CONFIRMAR RESPOSTA' : 'SELECIONE UMA ALTERNATIVA'}
         </button>
       </div>
     </div>

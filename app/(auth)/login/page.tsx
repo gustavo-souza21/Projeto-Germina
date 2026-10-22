@@ -126,7 +126,7 @@ function LoginConteudo() {
      Este botão era "Modo demonstração (offline)" e levava a `/tutorial`, de
      onde o middleware devolvia a pessoa para `/login` no primeiro passo:
      um caminho que prometia entrar sem conta e não entregava. A auditoria o
-     classificou como 🟡 e o Gustavo pediu explicitamente para REAPROVEITÁ-LO
+     classificou como "Atenção" e o Gustavo pediu explicitamente para REAPROVEITÁ-LO
      em vez de removê-lo — a intenção original (deixar olhar sem cadastro)
      estava certa, faltava o app suportá-la.
 

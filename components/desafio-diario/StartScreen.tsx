@@ -14,26 +14,6 @@ interface StartScreenProps {
   onStart: () => void;
 }
 
-// Um ícone por espécie do catálogo — antes só 3 estavam mapeadas e as outras 12
-// caíam no fallback genérico.
-const PLANT_ICONS: Record<string, string> = {
-  Amora: '🫐',
-  Goiaba: '🍐',
-  Abacate: '🥑',
-  Boldo: '🌿',
-  Corama: '🌵',
-  Crajiru: '🌺',
-  'Pobre-velho': '🌾',
-  Terramicina: '🍁',
-  Cidreira: '💜',
-  'Hortelã pimenta': '🍃',
-  'Cuia-mansa': '☘️',
-  'Capim santo': '🌱',
-  Cumaru: '🌰',
-  'Boldinho japonês': '🌱',
-  Malvarisco: '🪴',
-};
-
 export function StartScreen({
   plantaData,
   isRenisus,
@@ -44,8 +24,6 @@ export function StartScreen({
   jaCompletouHoje,
   onStart,
 }: StartScreenProps) {
-  const icone = PLANT_ICONS[plantaData.planta] || '🌱';
-
   return (
     <div className="w-full max-w-md mx-auto space-y-4">
       {/* Abas de seleção de planta */}
@@ -61,7 +39,6 @@ export function StartScreen({
                 : 'text-ink-muted hover:bg-surface-alt'
             }`}
           >
-            <span>{PLANT_ICONS[plantItem.planta] || '🌿'}</span>
             <span>{plantItem.planta}</span>
           </button>
         ))}
@@ -69,10 +46,6 @@ export function StartScreen({
 
       {/* Card principal */}
       <div className="bg-card-bg rounded-2xl border border-black/[0.08] p-6 flex flex-col items-center text-center">
-        <div className="w-28 h-28 bg-surface-alt rounded-full flex items-center justify-center mb-3 border-2 border-green-soft text-5xl">
-          {icone}
-        </div>
-
         <div className="space-y-1 mb-2">
           <div className="flex items-center justify-center gap-1.5">
             <span className="text-[10px] font-bold uppercase text-green-deep bg-green-soft/40 px-2 py-0.5 rounded">
@@ -96,7 +69,7 @@ export function StartScreen({
           </div>
           <div className="flex justify-between items-center text-xs py-1.5 border-b border-black/[0.06] font-medium text-ink-muted">
             <span>Dificuldade</span>
-            <span className="text-blue-main font-bold uppercase">Fácil ➔ Médio ➔ Difícil</span>
+            <span className="text-blue-main font-bold uppercase">Fácil, Médio e Difícil</span>
           </div>
           <div className="flex justify-between items-center text-xs py-1.5 border-b border-black/[0.06] font-medium text-ink-muted">
             <span>Ofensiva Diária</span>

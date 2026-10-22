@@ -11,7 +11,7 @@ import {
  * porque virão do banco. Este mapa é a ponte para o componente React.
  *
  * Existe também para resolver um bug real: `ConquistasTab` ignorava o campo
- * `icone` e renderizava 🏆 para todas as conquistas — o dado estava lá e não
+ * `icone` e renderizava o emoji de troféu para todas as conquistas — o dado estava lá e não
  * chegava à tela.
  *
  * Importar só o que é usado (em vez de `import * as Lucide`) mantém o

@@ -326,7 +326,7 @@ export const ScannerIA: React.FC<ScannerIAProps> = ({ onEstudarScan }) => {
               <CheckCircle2 className="w-4 h-4 text-emerald-300" />
               <span>
                 {resultadoSalvo
-                  ? 'Já salvo no seu Herbário ✓'
+                  ? 'Já salvo no seu Herbário'
                   : `Salvar no Meu Herbário (+${scanResult.xp_recompensa} XP)`}
               </span>
             </button>

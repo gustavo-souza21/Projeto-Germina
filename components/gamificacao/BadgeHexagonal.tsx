@@ -9,7 +9,7 @@ import { cn } from '../../lib/cn';
      • hexágono  → NÍVEL da trilha de evolução (este componente)
      • medalha   → CONQUISTA (ver MedalhaConquista.tsx)
 
-   O código antigo usava emoji (🌱 com animate-bounce) para nível e 🏆 para
+   O código antigo usava emoji (broto com animate-bounce) para nível e troféu para
    toda conquista — os dois formatos colapsados em nenhum.
 
    O hexágono é feito com `clip-path`, não com imagem: escala em qualquer

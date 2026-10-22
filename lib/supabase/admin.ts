@@ -4,7 +4,7 @@ import type { Database } from './database.types';
 /**
  * Cliente com a service_role key — ignora TODA política de RLS.
  *
- * ⚠️ NUNCA importar este módulo a partir de um arquivo 'use client' ou de
+ * ATENÇÃO: NUNCA importar este módulo a partir de um arquivo 'use client' ou de
  * qualquer código que possa rodar no navegador. `SUPABASE_SERVICE_ROLE_KEY`
  * (sem prefixo NEXT_PUBLIC_) só existe no ambiente do servidor — o Next não a
  * injeta no bundle do cliente. O guard abaixo é defesa em profundidade: se
