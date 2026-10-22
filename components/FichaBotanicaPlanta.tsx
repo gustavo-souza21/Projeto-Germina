@@ -145,7 +145,7 @@ export function FichaBotanicaPlanta({
             </div>
 
             <div className="bg-teal-50/60 p-3.5 rounded-xl border border-teal-200/60 text-xs">
-              <h5 className="font-bold text-teal-900 mb-1">Habitat & Ocorrência</h5>
+              <h5 className="font-bold text-teal-900 mb-1">Habitat e ocorrência</h5>
               <p className="text-teal-800/90 leading-relaxed">{planta.habitat}</p>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { FaseCultivada, FaseCultivo, PlantaCatalogo, TerrenoJardim } from './types';
 import { PLANTAS_CATALOGO } from '../data/plantasData';
+import { ECONOMIA } from './economia';
 
 /* ============================================================================
    GER-UI-15 — RÓTULOS DE FASE
@@ -113,15 +114,17 @@ export function derivarEstadoCanteiro(
 /**
  * Duração de cada fase até a próxima, em ms.
  *
- * Valores curtos de propósito nesta etapa: ciclo completo em 10 minutos, para
- * que a banca e os testes vejam a horta evoluir dentro de uma sessão. Em
- * produção, subir para horas — é o único lugar a alterar.
+ * Ciclo completo de 30 minutos (ECONOMIA.ciclo_ms, espelho de
+ * config_economia.ciclo_ms no servidor), dividido em 10% / 20% / 30% / 40%.
+ * Antes eram 10 minutos, valor de demonstração que fazia a horta render mais
+ * XP do que estudar. 30 minutos ainda deixam ver a planta crescer dentro de
+ * uma sessão de uso, e o adubo passa a fazer diferença perceptível.
  */
 export const DURACAO_FASE_MS: Record<Exclude<FaseCultivada, 'pronto'>, number> = {
-  semente: 1 * 60_000,
-  broto: 2 * 60_000,
-  muda: 3 * 60_000,
-  flor: 4 * 60_000,
+  semente: ECONOMIA.ciclo_ms * 0.1,
+  broto: ECONOMIA.ciclo_ms * 0.2,
+  muda: ECONOMIA.ciclo_ms * 0.3,
+  flor: ECONOMIA.ciclo_ms * 0.4,
 };
 
 /** Ordem da progressão. */
@@ -130,8 +133,8 @@ export const ORDEM_FASES: FaseCultivada[] = ['semente', 'broto', 'muda', 'flor',
 /** Tempo total do plantio até 'pronto'. */
 export const CICLO_COMPLETO_MS = Object.values(DURACAO_FASE_MS).reduce((a, b) => a + b, 0);
 
-/** Quanto tempo o adubo adianta a cada aplicação. */
-export const BONUS_ADUBO_MS = 90_000;
+/** Quanto tempo o adubo adianta a cada aplicação (config_economia.adubo_bonus_ms). */
+export const BONUS_ADUBO_MS = ECONOMIA.adubo_bonus_ms;
 
 /**
  * Folga entre o relógio do aparelho e o do servidor.

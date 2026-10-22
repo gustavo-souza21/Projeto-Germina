@@ -45,7 +45,9 @@ const VARIANTES: Record<ButtonVariant, string> = {
 };
 
 const TAMANHOS: Record<ButtonSize, string> = {
-  sm: 'text-xs px-3 py-1.5 gap-1.5 rounded-lg',
+  // pointer-coarse: em telas de toque o botão pequeno cresce para 40px de
+  // altura, perto do mínimo recomendado para o dedo (spec 6.4).
+  sm: 'text-xs px-3 py-1.5 gap-1.5 rounded-lg pointer-coarse:min-h-10',
   md: 'text-sm px-4 py-2.5 gap-2 rounded-xl',
   lg: 'text-base px-6 py-3 gap-2 rounded-xl',
 };

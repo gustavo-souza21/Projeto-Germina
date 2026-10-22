@@ -90,7 +90,10 @@ export type Database = {
       }
       catalogo_niveis: {
         Row: {
+          canteiros: number
+          moedas_recompensa: number
           nivel: number
+          nome: string
           xp_min: number
         }
         Insert: {
@@ -106,6 +109,7 @@ export type Database = {
       catalogo_plantas_xp: {
         Row: {
           planta_id: string
+          renisus: boolean
           xp_recompensa: number
         }
         Insert: {
@@ -230,6 +234,7 @@ export type Database = {
         Row: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number
@@ -241,6 +246,7 @@ export type Database = {
         Insert: {
           adubo?: number
           maior_streak?: number
+          nivel_recompensado?: number
           moedas?: number
           sementes?: number
           streak?: number
@@ -252,6 +258,7 @@ export type Database = {
         Update: {
           adubo?: number
           maior_streak?: number
+          nivel_recompensado?: number
           moedas?: number
           sementes?: number
           streak?: number
@@ -605,6 +612,19 @@ export type Database = {
         Update: { lida_em?: string; planta_id?: string; user_id?: string }
         Relationships: []
       }
+      // Migration 15 (20261024100000_niveis_ritmo_missoes.sql).
+      catalogo_missoes: {
+        Row: { descricao: string; meta: number; missao_id: string; moedas: number; ordem: number; tipo: string; titulo: string }
+        Insert: { descricao: string; meta: number; missao_id: string; moedas: number; ordem: number; tipo: string; titulo: string }
+        Update: { descricao?: string; meta?: number; missao_id?: string; moedas?: number; ordem?: number; tipo?: string; titulo?: string }
+        Relationships: []
+      }
+      missoes_resgatadas: {
+        Row: { missao_id: string; moedas: number; resgatada_em: string; user_id: string }
+        Insert: { missao_id: string; moedas: number; resgatada_em?: string; user_id: string }
+        Update: { missao_id?: string; moedas?: number; resgatada_em?: string; user_id?: string }
+        Relationships: []
+      }
     }
     Views: {
       // Migration 9 (20260909120000_perfis_publicos_view.sql). Escrito à mão,
@@ -620,6 +640,35 @@ export type Database = {
       }
     }
     Functions: {
+      // Migration 15
+      listar_missoes: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          descricao: string
+          meta: number
+          missao_id: string
+          moedas: number
+          ordem: number
+          progresso: number
+          resgatada: boolean
+          titulo: string
+        }[]
+      }
+      resgatar_missao: {
+        Args: { p_missao_id: string }
+        Returns: {
+          adubo: number
+          maior_streak: number
+          nivel_recompensado: number
+          moedas: number
+          sementes: number
+          streak: number
+          tema_ativo: string
+          ultimo_desafio_em: string | null
+          user_id: string
+          xp: number
+        }[]
+      }
       // Migration 14
       concluir_quiz_especie: {
         Args: { p_planta_id: string; p_planta_nome?: string }
@@ -630,6 +679,7 @@ export type Database = {
         Returns: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number
@@ -648,6 +698,7 @@ export type Database = {
         Returns: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number
@@ -662,6 +713,7 @@ export type Database = {
         Returns: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number
@@ -676,6 +728,7 @@ export type Database = {
         Returns: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number
@@ -690,6 +743,7 @@ export type Database = {
         Returns: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number
@@ -704,6 +758,7 @@ export type Database = {
         Returns: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number
@@ -718,6 +773,7 @@ export type Database = {
         Returns: {
           adubo: number
           maior_streak: number
+          nivel_recompensado: number
           moedas: number
           sementes: number
           streak: number

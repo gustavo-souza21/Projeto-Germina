@@ -93,7 +93,7 @@ export interface PlantaComQuiz {
 export interface PlantaCatalogo {
   id: string;
   nome_popular: string;
-  nome_cientifico: string; // Transcrito literalmente da ficha da curadoria (Sarah B. Freitas, 2025) — não corrigir grafia/autoridade sem atualizar o PDF fonte e registrar a mudança
+  nome_cientifico: string; // Base: ficha da curadoria (Sarah B. Freitas, 2025). Grafia e autoridades corrigidas em 22/10/2026 a partir de POWO/IPNI/NYBG, registradas em claude/GERMINA_Especificacao_Sarah_Configuracao_e_Status.md para validação da autora e atualização do PDF fonte
   familia: string;
   familia_fonte: string; // Fonte da classificação taxonômica citada na curadoria, ex: 'Souza e Lorenzi, 2019'
   descricao: string; // Características morfológicas — texto literal (citação entre aspas na curadoria)
@@ -263,4 +263,17 @@ export interface TerrenoJardim {
   /** Tempo adiantado pelo adubo, em ms. Somado ao decorrido. */
   bonus_adubo_ms: number;
   adubado: boolean;
+}
+
+/** Missão com o progresso do usuário (RPC listar_missoes, Migration 15). */
+export interface Missao {
+  missao_id: string;
+  ordem: number;
+  titulo: string;
+  descricao: string;
+  meta: number;
+  moedas: number;
+  /** Já limitado à meta pelo servidor. */
+  progresso: number;
+  resgatada: boolean;
 }

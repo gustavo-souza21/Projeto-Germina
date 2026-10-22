@@ -36,7 +36,7 @@ export function CanteiroBloqueado({ nivelNecessario }: { nivelNecessario: number
           `max-w-full` é a trava final: mesmo que um nome de nível cresça no
           futuro, a pílula nunca ultrapassa a largura do próprio canteiro. */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/3 w-full sm:w-[112%] text-center">
-        <span className="inline-block max-w-full text-[10px] sm:text-[11px] font-semibold text-white/95 bg-blue-deep/85 rounded-full px-2 sm:px-2.5 py-1 leading-tight truncate align-bottom">
+        <span className="inline-block max-w-full text-[10px] sm:text-[11px] font-semibold text-white/95 bg-blue-deep/85 rounded-2xl px-2 sm:px-2.5 py-1 leading-tight align-bottom">
           {/* Leitores de tela recebem a frase completa uma única vez; as duas
               versões visuais ficam ocultas para eles. */}
           <span className="sr-only">
@@ -52,11 +52,11 @@ export function CanteiroBloqueado({ nivelNecessario }: { nivelNecessario: number
             Desbloqueie no nível {nivelNecessario}
           </span>
 
-          {/* O nome do nível só entra a partir de md: em 640px exatos, a frase
-              completa ainda estourava a largura do canteiro e caía no truncate. */}
+          {/* O nome do nível entra a partir de md, NUMA LINHA PRÓPRIA: com os
+              nomes da trilha nova ("Guardião do Conhecimento") a frase numa
+              linha só era cortada com reticências e o nome sumia. */}
           {nivel && (
-            <span className="hidden md:inline" aria-hidden>
-              {' · '}
+            <span className="hidden md:block font-medium text-white/85" aria-hidden>
               {nivel.nome}
             </span>
           )}

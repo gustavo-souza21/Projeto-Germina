@@ -42,7 +42,7 @@ interface ResultScreenProps {
   hrefFicha: string;
   /** Ofensiva já validada por data (ofensivaVigente). */
   ofensiva: number;
-  /** Nome do nível novo, quando esta rodada fez o usuário subir. */
+  /** Mensagem de celebração (nível + recompensa), quando esta rodada fez o usuário subir. */
   nivelNovo: string | null;
   onHome: () => void;
   onRetry: () => void;
@@ -108,7 +108,7 @@ export function ResultScreen({
             className="w-full flex items-center justify-center gap-2 bg-green-soft/40 border border-green-soft text-green-deep text-sm font-bold rounded-xl px-4 py-3 mb-4"
           >
             <TrendingUp className="w-4 h-4" aria-hidden />
-            Você subiu para o nível {nivelNovo}!
+            {nivelNovo}
           </div>
         )}
 

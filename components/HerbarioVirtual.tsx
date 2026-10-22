@@ -41,10 +41,14 @@ export const HerbarioVirtual: React.FC<HerbarioVirtualProps> = ({
   }, [plantas]);
 
   // Filter implementation
+  // "×" (sinal de híbrido) e "x" são o mesmo caractere para quem busca:
+  // ninguém digita "Mentha × piperita" no celular.
+  const normalizarHibrido = (s: string) => s.toLowerCase().replace(/×/g, 'x');
+
   const plantasFiltradas = plantas.filter((planta) => {
     const matchesSearch =
       planta.nome_popular.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      planta.nome_cientifico.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      normalizarHibrido(planta.nome_cientifico).includes(normalizarHibrido(searchTerm)) ||
       planta.usos_tradicionais.some(u => u.toLowerCase().includes(searchTerm.toLowerCase())) ||
       planta.categoria.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -105,7 +109,7 @@ export const HerbarioVirtual: React.FC<HerbarioVirtualProps> = ({
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-semibold">
           <button
             onClick={() => setCategoriaFiltro('todos')}
-            className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-colors ${
+            className={`px-3 py-1.5 pointer-coarse:min-h-10 rounded-xl border whitespace-nowrap transition-colors ${
               categoriaFiltro === 'todos'
                 ? 'bg-green-deep text-white border-green-deep'
                 : 'bg-white text-ink-muted border-black/10 hover:bg-black/[0.03]'
@@ -116,7 +120,7 @@ export const HerbarioVirtual: React.FC<HerbarioVirtualProps> = ({
 
           <button
             onClick={() => setCategoriaFiltro('renisus')}
-            className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-colors flex items-center gap-1 ${
+            className={`px-3 py-1.5 pointer-coarse:min-h-10 rounded-xl border whitespace-nowrap transition-colors flex items-center gap-1 ${
               categoriaFiltro === 'renisus'
                 ? 'bg-amber-600 text-white border-amber-600'
                 : 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
@@ -128,7 +132,7 @@ export const HerbarioVirtual: React.FC<HerbarioVirtualProps> = ({
 
           <button
             onClick={() => setCategoriaFiltro('desbloqueadas')}
-            className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-colors flex items-center gap-1 ${
+            className={`px-3 py-1.5 pointer-coarse:min-h-10 rounded-xl border whitespace-nowrap transition-colors flex items-center gap-1 ${
               categoriaFiltro === 'desbloqueadas'
                 ? 'bg-emerald-700 text-white border-emerald-700'
                 : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
@@ -142,7 +146,7 @@ export const HerbarioVirtual: React.FC<HerbarioVirtualProps> = ({
             <button
               key={categoria.nome}
               onClick={() => setCategoriaFiltro(categoria.nome)}
-              className={`px-3 py-1.5 rounded-xl border whitespace-nowrap transition-colors ${
+              className={`px-3 py-1.5 pointer-coarse:min-h-10 rounded-xl border whitespace-nowrap transition-colors ${
                 categoriaFiltro === categoria.nome
                   ? 'bg-blue-main text-white border-blue-main'
                   : 'bg-white text-ink-muted border-black/10 hover:bg-black/[0.03]'

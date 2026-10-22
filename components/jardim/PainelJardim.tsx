@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import { Card, CardHeader } from '../ui/Card';
 import { buttonClasses } from '../ui/Button';
-import { BarraXP } from '../gamificacao/BarraXP';
-import { BookMarked, Target, Sprout, BookOpen, Users } from 'lucide-react';
-import { GameState, TerrenoJardim } from '../../lib/types';
-import { calcularNivel, DESAFIOS_INICIAIS } from '../../data/plantasData';
+import { BookMarked } from 'lucide-react';
+import { Missao } from '../../lib/types';
+import { DESAFIOS_INICIAIS } from '../../data/plantasData';
 import { ComoGanharMoedas } from '../gamificacao/ComoGanharMoedas';
-import { diaLocal, ofensivaVigente } from '../../lib/ofensiva';
+import { ListaMissoes } from '../gamificacao/ListaMissoes';
 
 /* ============================================================================
    GER-UI-16 — PAINEL LATERAL DO JARDIM
@@ -15,57 +14,18 @@ import { diaLocal, ofensivaVigente } from '../../lib/ofensiva';
    Desafio Diário e das Missões em andamento — conteúdo que PUXA o usuário de
    volta ao loop de estudo, em vez de pedir que ele gaste moedas.
 
-   As missões são derivadas do estado real (canteiros ocupados, espécies
-   estudadas), não de um mock separado: números inventados aqui divergiriam do
-   que a tela ao lado mostra.
+   As missões vêm do banco, com progresso calculado e recompensa paga pelo
+   servidor (ListaMissoes / Migration 15).
    ========================================================================= */
 
 export function PainelJardim({
-  gameState,
-  agora,
-  terrenos,
-  especiesEstudadas,
-  totalEspecies,
+  missoes,
+  onResgatarMissao,
 }: {
-  gameState: GameState;
-  /** Mesmo instante que o Jardim usa para as fases (vem do servidor no 1º render). */
-  agora: number;
-  terrenos: TerrenoJardim[];
-  especiesEstudadas: number;
-  totalEspecies: number;
+  missoes: Missao[];
+  onResgatarMissao: (missaoId: string) => Promise<boolean>;
 }) {
-  // Estado Derivado: nível não é persistido, é sempre recalculado do XP corrente.
-  const nivelAtual = calcularNivel(gameState.xp).nivel;
-  const canteirosOcupados = terrenos.filter((t) => Boolean(t.planta_id)).length;
-  const canteirosLiberados = terrenos.filter(
-    (t) => nivelAtual >= t.nivel_necessario
-  ).length;
-
   const desafioDia = DESAFIOS_INICIAIS.find((d) => d.id === 'd0');
-
-  const missoes = [
-    {
-      icone: BookOpen,
-      titulo: 'Estude espécies na Biblioteca',
-      atual: especiesEstudadas,
-      meta: totalEspecies,
-      xp: 50,
-    },
-    {
-      icone: Sprout,
-      titulo: 'Ocupe seus canteiros liberados',
-      atual: canteirosOcupados,
-      meta: canteirosLiberados,
-      xp: 30,
-    },
-    {
-      icone: Users,
-      titulo: 'Mantenha sua ofensiva de estudos',
-      atual: Math.min(ofensivaVigente(gameState, diaLocal(new Date(agora))), 7),
-      meta: 7,
-      xp: 40,
-    },
-  ];
 
   return (
     <div className="space-y-4">
@@ -103,43 +63,8 @@ export function PainelJardim({
         </div>
       </Card>
 
-      {/* Missões em andamento */}
-      <Card padding="md">
-        <CardHeader titulo="Missões em andamento" icone={Target} />
-
-        <ul className="space-y-3.5">
-          {missoes.map((missao) => {
-            const Icone = missao.icone;
-            const concluida = missao.atual >= missao.meta;
-
-            return (
-              <li key={missao.titulo}>
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Icone
-                    className="w-3.5 h-3.5 text-green-main shrink-0"
-                    strokeWidth={2}
-                    aria-hidden
-                  />
-                  <p className="text-[11px] font-medium text-green-deep flex-1 leading-snug">
-                    {missao.titulo}
-                  </p>
-                  <span className="text-[10px] font-semibold text-ink-muted tabular-nums shrink-0">
-                    {concluida ? 'Concluída' : `${missao.atual}/${missao.meta}`}
-                  </span>
-                </div>
-                <BarraXP
-                  xp={missao.atual}
-                  max={missao.meta}
-                  rotulo={false}
-                  tamanho="sm"
-                  // Missão não é nível: nunca deve exibir "Nível máximo".
-                  textoMaximo={null}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      </Card>
+      {/* Missões com recompensa resgatável (Migration 15). */}
+      <ListaMissoes missoes={missoes} onResgatar={onResgatarMissao} />
 
       {/* Spec 1.3: o saldo de moedas fica no topo do Jardim; aqui, como ganhá-las. */}
       <Card padding="md">

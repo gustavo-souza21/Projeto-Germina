@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { GameState, TerrenoJardim, UserColecao } from '../lib/types';
+import { GameState, Missao, TerrenoJardim, UserColecao } from '../lib/types';
 import { PLANTAS_CATALOGO, calcularNivel } from '../data/plantasData';
 import { ShoppingBag, PartyPopper, X } from 'lucide-react';
 import { Canteiro } from './jardim/Canteiro';
@@ -37,6 +37,8 @@ interface JardimConhecimentoProps {
   onColherPlanta: (terrenoId: number) => Promise<boolean>;
   /** QA-03: só o id trafega; preço e quantidade vêm do catálogo em lib/loja.ts. */
   onComprarItem: (itemId: string) => Promise<boolean>;
+  missoes: Missao[];
+  onResgatarMissao: (missaoId: string) => Promise<boolean>;
   /** Mensagem de promoção de nível (QA-02). `null` quando não há aviso pendente. */
   avisoNivel?: string | null;
   onDispensarAvisoNivel?: () => void;
@@ -52,6 +54,8 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
   onAdubarTerreno,
   onColherPlanta,
   onComprarItem,
+  missoes,
+  onResgatarMissao,
   avisoNivel = null,
   onDispensarAvisoNivel,
   agora,
@@ -148,7 +152,7 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
           <button
             type="button"
             onClick={onDispensarAvisoNivel}
-            className="p-0.5 rounded hover:bg-green-deep/10"
+            className="p-2 -m-1.5 rounded hover:bg-green-deep/10"
             aria-label="Dispensar aviso"
           >
             <X className="w-4 h-4" aria-hidden />
@@ -243,11 +247,13 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
             ficam o Desafio Diário e as Missões — conteúdo que puxa o usuário de
             volta ao loop de estudo, em vez de pedir que gaste moedas. */}
         <PainelJardim
-          gameState={gameState}
-          agora={agora}
-          terrenos={terrenos}
-          especiesEstudadas={colecaoUsuario.length}
-          totalEspecies={PLANTAS_CATALOGO.length}
+          missoes={missoes}
+          onResgatarMissao={async (id: string) => {
+            const ok = await onResgatarMissao(id);
+            const m = missoes.find((x) => x.missao_id === id);
+            if (ok && m) showStatus(`Missão concluída: ${m.titulo}! +${m.moedas} moedas.`);
+            return ok;
+          }}
         />
       </div>
 

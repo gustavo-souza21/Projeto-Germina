@@ -229,8 +229,8 @@ export function Sidebar({
         <div className="grid grid-cols-3 gap-1 text-center">
           {[
             { valor: plantasEstudadas, label: 'Espécies estudadas' },
-            { valor: totalEspecies, label: 'Plantas no herbário' },
-            { valor: especiesRenisus, label: 'Espécies raras' },
+            { valor: totalEspecies, label: 'Espécies no catálogo' },
+            { valor: especiesRenisus, label: 'Espécies RENISUS' },
           ].map((stat) => (
             <div key={stat.label}>
               <p className="text-base font-bold text-green-deep tabular-nums">{stat.valor}</p>

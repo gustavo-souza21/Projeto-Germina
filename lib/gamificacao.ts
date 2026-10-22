@@ -39,7 +39,7 @@ export interface ResultadoGanho {
   atingiuNivelMaximo: boolean;
 }
 
-/** O usuário chegou ao topo da trilha (Nível 8 — Curador Botânico)? */
+/** O usuário chegou ao topo da trilha (último nível)? */
 export function estaNoNivelMaximo(xp: number): boolean {
   return xp >= XP_MAXIMO;
 }
@@ -146,4 +146,30 @@ export function debitarRecursos(
     sementes: estado.sementes - (custo.sementes ?? 0),
     adubo: estado.adubo - (custo.adubo ?? 0),
   };
+}
+
+
+/**
+ * Texto de celebração quando o XP muda de nível (spec da Sarah: "exibir uma
+ * mensagem de celebração quando houver mudança de nível"). Informa a
+ * recompensa do nível — moedas e canteiros novos — com os valores da trilha,
+ * que são os mesmos que o servidor paga (catalogo_niveis). `null` quando não
+ * houve subida.
+ */
+export function mensagemSubidaNivel(xpAntes: number, xpDepois: number): string | null {
+  const antes = calcularNivel(xpAntes);
+  const depois = calcularNivel(xpDepois);
+  if (depois.nivel <= antes.nivel) return null;
+
+  const moedas = NIVEIS_EVOLUCAO.filter((n) => n.nivel > antes.nivel && n.nivel <= depois.nivel).reduce(
+    (soma, n) => soma + n.moedas,
+    0
+  );
+  const canteirosNovos = depois.canteiros - antes.canteiros;
+  const partes = [];
+  if (moedas > 0) partes.push(`+${moedas} moedas`);
+  if (canteirosNovos > 0) {
+    partes.push(canteirosNovos === 1 ? '1 canteiro novo no Jardim' : `${canteirosNovos} canteiros novos no Jardim`);
+  }
+  return `Você subiu para o nível ${depois.nome}!` + (partes.length ? ` ${partes.join(' e ')}.` : '');
 }

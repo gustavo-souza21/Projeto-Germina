@@ -350,7 +350,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais queixas gástricas aparecem entre os usos populares registrados para a Corama (Kalanchoe pinnata Lam.)?',
+          'Quais queixas gástricas aparecem entre os usos populares registrados para a Corama (Kalanchoe pinnata (Lam.) Pers.)?',
         alternativas: {
           A: 'Gastrite e úlceras gástricas',
           B: 'Gonorreia e nefrites',
@@ -429,7 +429,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Qual uso do Crajiru (Fidericia chica) é sustentado pelo maior número de fontes na curadoria, incluindo a mais antiga delas (Côrrea, 1926)?',
+          'Qual uso do Crajiru (Fridericia chica) é sustentado pelo maior número de fontes na curadoria, incluindo a mais antiga delas (Côrrea, 1926)?',
         alternativas: {
           A: 'Tratamento de anemia',
           B: 'Alívio da insônia',
@@ -506,7 +506,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Os usos populares do Pobre-velho (Costus spicatus Jaqc.) se concentram em qual sistema do corpo?',
+          'Os usos populares do Pobre-velho (Costus spicatus (Jacq.) Sw.) se concentram em qual sistema do corpo?',
         alternativas: {
           A: 'Sistema respiratório',
           B: 'Sistema urinário e renal',
@@ -584,7 +584,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Qual é o uso da Terramicina (Alternanthera brasiliana L.) com maior número de fontes na curadoria?',
+          'Qual é o uso da Terramicina (Alternanthera brasiliana (L.) Kuntze) com maior número de fontes na curadoria?',
         alternativas: {
           A: 'Ação anti-inflamatória',
           B: 'Ação calmante',
@@ -738,7 +738,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais usos populares a curadoria registra para a Hortelã pimenta (Mentha x piperita L.)?',
+          'Quais usos populares a curadoria registra para a Hortelã pimenta (Mentha × piperita L.)?',
         alternativas: {
           A: 'Gripe, problemas respiratórios e diarreia',
           B: 'Anemia e cicatrização de feridas',
@@ -1131,7 +1131,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais queixas das vias respiratórias aparecem entre os usos do Malvarisco (Plectranthus amboinicus Lour.)?',
+          'Quais queixas das vias respiratórias aparecem entre os usos do Malvarisco (Plectranthus amboinicus (Lour.) Spreng.)?',
         alternativas: {
           A: 'Gripe, resfriado e sinusite',
           B: 'Bronquite, asma e reumatismo',

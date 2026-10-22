@@ -103,7 +103,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '4',
     nome_popular: 'Boldo',
-    nome_cientifico: 'Plectranthus barbatus Andrew',
+    nome_cientifico: 'Plectranthus barbatus Andrews',
     familia: 'Lamiaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta arbustiva aromática perene, com ramos eretos e sublenhosos que podem chegar até 1,5 metros de altura; folhas são ovadas oblongas (formato oval em que seu comprimento é pelo menos três vezes maior que sua largura), pilosas, grossas e com margem dentada; flores pequenas e azuladas se dão em racemos (espigas).',
@@ -130,7 +130,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '5',
     nome_popular: 'Corama',
-    nome_cientifico: 'Kalanchoe pinnata Lam. (antiga Bryophyllum pinnatum)',
+    nome_cientifico: 'Kalanchoe pinnata (Lam.) Pers. (antiga Bryophyllum pinnatum)',
     familia: 'Crassulaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta herbácea ou sublenhosa, pouco ramificada, que atinge 1 a 1,5m de altura, especialmente durante a floração; folhas opostas, suculentas, ovaladas e de margem crenada com 10 a 20cm de comprimento, folhas inferiores geralmente são simples, enquanto as superiores são constituídas por 3 a 7 falíolos, longo-pecioladas; flores medem 5cm de comprimento, são violáceas, pendentes e em cachos; frutos são membranáceos e as sementes elipsoides.',
@@ -161,7 +161,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '6',
     nome_popular: 'Crajiru',
-    nome_cientifico: 'Fidericia chica (Bonpl.) (antiga Arrabidae chica)',
+    nome_cientifico: 'Fridericia chica (Bonpl.) L.G.Lohmann (antiga Arrabidaea chica)',
     familia: 'Bignoniaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta arbustiva trepadeira, com ramos escandentes; folhas compostas, bi ou trifolioladas, de fólios oblongo lanceoladas, cartáceos, de 8 a 13 cm de comprimento; flores são campanuladas, de cores róseas ou violáceas, dispostas em panículas terminais; frutos são cápsulas deiscentes.',
@@ -190,7 +190,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '7',
     nome_popular: 'Pobre-velho',
-    nome_cientifico: 'Costus spicatus Jaqc.',
+    nome_cientifico: 'Costus spicatus (Jacq.) Sw.',
     familia: 'Costaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Erva de hastes cilíndricas e duras, até 80 cm de altura; folhas espiraladas, invaginantes, curto-pecioladas, obovadas, paralelinérveas, verde-escuras, com bainha pilosa e avermelhada nas margens; flores amarelas dispostas em espiga terminal de 6-10 cm, protegida por brácteas escamosas cor de carmim; fruto capsula contendo sementes arredondadas no ápice.',
@@ -221,7 +221,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '8',
     nome_popular: 'Terramicina',
-    nome_cientifico: 'Alternanthera brasiliana L.',
+    nome_cientifico: 'Alternanthera brasiliana (L.) Kuntze',
     familia: 'Amaranthaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta herbácea, perene, ramos decumbentes ou semi-eretos, muito ramificada, com até 120 cm de altura; folhas simples, opostas cruzadas, de 4 a 8 cm de comprimento, membranáceas, subsésseis (superiores) ou pecioladas (inferiores), levemente pilosas em ambas as faces e a coloração pode ser verde, em várias tonalidades, até cores mais fortes como vermelho e púrpura; flores pequenas, de cor branca, formando uma panícula aberta no ápice dos ramos.',
@@ -278,7 +278,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '10',
     nome_popular: 'Hortelã pimenta',
-    nome_cientifico: 'Mentha x piperita L.',
+    nome_cientifico: 'Mentha × piperita L.',
     familia: 'Lamiaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Erva aromática, perene, ramificada, de 20 a 90 cm de altura, semi-ereta, de talos rasteiros, caules quadrangulares, de cor verde escuro a roxo-purpúreo; dos rizomas emergem novas plantas, espalhando por todo o terreno; folhas inteiras, curtas, com 3 a 9 cm de comprimento x 1 a 3 cm de largura, oblongo-ovais, ápice acuminado, margem dentada, base assimétrica, pubescente na parte abaxial, possui pecíolo estriado, medindo cerca de 1 mm de diâmetro x 0,5 a 1 cm de comprimento; flores em espigas terminais, de 2,5 a 7,5 cm, rosa-arroxeadas.',
@@ -304,7 +304,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '11',
     nome_popular: 'Cuia-mansa',
-    nome_cientifico: 'Alternanthera tenella',
+    nome_cientifico: 'Alternanthera tenella Colla',
     familia: 'Amaranthaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta herbácea, muito ramificada; ciclo de vida perene; crescimento prostrada; caule liso dentre 0,5m a 1,2m de comprimento; folhas pequenas, medindo de 2 a 3 cm; raiz radicular pivotante que cresce verticalmente para baixo; sementes lisas e de coloração castanha; propagação ocorre principalmente por sementes, mas também se alastra quando os nós do caule entram em contato com o solo e criam novas raízes.',
@@ -331,7 +331,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '12',
     nome_popular: 'Capim santo',
-    nome_cientifico: 'Cymbopogon citratus (DC.) Stapf.',
+    nome_cientifico: 'Cymbopogon citratus (DC.) Stapf',
     familia: 'Poaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta herbácea, cresce cerca de 0,6 a 2,0 m de altura; caule rizomatoso, muito ramificado, escuro, curto, semi-subterrâneo e palhoso; folhas são verde-grisáceo, de até 1 m de comprimento, longas, lineares, estreitas, alternas, durante o envelhecimento da folha, são aromáticas; florescimento é raro; flores, eventualmente formadas, são estéreis; inflorescências do tipo panícula de até 60 cm de comprimento; raízes são fibrosas, escuras e numerosas, partindo dos rizomas, colmos em tufos eretos e folhosos.',
@@ -362,7 +362,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '13',
     nome_popular: 'Cumaru',
-    nome_cientifico: 'Dipteryx odorata',
+    nome_cientifico: 'Dipteryx odorata (Aubl.) Willd.',
     familia: 'Fabaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Folha raque foliar 11 - 30 compr. (cm); número de folíolo(s) 2 - 6; flor cálice(s) coriáceo(s); cor do cálice(s) ferrugíneo(s); pontuação(ões) verrucosa(s) ausente(s); tamanho do cálice(s) 6 - 15 compr. (mm); fruto: forma do fruto(s) ovoide(s) oblongo(s); pericarpo carnoso(s).',
@@ -391,7 +391,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
     // enquanto a ficha da espécie grafa 'Mentha arvensis'. Mantida a grafia da ficha
     // (mais detalhada e coerente com a fonte citada, Infoteca Embrapa).
     // Confirmar com a autora qual das duas prevalece antes da defesa.
-    nome_cientifico: 'Mentha arvensis',
+    nome_cientifico: 'Mentha arvensis L.',
     familia: 'Lamiaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta herbácea estolonífera; caule quadrangular; folhas opostas, ovaladas e serradas; inflorescência é em espiga terminal de flores violáceas.',
@@ -417,7 +417,7 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
   {
     id: '15',
     nome_popular: 'Malvarisco',
-    nome_cientifico: 'Plectranthus amboinicus Lour.',
+    nome_cientifico: 'Plectranthus amboinicus (Lour.) Spreng.',
     familia: 'Lamiaceae',
     familia_fonte: 'Souza e Lorenzi, 2019',
     descricao: 'Planta herbácea, perene; folhas bastante aromáticas, semicarnosa; flores azuladas ou róseas. Sua propagação pode ser feita por estacas produzidas a partir dos seus ramos e o seu cultivo pode ser realizado em local com bastante incidência de sol ou à meia sombra. Esta espécie diferencia-se das outras do gênero Plectranthus (P. barbatus e P. ornatus), conhecidas popularmente como "boldos", por não ter o sabor amargo característico dessas duas outras plantas.',
@@ -459,91 +459,98 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
 ];
 
 /**
- * TRILHA DE EVOLUÇÃO — 8 NÍVEIS
+ * TRILHA DE EVOLUÇÃO — 6 NÍVEIS (nomes propostos pela Sarah em 22/10/2026)
  *
- * Decisão de produto que encerra a divergência GER-UI-12: os protótipos traziam
- * duas trilhas diferentes (Semente→Frutos com 2.000 XP e Semente→Curador
- * Botânico com 5.000 XP). A trilha abaixo unifica as duas, preservando os
- * nomes de ambas e adotando o teto de 5.000 XP da referência mais recente.
+ * Mesmos valores de `catalogo_niveis` no banco (Migration 15), que é quem o
+ * servidor usa para liberar canteiros e pagar a recompensa de nível. Mudou
+ * aqui, mude lá.
  *
- * Curva de XP: os dois primeiros níveis são curtos de propósito (250 XP), para
- * que o usuário sinta progresso já na primeira sessão. A partir do nível 4 os
- * intervalos crescem (550 → 750 → 900 → 1.000 → 1.100), alongando o ritmo
- * conforme o engajamento se consolida.
+ * Curva de XP pensada para o estudo ser a principal fonte de progresso:
+ * concluir as 15 espécies rende 1.100 XP (chega ao nível 3) e o Desafio
+ * Diário rende até 200 XP por dia; o topo (3.000 XP) fica a cerca de duas
+ * semanas de estudo regular. A colheita rende pouco XP de propósito (ver
+ * lib/economia.ts) — ela é a fonte de moedas, não de nível.
  *
- * `icone` guarda o nome de um ícone do lucide-react — todos verificados como
- * existentes no pacote. O componente <BadgeHexagonal> (GER-UI-10) vai consumir
- * este campo; hoje ele ainda não é renderizado em lugar nenhum.
+ * `canteiros`: quantos canteiros ficam liberados NESTE nível (8 no total).
+ * `moedas`: recompensa paga uma vez, ao alcançar o nível.
+ * `icone`: nome de um ícone do lucide-react (ver lib/icones.ts).
  */
 export const NIVEIS_EVOLUCAO = [
   {
     nivel: 1,
-    nome: 'Semente do Saber',
+    nome: 'Semente Curiosa',
     xpMin: 0,
-    xpMax: 249,
+    xpMax: 199,
     icone: 'Bean',
-    descricao: 'O ponto de partida: a união da botânica com a vontade de aprender.',
+    descricao: 'O ponto de partida: a curiosidade sobre as plantas que curam.',
+    canteiros: 1,
+    moedas: 0,
   },
   {
     nivel: 2,
-    nome: 'Broto Curioso',
-    xpMin: 250,
-    xpMax: 699,
+    nome: 'Broto Aprendiz',
+    xpMin: 200,
+    xpMax: 599,
     icone: 'Sprout',
-    descricao: 'Primeiro contato com as dinâmicas do app — seu conhecimento rompeu a terra.',
+    descricao: 'O conhecimento rompeu a terra: as primeiras espécies já são suas.',
+    canteiros: 2,
+    moedas: 20,
   },
   {
     nivel: 3,
-    nome: 'Folha Exploradora',
-    xpMin: 700,
-    xpMax: 1249,
+    nome: 'Muda Exploradora',
+    xpMin: 600,
+    xpMax: 1199,
     icone: 'Leaf',
-    descricao: 'Você começou a explorar a biblioteca por conta própria.',
+    descricao: 'Você explora a Biblioteca por conta própria e compara usos e preparos.',
+    canteiros: 3,
+    moedas: 30,
   },
   {
     nivel: 4,
-    nome: 'Raiz Digital',
-    xpMin: 1250,
+    nome: 'Planta Conhecedora',
+    xpMin: 1200,
     xpMax: 1999,
-    icone: 'Network',
-    descricao: 'A planta se firma: a botânica encontra a tecnologia, como na marca do GERMINA.',
+    icone: 'Shrub',
+    descricao: 'Raízes firmes: indicações, preparos e cuidados já fazem parte do seu repertório.',
+    canteiros: 5,
+    moedas: 40,
   },
   {
     nivel: 5,
-    nome: 'Muda Boticária',
+    nome: 'Flor do Saber',
     xpMin: 2000,
-    xpMax: 2899,
-    icone: 'Shrub',
-    descricao: 'O conhecimento ganha volume e propósito medicinal.',
+    xpMax: 2999,
+    icone: 'Flower',
+    descricao: 'Seu conhecimento floresce e pode ser compartilhado com a comunidade.',
+    canteiros: 6,
+    moedas: 60,
   },
   {
     nivel: 6,
-    nome: 'Flor da Saúde',
-    xpMin: 2900,
-    xpMax: 3899,
-    icone: 'Flower',
-    descricao: 'Suas habilidades desabrocham, com foco em saúde e cura.',
-  },
-  {
-    nivel: 7,
-    nome: 'Guardião da Flora',
-    xpMin: 3900,
-    xpMax: 4999,
-    icone: 'TreeDeciduous',
-    descricao: 'Protetor do conhecimento tradicional e da biodiversidade amazônica.',
-  },
-  {
-    nivel: 8,
-    nome: 'Curador Botânico',
-    xpMin: 5000,
+    nome: 'Guardião do Conhecimento',
+    xpMin: 3000,
     xpMax: 999999,
-    icone: 'Award',
-    descricao: 'A união entre o método científico e a curadoria do saber tradicional.',
+    icone: 'TreeDeciduous',
+    descricao: 'Guardião do saber tradicional e científico sobre as plantas medicinais da Amazônia.',
+    canteiros: 8,
+    moedas: 100,
   },
 ];
 
 /** XP necessário para atingir o último nível da trilha. */
-export const XP_MAXIMO = 5000;
+export const XP_MAXIMO = 3000;
+
+/** Quantos canteiros o Jardim tem ao todo. */
+export const TOTAL_CANTEIROS = 8;
+
+/**
+ * Nível mínimo que libera o canteiro `id` (1 a 8). Com 6 níveis e 8 canteiros,
+ * os níveis 4 e 6 liberam dois de uma vez (ver `canteiros` acima).
+ */
+export function nivelParaCanteiro(id: number): number {
+  return NIVEIS_EVOLUCAO.find((n) => n.canteiros >= id)?.nivel ?? NIVEIS_EVOLUCAO.length;
+}
 
 /**
  * Deriva o nível a partir do XP.
@@ -553,7 +560,7 @@ export const XP_MAXIMO = 5000;
  * combinação impossível na curva. XP é o único dado que precisa ser persistido.
  *
  * TETO (QA-04): satura no último nível da trilha. Qualquer XP a partir de
- * XP_MAXIMO devolve o Nível 8 — o acúmulo continua no dado, a progressão para
+ * XP_MAXIMO devolve o último nível — o acúmulo continua no dado, a progressão para
  * na trilha. XP negativo (por bug de chamada) é tratado como zero, para que o
  * nível nunca regrida por um sinal trocado.
  */

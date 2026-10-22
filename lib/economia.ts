@@ -27,11 +27,16 @@ export const ECONOMIA = {
   revisao_moedas: 10,
   /** Preço de uma semente extra de uma espécie já estudada. */
   semente_preco: 10,
-  /** Recompensa da colheita. */
-  colheita_xp: 40,
+  /** Recompensa da colheita. XP baixo de propósito: a horta é fonte de MOEDAS;
+   *  o nível vem do estudo (análise de ritmo, 22/10/2026). */
+  colheita_xp: 10,
   colheita_moedas: 15,
   /** Sementes da MESMA espécie devolvidas pela colheita (para replantar). */
   colheita_sementes: 1,
+  /** Tempo do plantio até a colheita (30 min). */
+  ciclo_ms: 1_800_000,
+  /** Quanto cada adubo adianta o crescimento (5 min). */
+  adubo_bonus_ms: 300_000,
 } as const;
 
 /** Moedas do Desafio Diário — lido do catálogo para não duplicar o número. */

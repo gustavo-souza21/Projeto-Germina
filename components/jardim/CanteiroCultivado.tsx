@@ -18,6 +18,11 @@ import { IlustracaoPlanta } from './IlustracaoPlanta';
  * As ações ficam num overlay que só aparece no hover/foco: na cena cheia, oito
  * pares de botões competiriam com as plantas. `focus-within` garante que quem
  * navega por teclado também alcance.
+ *
+ * Responsividade (22/10/2026): celular não tem hover. Com o overlay invisível,
+ * quem usa toque não via "Colher" nem "Adubar" — precisava adivinhar onde
+ * tocar. Em telas de toque (`pointer-coarse`) as ações ficam sempre visíveis,
+ * e "Colher" fica visível em qualquer tela: é a ação que a planta pronta pede.
  */
 export function CanteiroCultivado({
   planta,
@@ -59,21 +64,27 @@ export function CanteiroCultivado({
         <span className="text-[10px] sm:text-[11px] font-semibold text-white bg-green-deep rounded-full px-2.5 py-0.5 leading-tight max-w-full truncate">
           {planta?.nome_popular ?? 'Espécie desconhecida'}
         </span>
-        <span className="text-[9px] sm:text-[10px] font-semibold text-green-deep bg-green-soft rounded-full px-2 py-0.5 leading-tight">
+        <span className="text-[10px] font-semibold text-green-deep bg-green-soft rounded-full px-2 py-0.5 leading-tight">
           {ROTULO_FASE[fase]}
         </span>
 
         {/* QA-01: sem contador, o crescimento era invisível e a horta parecia
             travada mesmo quando estava evoluindo. */}
         {msParaProxima !== null && (
-          <span className="text-[9px] text-white/90 bg-blue-deep/70 rounded-full px-2 py-0.5 leading-tight tabular-nums">
+          <span className="text-[10px] text-white/90 bg-blue-deep/70 rounded-full px-2 py-0.5 leading-tight tabular-nums">
             {formatarTempoRestante(msParaProxima)}
           </span>
         )}
       </div>
 
       {/* Ações — reveladas no hover ou no foco por teclado */}
-      <div className="absolute inset-x-0 top-0 flex justify-center opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+      <div
+        className={`absolute inset-x-0 top-0 -translate-y-[65%] flex justify-center transition-opacity ${
+          pronto
+            ? 'opacity-100'
+            : 'opacity-0 group-hover:opacity-100 focus-within:opacity-100 pointer-coarse:opacity-100'
+        }`}
+      >
         {pronto ? (
           <Button variant="secondary" size="sm" icone={Sparkles} onClick={onColher}>
             Colher

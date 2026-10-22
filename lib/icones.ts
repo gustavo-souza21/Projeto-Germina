@@ -1,6 +1,6 @@
 import {
   Bean, Sprout, Leaf, Network, Shrub, Flower, TreeDeciduous, Award,
-  Wheat, ShieldAlert, Flame, Trophy, BookOpen, Users,
+  Wheat, ShieldAlert, Flame, Trophy, BookOpen, Users, Target,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -18,10 +18,12 @@ import {
  * tree-shaking funcionando; o pacote inteiro tem mais de 1.500 ícones.
  */
 export const ICONES: Record<string, LucideIcon> = {
-  // Trilha de evolução (8 níveis)
+  // Trilha de evolução (6 níveis: Bean, Sprout, Leaf, Shrub, Flower, TreeDeciduous)
   Bean, Sprout, Leaf, Network, Shrub, Flower, TreeDeciduous, Award,
   // Conquistas
   Wheat, ShieldAlert, Flame, Trophy, BookOpen, Users,
+  // Histórico de atividades: missão resgatada (Migration 15)
+  Target,
 };
 
 /** Resolve o ícone pelo nome, com fallback seguro caso o dado traga um nome desconhecido. */

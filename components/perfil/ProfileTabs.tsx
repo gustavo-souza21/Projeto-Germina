@@ -24,7 +24,7 @@ export function ProfileTabs({
         <button
           key={key}
           onClick={() => onChangeTab(key)}
-          className={`flex-1 py-2 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 px-2 pointer-coarse:min-h-11 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
             activeTab === key
               ? 'bg-green-deep text-white shadow'
               : 'text-ink-muted hover:bg-surface-alt'

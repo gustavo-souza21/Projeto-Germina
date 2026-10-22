@@ -39,7 +39,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const nivelInfo = gameState
     ? NIVEIS_EVOLUCAO.find((n) => n.nivel === calcularNivel(gameState.xp).nivel)
     : undefined;
-  const nivelNome = nivelInfo?.nome ?? 'Semente do Saber';
+  const nivelNome = nivelInfo?.nome ?? NIVEIS_EVOLUCAO[0].nome;
 
   const especiesRenisus = PLANTAS_CATALOGO.filter((p) => p.is_renisus).length;
 

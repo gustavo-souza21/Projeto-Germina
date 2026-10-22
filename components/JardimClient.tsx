@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { JardimConhecimento } from './JardimConhecimento';
-import { GameState, TerrenoJardim, UserColecao } from '../lib/types';
-import { aplicarGanho, debitarRecursos, mapGameStateRow } from '../lib/gamificacao';
+import { GameState, Missao, TerrenoJardim, UserColecao } from '../lib/types';
+import { aplicarGanho, debitarRecursos, mapGameStateRow, mensagemSubidaNivel } from '../lib/gamificacao';
 import { BONUS_ADUBO_MS, calcularProgresso } from '../lib/jardim';
 import { buscarItemLoja } from '../lib/loja';
 import { ECONOMIA } from '../lib/economia';
@@ -17,11 +17,13 @@ export function JardimClient({
   gameStateInicial,
   terrenosIniciais,
   colecaoUsuario,
+  missoesIniciais,
   agoraInicial,
 }: {
   gameStateInicial: GameState;
   terrenosIniciais: TerrenoJardim[];
   colecaoUsuario: UserColecao[];
+  missoesIniciais: Missao[];
   /**
    * Instante calculado no servidor. O primeiro render do cliente usa este mesmo
    * valor, e não `Date.now()`, para que servidor e cliente derivem a MESMA fase
@@ -35,6 +37,7 @@ export function JardimClient({
   const [terrenos, setTerrenos] = useState(terrenosIniciais);
   // Sementes são POR ESPÉCIE (Migration 14) e moram na coleção.
   const [colecao, setColecao] = useState(colecaoUsuario);
+  const [missoes, setMissoes] = useState(missoesIniciais);
   // Aviso de promoção de nível. Subir de nível libera um canteiro, então a
   // mudança precisa ser anunciada — antes ela acontecia em silêncio.
   const [avisoNivel, setAvisoNivel] = useState<string | null>(null);
@@ -225,9 +228,9 @@ export function JardimClient({
     });
     setGameState(resultado.estado);
 
-    if (resultado.subiuDeNivel) {
-      setAvisoNivel(`Novo nível: ${resultado.nomeNivelNovo}! Um canteiro foi liberado.`);
-    }
+    // Anúncio com a recompensa do nível (moedas + canteiros), mesmos valores
+    // que o servidor paga em creditar_xp (Migration 15).
+    setAvisoNivel(mensagemSubidaNivel(gameState.xp, resultado.estado.xp));
 
     // Persistência real: a colheita inteira (limpar terreno + creditar
     // game_state + logar atividade + logar colheita) roda como uma única
@@ -258,6 +261,10 @@ export function JardimClient({
     // O XP mudou: cabeçalho e menu lateral (layout do servidor) precisam
     // acompanhar, senão mostram o nível antigo (spec 6.3).
     router.refresh();
+    // Colher avança as missões de colheita (e pode ter subido o nível): o
+    // progresso vem do servidor, então recarrega a lista — senão "Primeira
+    // colheita" ficaria 0/1 até sair e voltar à página.
+    void recarregarMissoes();
     return true;
   };
 
@@ -312,8 +319,29 @@ export function JardimClient({
     return true;
   };
 
+  const recarregarMissoes = async () => {
+    const { data, error } = await createClient().rpc('listar_missoes');
+    if (!error && data) setMissoes(data as Missao[]);
+  };
+
+  /** Resgata a recompensa de uma missão. O servidor confere o progresso e
+   *  paga uma vez só (resgatar_missao); aqui só refletimos a resposta. */
+  const handleResgatarMissao = async (missaoId: string): Promise<boolean> => {
+    const supabase = createClient();
+    const { data, error } = await supabase.rpc('resgatar_missao', { p_missao_id: missaoId });
+    if (error || !data?.[0]) {
+      console.error('Falha ao resgatar missão:', error?.message);
+      return false;
+    }
+    setGameState(mapGameStateRow(data[0]));
+    setMissoes((prev) => prev.map((m) => (m.missao_id === missaoId ? { ...m, resgatada: true } : m)));
+    return true;
+  };
+
   return (
     <JardimConhecimento
+      missoes={missoes}
+      onResgatarMissao={handleResgatarMissao}
       agora={agora}
       avisoNivel={avisoNivel}
       onDispensarAvisoNivel={() => setAvisoNivel(null)}

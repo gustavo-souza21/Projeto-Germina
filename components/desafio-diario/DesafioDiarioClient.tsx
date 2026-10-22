@@ -4,10 +4,10 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GameState, PerguntaQuiz, EixoTematico, UserColecao } from '../../lib/types';
 import { slugify } from '../../lib/slug';
-import { aplicarGanho, mapGameStateRow } from '../../lib/gamificacao';
+import { aplicarGanho, mapGameStateRow, mensagemSubidaNivel } from '../../lib/gamificacao';
 import { lerOfensiva, registrarConclusao, ofensivaVigente } from '../../lib/ofensiva';
 import { PLANTAS_COM_QUIZ } from '../../data/desafioDiarioQuiz';
-import { PLANTAS_CATALOGO, DESAFIOS_INICIAIS, calcularNivel } from '../../data/plantasData';
+import { PLANTAS_CATALOGO, DESAFIOS_INICIAIS } from '../../data/plantasData';
 import { createClient } from '../../lib/supabase/client';
 
 // Único desafio hoje representado nesta tela — o quiz de 4 perguntas por
@@ -291,9 +291,7 @@ export function DesafioDiarioClient({
     }
 
     // Subir de nível era anunciado só no Jardim; aqui passava em silêncio.
-    const nivelAntes = calcularNivel(gameStateAnterior.xp);
-    const nivelDepois = calcularNivel(estadoFinal.xp);
-    if (nivelDepois.nivel > nivelAntes.nivel) setNivelNovo(nivelDepois.nome);
+    setNivelNovo(mensagemSubidaNivel(gameStateAnterior.xp, estadoFinal.xp));
 
     // Cabeçalho e menu lateral vêm do layout, renderizado no servidor; sem
     // isto continuariam mostrando o XP e o nível de antes (spec 6.3).

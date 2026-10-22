@@ -23,7 +23,8 @@ export interface NomeCientificoPartes {
 
 export function parseNomeCientifico(nomeCientifico: string): NomeCientificoPartes {
   const partes = nomeCientifico.trim().split(/\s+/);
-  const fimBinomio = partes[1] === 'x' && partes.length > 2 ? 3 : 2;
+  // Híbrido: aceita o sinal correto "×" (padrão botânico) e o "x" antigo.
+  const fimBinomio = (partes[1] === '×' || partes[1] === 'x') && partes.length > 2 ? 3 : 2;
 
   return {
     binomio: partes.slice(0, fimBinomio).join(' '),
