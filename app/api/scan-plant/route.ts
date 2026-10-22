@@ -4,7 +4,24 @@ import { createClient } from "../../../lib/supabase/server";
 
 // Portado de server.ts (Express) do protótipo AI Studio.
 // Lógica idêntica, apenas adaptada para o formato de Route Handler do App Router.
+
+/* Scanner PAUSADO (análise de XP e gamificação, achado 8, 22/10/2026).
+   A tela anunciava "+100 XP" que nunca era salvo (havia um TODO no lugar da
+   gravação) e a feature já era tratada como descontinuada no resto do código,
+   mas esta rota seguia consumindo a cota paga do Gemini. O código fica
+   preservado: para retomar, basta voltar esta constante para `true` E
+   implementar a gravação do XP em ScannerClient (via RPC, como o resto da
+   economia) — sem isso, retomar reabre a promessa falsa. */
+const SCANNER_ATIVO = false;
+
 export async function POST(req: NextRequest) {
+  if (!SCANNER_ATIVO) {
+    return NextResponse.json(
+      { error: 'O Scanner está temporariamente desativado.' },
+      { status: 410 }
+    );
+  }
+
   /* --------------------------------------------------------------------------
      Achado #6 da auditoria (Fase 3, 09/09/2026) — checagem própria de sessão.
 

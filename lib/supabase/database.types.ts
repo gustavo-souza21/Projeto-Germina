@@ -226,6 +226,7 @@ export type Database = {
       game_state: {
         Row: {
           adubo: number
+          maior_streak: number
           moedas: number
           sementes: number
           streak: number
@@ -236,6 +237,7 @@ export type Database = {
         }
         Insert: {
           adubo?: number
+          maior_streak?: number
           moedas?: number
           sementes?: number
           streak?: number
@@ -246,6 +248,7 @@ export type Database = {
         }
         Update: {
           adubo?: number
+          maior_streak?: number
           moedas?: number
           sementes?: number
           streak?: number
@@ -599,6 +602,7 @@ export type Database = {
         Args: { p_terreno_id: number }
         Returns: {
           adubo: number
+          maior_streak: number
           moedas: number
           sementes: number
           streak: number
@@ -612,6 +616,7 @@ export type Database = {
         Args: { p_item_id: string }
         Returns: {
           adubo: number
+          maior_streak: number
           moedas: number
           sementes: number
           streak: number
@@ -625,6 +630,7 @@ export type Database = {
         Args: { p_desafio_id: string; p_moedas_ganho: number; p_xp_ganho: number }
         Returns: {
           adubo: number
+          maior_streak: number
           moedas: number
           sementes: number
           streak: number
@@ -638,6 +644,7 @@ export type Database = {
         Args: { p_planta_id: string; p_planta_nome?: string }
         Returns: {
           adubo: number
+          maior_streak: number
           moedas: number
           sementes: number
           streak: number
@@ -651,6 +658,7 @@ export type Database = {
         Args: { p_planta_id: string; p_terreno_id: number }
         Returns: {
           adubo: number
+          maior_streak: number
           moedas: number
           sementes: number
           streak: number
@@ -664,6 +672,7 @@ export type Database = {
         Args: { p_terreno_id: number }
         Returns: {
           adubo: number
+          maior_streak: number
           moedas: number
           sementes: number
           streak: number

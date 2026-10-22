@@ -42,7 +42,9 @@ export function AtividadeTab({ atividades }: { atividades: Atividade[] }) {
               <p className="text-xs text-ink-muted font-medium">{atividade.texto}</p>
               <p className="text-[10px] text-ink-muted">{tempoRelativo(atividade.criado_em)}</p>
             </div>
-            <span className="text-xs font-bold text-emerald-700 shrink-0">+{atividade.xp_ganho} XP</span>
+            {atividade.xp_ganho > 0 && (
+              <span className="text-xs font-bold text-emerald-700 shrink-0">+{atividade.xp_ganho} XP</span>
+            )}
           </div>
         );
       })}

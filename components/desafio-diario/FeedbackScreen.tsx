@@ -14,6 +14,7 @@ interface FeedbackScreenProps {
   totalQuestions: number;
   userSelection: 'A' | 'B' | 'C' | 'D';
   onNext: () => void;
+  modoTreino: boolean;
 }
 
 export function FeedbackScreen({
@@ -24,6 +25,7 @@ export function FeedbackScreen({
   totalQuestions,
   userSelection,
   onNext,
+  modoTreino,
 }: FeedbackScreenProps) {
   const isCorrect = userSelection === desafio.resposta_correta;
   const isLastQuestion = currentIndex === totalQuestions - 1;
@@ -72,6 +74,7 @@ export function FeedbackScreen({
           feedbackText={desafio.feedback}
           onNext={onNext}
           isLastQuestion={isLastQuestion}
+          modoTreino={modoTreino}
         />
 
         {/* Rastreabilidade acadêmica: mostra de qual campo da curadoria a resposta

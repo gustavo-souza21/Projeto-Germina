@@ -1,15 +1,31 @@
 'use client';
 
 import { useState } from 'react';
-import { PlantaComQuiz, GameState } from '../../lib/types';
-import { Share2, Home, RefreshCw, BookOpen } from 'lucide-react';
+import { PlantaComQuiz } from '../../lib/types';
+import { Share2, Home, RefreshCw, BookOpen, TrendingUp } from 'lucide-react';
+
+/**
+ * O que aconteceu com a recompensa desta rodada.
+ *
+ * Antes a tela mostrava sempre "+X XP" e "Ofensiva Mantida!", calculados no
+ * próprio aparelho — inclusive quando nada tinha sido creditado (refazer no
+ * mesmo dia, falha de rede). A recompensa só é anunciada como ganha quando o
+ * servidor confirmou.
+ */
+export type StatusRecompensa = 'pendente' | 'creditada' | 'treino' | 'falhou';
 
 interface ResultScreenProps {
   plantaData: PlantaComQuiz;
   correctAnswersCount: number;
   totalQuestions: number;
   pointsEarned: number;
-  gameState: GameState;
+  recompensa: StatusRecompensa;
+  /** XP confirmado pelo servidor; enquanto pendente, a previsão local. */
+  xpGanho: number;
+  /** Ofensiva já validada por data (ofensivaVigente). */
+  ofensiva: number;
+  /** Nome do nível novo, quando esta rodada fez o usuário subir. */
+  nivelNovo: string | null;
   onHome: () => void;
   onRetry: () => void;
   onVerBiblioteca: () => void;
@@ -20,18 +36,22 @@ export function ResultScreen({
   correctAnswersCount,
   totalQuestions,
   pointsEarned,
-  gameState,
+  recompensa,
+  xpGanho,
+  ofensiva,
+  nivelNovo,
   onHome,
   onRetry,
   onVerBiblioteca,
 }: ResultScreenProps) {
   const [copiado, setCopiado] = useState(false);
-  const xpGanho = pointsEarned * 5;
+  const rotuloDias = ofensiva === 1 ? 'dia' : 'dias';
+  const valeu = recompensa === 'creditada' || recompensa === 'pendente';
 
   const handleShare = async () => {
     const texto = `GERMINA - Desafio Diário sobre ${plantaData.planta}!\n\n` +
       `Acertei ${correctAnswersCount}/${totalQuestions} perguntas!\n` +
-      `Ofensiva diária: ${gameState.streak} ${gameState.streak === 1 ? 'dia' : 'dias'}\n\n` +
+      `Ofensiva diária: ${ofensiva} ${rotuloDias}\n\n` +
       `Aprenda mais sobre plantas medicinais amazônicas no GERMINA!`;
 
     if (navigator.share) {
@@ -54,15 +74,45 @@ export function ResultScreen({
   return (
     <div className="w-full max-w-md mx-auto space-y-4">
       <div className="bg-card-bg rounded-2xl border border-black/[0.08] p-6 flex flex-col items-center text-center">
-        <h3 className="text-2xl font-bold text-green-deep mb-1">Parabéns!</h3>
+        <h3 className="text-2xl font-bold text-green-deep mb-1">
+          {recompensa === 'treino' ? 'Treino concluído!' : 'Parabéns!'}
+        </h3>
         <p className="text-xs text-ink-muted mb-6">
           Você completou o Desafio Diário da planta <strong>{plantaData.planta}</strong>!
         </p>
 
+        {nivelNovo && (
+          <div
+            role="status"
+            className="w-full flex items-center justify-center gap-2 bg-green-soft/40 border border-green-soft text-green-deep text-sm font-bold rounded-xl px-4 py-3 mb-4"
+          >
+            <TrendingUp className="w-4 h-4" aria-hidden />
+            Você subiu para o nível {nivelNovo}!
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-3 w-full mb-5">
           <div className="bg-blue-main/10 p-4 rounded-2xl text-center border border-black/10">
-            <div className="text-2xl font-bold text-blue-main">+{xpGanho} XP</div>
-            <div className="text-[10px] uppercase font-bold text-ink-muted">Pontuação (+{pointsEarned} pts)</div>
+            {valeu && (
+              <>
+                <div className="text-2xl font-bold text-blue-main">+{xpGanho} XP</div>
+                <div className="text-[10px] uppercase font-bold text-ink-muted">
+                  {recompensa === 'pendente' ? 'Salvando...' : `Pontuação (+${pointsEarned} pts)`}
+                </div>
+              </>
+            )}
+            {recompensa === 'treino' && (
+              <>
+                <div className="text-2xl font-bold text-blue-main">Treino</div>
+                <div className="text-[10px] uppercase font-bold text-ink-muted">Sem XP: o de hoje já foi pago</div>
+              </>
+            )}
+            {recompensa === 'falhou' && (
+              <>
+                <div className="text-2xl font-bold text-blue-main">Não salvo</div>
+                <div className="text-[10px] uppercase font-bold text-ink-muted">Toque em Refazer para tentar de novo</div>
+              </>
+            )}
           </div>
           <div className="bg-green-soft/40 p-4 rounded-2xl text-center border border-green-soft">
             <div className="text-2xl font-bold text-green-deep">{correctAnswersCount}/{totalQuestions}</div>
@@ -70,14 +120,18 @@ export function ResultScreen({
           </div>
         </div>
 
-        <div className="w-full bg-orange-50 border border-orange-200 p-4 rounded-xl flex items-center gap-3 mb-6">
-          <div className="text-left">
-            <div className="text-xs font-bold text-orange-900">Ofensiva Mantida!</div>
-            <div className="text-[11px] text-orange-700">
-              Você está a <strong>{gameState.streak} {gameState.streak === 1 ? 'dia' : 'dias'}</strong> aprendendo sem parar.
+        {recompensa !== 'falhou' && (
+          <div className="w-full bg-orange-50 border border-orange-200 p-4 rounded-xl flex items-center gap-3 mb-6">
+            <div className="text-left">
+              <div className="text-xs font-bold text-orange-900">
+                {recompensa === 'treino' ? 'Ofensiva de hoje já garantida' : 'Ofensiva Mantida!'}
+              </div>
+              <div className="text-[11px] text-orange-700">
+                Você está a <strong>{ofensiva} {rotuloDias}</strong> aprendendo sem parar.
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="w-full space-y-2.5">
           <button

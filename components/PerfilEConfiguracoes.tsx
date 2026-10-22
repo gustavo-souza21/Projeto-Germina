@@ -21,6 +21,8 @@ interface PerfilEConfiguracoesProps {
   colecao: UserColecao[];
   conquistas: Conquista[];
   atividades: Atividade[];
+  /** Ofensiva já validada por data (ofensivaVigente) — 0 se a sequência quebrou. */
+  ofensiva: number;
 }
 
 export const PerfilEConfiguracoes: React.FC<PerfilEConfiguracoesProps> = ({
@@ -31,6 +33,7 @@ export const PerfilEConfiguracoes: React.FC<PerfilEConfiguracoesProps> = ({
   colecao,
   conquistas,
   atividades,
+  ofensiva,
 }) => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [abaAtiva, setAbaAtiva] = useState<PerfilTabKey>('herbario');
@@ -136,7 +139,7 @@ export const PerfilEConfiguracoes: React.FC<PerfilEConfiguracoesProps> = ({
         <div className="bg-card-bg p-4 rounded-2xl border border-black/[0.04] shadow-card text-center">
           <Flame className="w-6 h-6 text-orange-500 mx-auto mb-1" />
           <p className="text-xs text-ink-muted font-medium">Ofensiva de Estudo</p>
-          <p className="text-xl font-bold text-orange-600">{gameState.streak} dias</p>
+          <p className="text-xl font-bold text-orange-600">{ofensiva} {ofensiva === 1 ? 'dia' : 'dias'}</p>
         </div>
 
         <div className="bg-card-bg p-4 rounded-2xl border border-black/[0.04] shadow-card text-center">

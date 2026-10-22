@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { InicioDashboard } from './InicioDashboard';
 import { Profile, GameState, Atividade, DesafioDiario } from '../lib/types';
-import { aplicarGanho } from '../lib/gamificacao';
 
 export function InicioClient({
   profile,
@@ -14,6 +12,7 @@ export function InicioClient({
   plantasEstudadasCount,
   conquistasDesbloqueadas,
   conquistasTotal,
+  ofensiva,
 }: {
   profile: Profile;
   gameStateInicial: GameState;
@@ -22,44 +21,35 @@ export function InicioClient({
   plantasEstudadasCount: number;
   conquistasDesbloqueadas: number;
   conquistasTotal: number;
+  ofensiva: number;
 }) {
   const router = useRouter();
-  const [gameState, setGameState] = useState(gameStateInicial);
-  const [desafios, setDesafios] = useState(desafiosIniciais);
 
+  /* O único desafio do app é o quiz, que vive numa página própria (várias
+     plantas, fluxo pergunta → feedback → resultado, recompensa paga pela RPC
+     concluir_desafio_diario).
+
+     Antes havia aqui um segundo caminho, para desafios "de ação" (d1, d2, d3),
+     que concluía com um clique e somava XP e moedas SÓ NA TELA — nunca chegava
+     ao banco (havia um TODO no lugar da gravação). Esses desafios nunca foram
+     exibidos, mas continuavam aceitos pelo servidor por chamada direta à API.
+     Saíram do catálogo dos dois lados (data/plantasData.ts e Migration 13). */
   const handleConcluirDesafio = (desafioId: string) => {
-    const desafio = desafios.find((d) => d.id === desafioId);
+    const desafio = desafiosIniciais.find((d) => d.id === desafioId);
     if (!desafio || desafio.concluido) return;
-
-    if (desafio.tipo === 'quiz') {
-      // O quiz de verdade (com nível/eixo/alternativas) vive numa página própria,
-      // que tem várias plantas e um fluxo completo de pergunta → feedback → resultado.
-      router.push('/desafio-diario');
-      return;
-    }
-
-    // Desafios "de ação" continuam com a conclusão direta de 1 clique
-    setDesafios((prev) => prev.map((d) => (d.id === desafioId ? { ...d, concluido: true } : d)));
-    // QA-02: terceiro ponto de mutação de XP do app, também sem recálculo de
-    // nível. Passa a usar o helper centralizado como os outros dois.
-    const resultado = aplicarGanho(gameState, {
-      xp: desafio.xp_recompensa,
-      moedas: desafio.moedas_recompensa,
-    });
-    setGameState(resultado.estado);
-    // TODO: quando o Supabase estiver plugado, persistir via update em game_state
-    // e insert em atividades, em vez de só atualizar o estado local.
+    router.push('/desafio-diario');
   };
 
   return (
     <InicioDashboard
       profile={profile}
-      gameState={gameState}
+      gameState={gameStateInicial}
       atividades={atividades}
-      desafios={desafios}
+      desafios={desafiosIniciais}
       plantasEstudadasCount={plantasEstudadasCount}
       conquistasDesbloqueadas={conquistasDesbloqueadas}
       conquistasTotal={conquistasTotal}
+      ofensiva={ofensiva}
       onConcluirDesafio={handleConcluirDesafio}
     />
   );

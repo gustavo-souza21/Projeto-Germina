@@ -1,5 +1,4 @@
 import { PlantaComQuiz } from '../../lib/types';
-import { GameState } from '../../lib/types';
 import { ShieldCheck, Flame, Play, Info } from 'lucide-react';
 
 interface StartScreenProps {
@@ -9,7 +8,8 @@ interface StartScreenProps {
   allPlants: PlantaComQuiz[];
   selectedPlantIndex: number;
   onSelectPlant: (index: number) => void;
-  gameState: GameState;
+  /** Ofensiva já validada por data (ofensivaVigente). */
+  ofensiva: number;
   jaCompletouHoje: boolean;
   onStart: () => void;
 }
@@ -20,7 +20,7 @@ export function StartScreen({
   allPlants,
   selectedPlantIndex,
   onSelectPlant,
-  gameState,
+  ofensiva,
   jaCompletouHoje,
   onStart,
 }: StartScreenProps) {
@@ -75,7 +75,7 @@ export function StartScreen({
             <span>Ofensiva Diária</span>
             <span className="text-orange-600 font-bold flex items-center gap-1">
               <Flame className="w-3.5 h-3.5 fill-orange-500 text-orange-500" />
-              {gameState.streak} {gameState.streak === 1 ? 'dia' : 'dias'}
+              {ofensiva} {ofensiva === 1 ? 'dia' : 'dias'}
             </span>
           </div>
         </div>
@@ -87,6 +87,15 @@ export function StartScreen({
           <Play className="w-5 h-5 fill-white" />
           {jaCompletouHoje ? 'REFAZER DESAFIO' : 'COMEÇAR DESAFIO'}
         </button>
+
+        {/* Só o primeiro desafio do dia é recompensado, qualquer que seja a
+            planta. Sem este aviso, a pessoa refazia achando que ganharia de novo. */}
+        {jaCompletouHoje && (
+          <p className="text-[11px] text-ink-muted mt-3 leading-snug">
+            Você já concluiu o desafio de hoje. Refazer, nesta ou em outra planta, é
+            treino: não rende XP nem moedas. Volte amanhã para manter a ofensiva.
+          </p>
+        )}
       </div>
     </div>
   );

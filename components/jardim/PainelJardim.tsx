@@ -5,6 +5,7 @@ import { BarraXP } from '../gamificacao/BarraXP';
 import { BookMarked, Target, Sprout, BookOpen, Users } from 'lucide-react';
 import { GameState, TerrenoJardim } from '../../lib/types';
 import { calcularNivel } from '../../data/plantasData';
+import { diaLocal, ofensivaVigente } from '../../lib/ofensiva';
 
 /* ============================================================================
    GER-UI-16 — PAINEL LATERAL DO JARDIM
@@ -20,11 +21,14 @@ import { calcularNivel } from '../../data/plantasData';
 
 export function PainelJardim({
   gameState,
+  agora,
   terrenos,
   especiesEstudadas,
   totalEspecies,
 }: {
   gameState: GameState;
+  /** Mesmo instante que o Jardim usa para as fases (vem do servidor no 1º render). */
+  agora: number;
   terrenos: TerrenoJardim[];
   especiesEstudadas: number;
   totalEspecies: number;
@@ -54,7 +58,7 @@ export function PainelJardim({
     {
       icone: Users,
       titulo: 'Mantenha sua ofensiva de estudos',
-      atual: Math.min(gameState.streak, 7),
+      atual: Math.min(ofensivaVigente(gameState, diaLocal(new Date(agora))), 7),
       meta: 7,
       xp: 40,
     },

@@ -2,6 +2,7 @@ import { getPerfil, getGameState } from '../../../lib/queries/perfil';
 import { getPlantasEstudadasCount, getConquistas, getAtividades } from '../../../lib/queries/dashboard';
 import { getPlantasCatalogo, getColecao } from '../../../lib/queries/colecao';
 import { PerfilEConfiguracoes } from '../../../components/PerfilEConfiguracoes';
+import { diaLocal, ofensivaVigente } from '../../../lib/ofensiva';
 
 export default async function PerfilPage() {
   const [profile, gameState, plantasEstudadasCount, plantas, colecao, conquistas, atividades] =
@@ -24,6 +25,7 @@ export default async function PerfilPage() {
       colecao={colecao}
       conquistas={conquistas}
       atividades={atividades}
+      ofensiva={ofensivaVigente(gameState, diaLocal())}
     />
   );
 }

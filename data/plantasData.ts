@@ -450,36 +450,12 @@ export const PLANTAS_CATALOGO: PlantaCatalogo[] = [
     concluido: false,
     tipo: 'quiz' as const,
   },
-  {
-    id: 'd1',
-    titulo: 'Saberes da RENISUS',
-    descricao: 'Identifique 3 propriedades medicinais do Boldo ou da Corama na biblioteca.',
-    xp_recompensa: 80,
-    moedas_recompensa: 25,
-    expiracao: '23h 59m',
-    concluido: false,
-    planta_alvo_id: '4'
-  },
-  {
-    id: 'd2',
-    titulo: 'Cultivo na Horta',
-    descricao: 'Plante uma semente no Jardim do Conhecimento e aplique 1 adubo.',
-    xp_recompensa: 100,
-    moedas_recompensa: 30,
-    expiracao: '23h 59m',
-    concluido: false
-  },
-  {
-    // Substituiu o antigo desafio 'Pesquisa Botânica', que dependia do Scanner IA
-    // (feature descontinuada). Agora usa a Biblioteca, que já está implementada.
-    id: 'd3',
-    titulo: 'Pesquisa Botânica',
-    descricao: 'Abra a Ficha Botânica de uma espécie que você ainda não estudou e registre-a no seu herbário.',
-    xp_recompensa: 120,
-    moedas_recompensa: 40,
-    expiracao: '23h 59m',
-    concluido: false
-  }
+  // d1 ('Saberes da RENISUS'), d2 ('Cultivo na Horta') e d3 ('Pesquisa
+  // Botânica') existiam aqui sem nenhuma tela que os concluísse: a única
+  // conclusão era um clique no Início que somava XP só na tela, e o servidor
+  // os aceitava por chamada direta à API (+300 XP e +95 moedas por dia sem
+  // jogar). Saíram daqui e de catalogo_desafios (Migration 13). Se voltarem,
+  // voltam junto com a tela que os conclui de verdade.
 ];
 
 /**

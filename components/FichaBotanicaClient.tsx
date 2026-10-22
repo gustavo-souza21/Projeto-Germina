@@ -6,6 +6,7 @@ import { GameState, PlantaCatalogo, UserColecao } from '../lib/types';
 import { aplicarGanho, mapGameStateRow } from '../lib/gamificacao';
 import { createClient } from '../lib/supabase/client';
 import { ExigeLoginModal } from './ExigeLoginModal';
+import { calcularNivel } from '../data/plantasData';
 
 export function FichaBotanicaClient({
   planta,
@@ -24,6 +25,7 @@ export function FichaBotanicaClient({
   const [gameState, setGameState] = useState(gameStateInicial);
   const [estudando, setEstudando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [avisoNivel, setAvisoNivel] = useState<string | null>(null);
   const [pedindoLogin, setPedindoLogin] = useState(false);
   const jaEstudada = colecao.some((c) => c.planta_id === planta.id);
 
@@ -110,7 +112,16 @@ export function FichaBotanicaClient({
 
     // Substitui o palpite otimista (aplicarGanho local) pelo XP autoritativo
     // devolvido pela RPC.
-    setGameState(mapGameStateRow(data[0]));
+    const confirmado = mapGameStateRow(data[0]);
+    setGameState(confirmado);
+
+    // Estudar uma ficha RENISUS (100 XP) pode subir de nível — antes isso só
+    // era anunciado no Jardim e aqui passava em silêncio.
+    const nivelAntes = calcularNivel(gameStateAnterior.xp);
+    const nivelDepois = calcularNivel(confirmado.xp);
+    if (nivelDepois.nivel > nivelAntes.nivel) {
+      setAvisoNivel(`Você subiu para o nível ${nivelDepois.nome}! Um novo canteiro foi liberado no Jardim.`);
+    }
   };
 
   return (
@@ -122,6 +133,11 @@ export function FichaBotanicaClient({
         onEstudarPlanta={handleEstudarPlanta}
       />
       {erro && <p className="text-xs text-red-600 font-semibold text-center mt-3">{erro}</p>}
+      {avisoNivel && (
+        <p role="status" className="text-sm text-green-deep font-bold text-center mt-3 bg-green-soft/40 border border-green-soft rounded-xl px-4 py-3">
+          {avisoNivel}
+        </p>
+      )}
 
       <ExigeLoginModal
         aberto={pedindoLogin}

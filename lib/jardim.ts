@@ -133,6 +133,19 @@ export const CICLO_COMPLETO_MS = Object.values(DURACAO_FASE_MS).reduce((a, b) =>
 /** Quanto tempo o adubo adianta a cada aplicação. */
 export const BONUS_ADUBO_MS = 90_000;
 
+/**
+ * Folga entre o relógio do aparelho e o do servidor.
+ *
+ * O botão "Colher" aparece quando o relógio DO APARELHO diz que a planta está
+ * pronta; a RPC `realizar_colheita` confere com o relógio DO SERVIDOR e com o
+ * horário de plantio que ELE registrou (alguns centésimos de segundo depois do
+ * clique em plantar). Quem colhia no instante exato, ou tinha o celular um
+ * pouco adiantado, recebia "Não foi possível colher agora". Atrasar a fase na
+ * tela por alguns segundos garante que, quando o botão aparece, o servidor já
+ * concorda. Só afeta a EXIBIÇÃO: o ciclo real continua sendo o do servidor.
+ */
+export const MARGEM_SINCRONIA_MS = 3_000;
+
 export interface ProgressoCultivo {
   fase: FaseCultivada;
   /** ms até a próxima fase. `null` quando já está em 'pronto'. */
@@ -148,8 +161,12 @@ export interface ProgressoCultivo {
  * mesmo instante no primeiro render, evitando erro de hidratação.
  */
 export function calcularProgresso(terreno: TerrenoJardim, agora: number): ProgressoCultivo {
-  const decorrido =
-    Math.max(0, agora - (terreno.plantado_em ?? agora)) + (terreno.bonus_adubo_ms ?? 0);
+  const decorrido = Math.max(
+    0,
+    Math.max(0, agora - (terreno.plantado_em ?? agora)) +
+      (terreno.bonus_adubo_ms ?? 0) -
+      MARGEM_SINCRONIA_MS
+  );
 
   let acumulado = 0;
   for (const fase of ORDEM_FASES) {

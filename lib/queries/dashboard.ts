@@ -88,15 +88,15 @@ export async function getConquistas(): Promise<Conquista[]> {
     { data: gameState, error: gameStateError },
     { data: colecao, error: colecaoError },
     { count: colheitasCount, error: colheitasError },
-    { count: respostasQuizCount, error: respostasQuizError },
+    { data: respostasSeguranca, error: respostasQuizError },
   ] = await Promise.all([
     supabase.from('profiles').select('tutorial_concluido').eq('id', user.id).single(),
-    supabase.from('game_state').select('streak').eq('user_id', user.id).single(),
+    supabase.from('game_state').select('maior_streak').eq('user_id', user.id).single(),
     supabase.from('user_colecao').select('planta_id').eq('user_id', user.id),
     supabase.from('colheitas').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
     supabase
       .from('respostas_quiz')
-      .select('*', { count: 'exact', head: true })
+      .select('planta_id')
       .eq('user_id', user.id)
       .eq('eixo', 'Segurança e Contraindicação')
       .eq('correta', true),
@@ -109,6 +109,13 @@ export async function getConquistas(): Promise<Conquista[]> {
   if (respostasQuizError) throw new Error(`Falha ao contar respostas_quiz: ${respostasQuizError.message}`);
 
   const plantasDesbloqueadasIds = new Set((colecao ?? []).map((c) => c.planta_id));
+
+  // c4 promete "5 ESPÉCIES". Antes contava linhas: cada planta tem uma única
+  // pergunta de segurança, então refazer o quiz da mesma planta 5 vezes já
+  // liberava a medalha. Agora conta espécies distintas.
+  const especiesSegurancaAcertadas = new Set(
+    (respostasSeguranca ?? []).map((r) => r.planta_id)
+  ).size;
   const especiesRenisusEstudadas = PLANTAS_CATALOGO.filter(
     (p) => p.is_renisus && plantasDesbloqueadasIds.has(p.id)
   ).length;
@@ -128,11 +135,13 @@ export async function getConquistas(): Promise<Conquista[]> {
         return { ...c, progresso, desbloqueada: progresso >= c.total };
       }
       case 'c4': {
-        const progresso = Math.min(respostasQuizCount ?? 0, c.total);
+        const progresso = Math.min(especiesSegurancaAcertadas, c.total);
         return { ...c, progresso, desbloqueada: progresso >= c.total };
       }
       case 'c5': {
-        const progresso = Math.min(gameState?.streak ?? 0, c.total);
+        // Maior ofensiva JÁ alcançada (Migration 13), não a atual: com a atual,
+        // quem chegava a 5 dias e depois quebrava a sequência perdia a medalha.
+        const progresso = Math.min(gameState?.maior_streak ?? 0, c.total);
         return { ...c, progresso, desbloqueada: progresso >= c.total };
       }
       default:

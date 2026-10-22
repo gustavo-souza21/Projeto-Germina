@@ -23,17 +23,33 @@
    ========================================================================= */
 
 /**
- * Data local no formato YYYY-MM-DD.
+ * Fuso de referência do jogo. É o MESMO que a RPC `concluir_desafio_diario`
+ * usa no banco (`now() at time zone 'America/Manaus'`) — os dois lados têm que
+ * concordar sobre que dia é hoje, senão um diz "já concluído" e o outro não.
+ */
+export const FUSO_GERMINA = 'America/Manaus';
+
+const FORMATO_DIA = new Intl.DateTimeFormat('en-CA', {
+  timeZone: FUSO_GERMINA,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+/**
+ * Data de hoje no fuso do jogo, no formato YYYY-MM-DD.
  *
- * Usa os getters locais (não `toISOString()`, que converte para UTC): em
- * Itacoatiara/AM (UTC-4), qualquer estudo após as 20h cairia no dia seguinte se
- * usássemos UTC, e a ofensiva quebraria para quem estuda à noite.
+ * Antes usava os getters locais (`getFullYear`, `getDate`...), que leem o fuso
+ * DA MÁQUINA onde o código roda. No navegador de Itacoatiara isso dava certo;
+ * no servidor da Vercel, que roda em UTC, não: das 20h à meia-noite o app já
+ * achava que era o dia seguinte, enquanto o banco (em America/Manaus) ainda
+ * estava no dia atual. O card do Início mostrava o desafio como não feito, a
+ * tela liberava jogar de novo e anunciava XP que o servidor (corretamente) não
+ * pagava. Fixar o fuso aqui faz servidor, navegador e banco concordarem, em
+ * qualquer lugar onde o código rode. (`en-CA` é só o formato: AAAA-MM-DD.)
  */
 export function diaLocal(data: Date = new Date()): string {
-  const ano = data.getFullYear();
-  const mes = String(data.getMonth() + 1).padStart(2, '0');
-  const dia = String(data.getDate()).padStart(2, '0');
-  return `${ano}-${mes}-${dia}`;
+  return FORMATO_DIA.format(data);
 }
 
 /**
@@ -113,4 +129,19 @@ export function registrarConclusao(
     streak: atual.quebrou || !ultimoDesafioEm ? 1 : atual.streak + 1,
     ultimo_desafio_em: hoje,
   };
+}
+
+/**
+ * A ofensiva que a TELA deve mostrar.
+ *
+ * `game_state.streak` só é regravado quando o usuário conclui um desafio. Quem
+ * fez 5 dias seguidos e parou continuava vendo "5 dias" até voltar a jogar —
+ * e aí caía para 1 de uma vez. Toda exibição de ofensiva passa por aqui, que
+ * devolve 0 quando a sequência já quebrou. O dado bruto continua intocado.
+ */
+export function ofensivaVigente(
+  estado: { streak: number; ultimo_desafio_em?: string },
+  hoje: string
+): number {
+  return lerOfensiva(estado.streak, estado.ultimo_desafio_em, hoje).streak;
 }

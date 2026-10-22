@@ -19,6 +19,8 @@ interface InicioDashboardProps {
   plantasEstudadasCount: number;
   conquistasDesbloqueadas: number;
   conquistasTotal: number;
+  /** Ofensiva já validada por data (ofensivaVigente) — 0 se a sequência quebrou. */
+  ofensiva: number;
   onConcluirDesafio: (desafioId: string) => void;
 }
 
@@ -30,6 +32,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
   plantasEstudadasCount,
   conquistasDesbloqueadas,
   conquistasTotal,
+  ofensiva,
   onConcluirDesafio,
 }) => {
   // Estado Derivado: nível não é persistido, é sempre recalculado do XP corrente.
@@ -101,7 +104,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
 
           <div className="flex items-center gap-1.5 bg-surface-alt text-green-deep px-3 py-2 rounded-xl font-semibold text-xs shrink-0 self-start sm:self-center">
             <Flame className="w-4 h-4 text-orange-500" aria-hidden />
-            <span>{gameState.streak} dias</span>
+            <span>{ofensiva} {ofensiva === 1 ? 'dia' : 'dias'}</span>
           </div>
         </div>
 
@@ -144,7 +147,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
             <div className="flex flex-col sm:items-end gap-2 w-full sm:w-auto">
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-emerald-200">
                 <Award className="w-4 h-4 text-emerald-600" />
-                <span>+{desafios[0].xp_recompensa} XP</span>
+                <span>Até {desafios[0].xp_recompensa} XP</span>
                 <span className="text-amber-600 font-bold">+{desafios[0].moedas_recompensa} Moedas</span>
               </div>
 
@@ -255,9 +258,11 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
                   </p>
                 </div>
               </div>
-              <span className="font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-lg text-xs">
-                +{act.xp_ganho} XP
-              </span>
+              {act.xp_ganho > 0 && (
+                <span className="font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-lg text-xs">
+                  +{act.xp_ganho} XP
+                </span>
+              )}
             </div>
           ))}
         </div>

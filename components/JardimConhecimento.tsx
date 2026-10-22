@@ -239,6 +239,7 @@ export const JardimConhecimento: React.FC<JardimConhecimentoProps> = ({
             volta ao loop de estudo, em vez de pedir que gaste moedas. */}
         <PainelJardim
           gameState={gameState}
+          agora={agora}
           terrenos={terrenos}
           especiesEstudadas={colecaoUsuario.length}
           totalEspecies={PLANTAS_CATALOGO.length}

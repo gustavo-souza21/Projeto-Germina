@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GameState, PerguntaQuiz, EixoTematico } from '../../lib/types';
 import { aplicarGanho, mapGameStateRow } from '../../lib/gamificacao';
-import { lerOfensiva, registrarConclusao } from '../../lib/ofensiva';
+import { lerOfensiva, registrarConclusao, ofensivaVigente } from '../../lib/ofensiva';
 import { PLANTAS_COM_QUIZ } from '../../data/desafioDiarioQuiz';
-import { PLANTAS_CATALOGO, DESAFIOS_INICIAIS } from '../../data/plantasData';
+import { PLANTAS_CATALOGO, DESAFIOS_INICIAIS, calcularNivel } from '../../data/plantasData';
 import { createClient } from '../../lib/supabase/client';
 
 // Único desafio hoje representado nesta tela — o quiz de 4 perguntas por
@@ -18,7 +18,7 @@ const ID_DESAFIO_QUIZ = 'd0';
 import { StartScreen } from './StartScreen';
 import { QuestionScreen } from './QuestionScreen';
 import { FeedbackScreen } from './FeedbackScreen';
-import { ResultScreen } from './ResultScreen';
+import { ResultScreen, StatusRecompensa } from './ResultScreen';
 
 type Letra = 'A' | 'B' | 'C' | 'D';
 const LETRAS: Letra[] = ['A', 'B', 'C', 'D'];
@@ -109,6 +109,10 @@ export function DesafioDiarioClient({
   const [selectedOption, setSelectedOption] = useState<'A' | 'B' | 'C' | 'D' | null>(null);
   const [userAnswers, setUserAnswers] = useState<Array<'A' | 'B' | 'C' | 'D'>>([]);
   const [pointsEarnedThisSession, setPointsEarnedThisSession] = useState(0);
+  // O que a tela de resultado pode afirmar sobre a recompensa (ver ResultScreen).
+  const [recompensa, setRecompensa] = useState<StatusRecompensa>('pendente');
+  const [xpCreditado, setXpCreditado] = useState(0);
+  const [nivelNovo, setNivelNovo] = useState<string | null>(null);
   /* QA-05: antes era `useState(false)` — recarregar a página zerava a flag e o
      usuário incrementava a ofensiva infinitas vezes no mesmo dia. Agora é
      DERIVADO da data do último desafio concluído, que sobrevive ao reload. */
@@ -134,6 +138,9 @@ export function DesafioDiarioClient({
     setUserAnswers([]);
     setSelectedOption(null);
     setPointsEarnedThisSession(0);
+    setRecompensa('pendente');
+    setXpCreditado(0);
+    setNivelNovo(null);
     setTela('question');
   };
 
@@ -170,6 +177,7 @@ export function DesafioDiarioClient({
     // resultado desta sessão continua funcionando (o placar é sempre real,
     // calculado das respostas locais); só a recompensa não se repete.
     if (jaCompletouHoje) {
+      setRecompensa('treino');
       setTela('result');
       return;
     }
@@ -199,6 +207,8 @@ export function DesafioDiarioClient({
     const gameStateAnterior = gameState;
     const novoEstado: GameState = { ...resultado.estado, ...ofensiva };
     setGameState(novoEstado);
+    setRecompensa('pendente');
+    setXpCreditado(xpGanho);
     setTela('result');
 
     // concluir_desafio_diario (Migration 8 — GERMINA_Auditoria_
@@ -225,13 +235,31 @@ export function DesafioDiarioClient({
       // exibido (é real, independe da persistência), só a recompensa é
       // desfeita porque não foi confirmada pelo servidor.
       setGameState(gameStateAnterior);
+      setRecompensa('falhou');
       console.error('Falha ao registrar desafio concluído:', error?.message);
       return;
     }
 
     // Substitui o palpite otimista (aplicarGanho + registrarConclusao
     // locais) pelo xp/moedas/streak autoritativos devolvidos pela RPC.
-    setGameState(mapGameStateRow(data[0]));
+    const confirmado = mapGameStateRow(data[0]);
+    setGameState(confirmado);
+
+    // A RPC devolve o estado sem creditar quando o desafio de hoje já existe
+    // no banco. O único sinal disso é o XP não ter mudado — e todo desafio
+    // concluído rende pelo menos 100 XP, então a comparação é segura.
+    const xpReal = confirmado.xp - gameStateAnterior.xp;
+    if (xpReal <= 0) {
+      setRecompensa('treino');
+      return;
+    }
+    setXpCreditado(xpReal);
+    setRecompensa('creditada');
+
+    // Subir de nível era anunciado só no Jardim; aqui passava em silêncio.
+    const nivelAntes = calcularNivel(gameStateAnterior.xp);
+    const nivelDepois = calcularNivel(confirmado.xp);
+    if (nivelDepois.nivel > nivelAntes.nivel) setNivelNovo(nivelDepois.nome);
   };
 
   // Compara com o gabarito JÁ EMBARALHADO de cada pergunta — comparar com o
@@ -256,7 +284,7 @@ export function DesafioDiarioClient({
             setSelectedPlantIndex(idx);
             setCurrentQuestionIndex(0);
           }}
-          gameState={gameState}
+          ofensiva={ofensivaVigente(gameState, hoje)}
           jaCompletouHoje={jaCompletouHoje}
           onStart={handleStart}
         />
@@ -284,6 +312,7 @@ export function DesafioDiarioClient({
           totalQuestions={currentPlantData.desafios.length}
           userSelection={selectedOption}
           onNext={handleNextStep}
+          modoTreino={jaCompletouHoje}
         />
       )}
 
@@ -293,7 +322,10 @@ export function DesafioDiarioClient({
           correctAnswersCount={correctCount}
           totalQuestions={currentPlantData.desafios.length}
           pointsEarned={pointsEarnedThisSession}
-          gameState={gameState}
+          recompensa={recompensa}
+          xpGanho={xpCreditado}
+          ofensiva={ofensivaVigente(gameState, hoje)}
+          nivelNovo={nivelNovo}
           onHome={() => router.push('/inicio')}
           onRetry={handleStart}
           onVerBiblioteca={() => router.push('/biblioteca')}

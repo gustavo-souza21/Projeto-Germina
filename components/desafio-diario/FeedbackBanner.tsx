@@ -4,6 +4,8 @@ interface FeedbackBannerProps {
   feedbackText: string;
   onNext: () => void;
   isLastQuestion: boolean;
+  /** Desafio de hoje já pago: a rodada é treino e não rende XP. */
+  modoTreino: boolean;
 }
 
 export function FeedbackBanner({
@@ -12,6 +14,7 @@ export function FeedbackBanner({
   feedbackText,
   onNext,
   isLastQuestion,
+  modoTreino,
 }: FeedbackBannerProps) {
   return (
     <div className="w-full rounded-2xl border border-black/[0.08] bg-card-bg overflow-hidden">
@@ -41,8 +44,10 @@ export function FeedbackBanner({
             ? 'bg-green-soft/40 border-green-soft text-green-deep'
             : 'bg-blue-main/10 border-blue-main/25 text-blue-deep'
         }`}>
-          <span>Você ganhou:</span>
-          <span className="text-sm font-bold">{isCorrect ? '+10 pts (+50 XP)' : '+5 pts aprendizado'}</span>
+          <span>{modoTreino ? 'Treino:' : 'Você ganhou:'}</span>
+          <span className="text-sm font-bold">
+            {modoTreino ? 'sem XP hoje' : isCorrect ? '+10 pts (+50 XP)' : '+5 pts (+25 XP)'}
+          </span>
         </div>
 
         {/* GER-UI-06: ação que AVANÇA UM FLUXO usa o azul primário. O verde
