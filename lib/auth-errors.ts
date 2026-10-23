@@ -29,6 +29,14 @@ export function traduzErroAuth(mensagem: string): string {
   if (m.includes('password should be at least')) {
     return 'A senha é muito curta.';
   }
+  // Política de senha do painel: "Password should contain at least one
+  // character of each: ..." (código weak_password).
+  if (m.includes('password should contain') || m.includes('weak_password') || m.includes('weak password')) {
+    return 'A senha precisa ter letra maiúscula, letra minúscula, número e um símbolo como ! @ # $ % & * ?';
+  }
+  if (m.includes('should be different from the old password')) {
+    return 'A nova senha precisa ser diferente da senha atual.';
+  }
   if (m.includes('unable to validate email address') || m.includes('invalid email')) {
     return 'Informe um e-mail válido.';
   }

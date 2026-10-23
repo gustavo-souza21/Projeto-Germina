@@ -34,6 +34,9 @@ export interface RegraSenha {
   teste: (senha: string) => boolean;
 }
 
+/** Símbolos que o Supabase conta como "symbol": !@#$%^&*()_+-=[]{};'\\:"|<>?,./`~ */
+const SIMBOLOS_SUPABASE = /[!@#$%^&*()_+\-=[\]{};'\\:"|<>?,./`~]/;
+
 /** Comprimento mínimo. Precisa bater com o "Minimum password length" do painel. */
 export const SENHA_TAMANHO_MINIMO = 8;
 
@@ -55,8 +58,12 @@ export const REGRAS_SENHA: RegraSenha[] = [
   { id: 'numero', label: 'Um número', teste: (s) => /[0-9]/.test(s) },
   {
     id: 'especial',
-    label: 'Um caractere especial (!@#$...)',
-    teste: (s) => /[^A-Za-z0-9]/.test(s),
+    label: 'Um símbolo, como ! @ # $ % & * ?',
+    // EXATAMENTE os símbolos que o Supabase aceita na política mais estrita
+    // (docs: Auth → Password security). Antes valia qualquer caractere que não
+    // fosse letra ou número — "ç", "é" ou um espaço deixavam a regra verde na
+    // tela, e o servidor recusava a senha no envio.
+    teste: (s) => SIMBOLOS_SUPABASE.test(s),
   },
 ];
 
