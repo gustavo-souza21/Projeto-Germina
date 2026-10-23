@@ -1,3 +1,4 @@
+import { TextoCientifico } from '../ui/TextoCientifico';
 import { PerguntaQuiz, PlantaComQuiz } from '../../lib/types';
 import { ProgressBar } from './ProgressBar';
 import { PlantBadge } from './PlantBadge';
@@ -44,7 +45,7 @@ export function FeedbackScreen({
         />
 
         <h2 className="text-base font-bold text-blue-deep leading-snug">
-          {desafio.pergunta}
+          <TextoCientifico texto={desafio.pergunta} />
         </h2>
 
         <div className="space-y-2.5">
@@ -81,9 +82,9 @@ export function FeedbackScreen({
             foi extraída. É o que permite ao Comitê Ad Hoc validar item a item. */}
         <div className="flex items-start gap-1.5 pt-1 border-t border-black/[0.06]">
           <BookMarked className="w-3.5 h-3.5 mt-0.5 shrink-0 text-ink-muted" />
-          <p className="text-[10px] leading-snug text-ink-muted">
+          <p className="text-xs leading-snug text-ink-muted">
             <span className="font-bold">Fonte na curadoria: </span>
-            {desafio.fonte}{' '}
+            <TextoCientifico texto={desafio.fonte} />{' '}
             <span className="opacity-70">
               (Freitas, 2025)
             </span>

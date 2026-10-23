@@ -127,7 +127,7 @@ export const HerbarioVirtual: React.FC<HerbarioVirtualProps> = ({
             }`}
           >
             <Award className="w-3.5 h-3.5" />
-            <span>Raras RENISUS 2x XP (7)</span>
+            <span>RENISUS · XP em dobro (7)</span>
           </button>
 
           <button

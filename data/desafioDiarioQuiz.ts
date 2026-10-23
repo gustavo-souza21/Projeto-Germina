@@ -41,7 +41,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Entre os usos populares registrados na literatura para a Amora (Morus nigra L.), qual está relacionado a uma fase da vida da mulher?',
+          'Entre os usos populares registrados na literatura para a amora (Morus nigra L.), qual está relacionado a uma fase da vida da mulher?',
         alternativas: {
           A: 'Auxílio nos sintomas da menopausa',
           B: 'Tratamento de ovários policísticos',
@@ -50,7 +50,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'A curadoria registra o uso da Amora para menopausa (Da Silva, 2025). As opções B e C também são usos reais, mas de outras espécies do catálogo: ovários policísticos aparece na ficha da Cidreira e inflamações uterinas na do Crajiru.',
+          'A curadoria registra o uso da amora para menopausa (Da Silva, 2025). As opções B e C também são usos reais, mas de outras espécies do catálogo: ovários policísticos aparecem na ficha da cidreira e inflamações uterinas na do crajiru.',
         campo_fonte: 'usos_tradicionais',
         fonte: 'Uso popular na literatura: "menopausa (Da Silva, 2025)".',
       },
@@ -58,11 +58,11 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Segundo os dados sobre o uso da Amora, qual é a quantidade diária registrada para o chá da folha?',
+          'Segundo os dados sobre o uso da amora, qual é a quantidade diária registrada para o chá da folha?',
         alternativas: {
           A: '1 xícara ao dia',
           B: '2 xícaras ao dia',
-          C: 'Até 3 vezes ao dia',
+          C: 'Até três vezes ao dia',
           D: 'Sem limite estabelecido',
         },
         resposta_correta: 'A',
@@ -75,7 +75,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'O campo de contraindicações da ficha da Amora traz a palavra "Nenhuma". Qual é a leitura correta dessa informação?',
+          'O campo de contraindicações da ficha da amora traz a palavra "Nenhuma". Qual é a leitura correta dessa informação?',
         alternativas: {
           A: 'Que a planta pode ser consumida em qualquer quantidade, sem risco',
           B: 'Que a literatura consultada não relatou contraindicações, o que não dispensa uso responsável',
@@ -87,12 +87,12 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'Ausência de contraindicação relatada não é o mesmo que comprovação de segurança. A própria curadoria abre com a diretriz da ANVISA: as plantas medicinais devem ser usadas garantindo os efeitos benéficos e evitando que o uso incorreto cause efeitos indesejáveis e toxicidade (ANVISA, 2010).',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Nenhuma (Veras, 2025)" + nota de abertura da curadoria (ANVISA, 2010).',
+          'Contraindicações: "Nenhuma (Veras, 2025)" + nota de abertura da curadoria (ANVISA, 2010).',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
-        pergunta: 'A que família botânica pertence a Amora (Morus nigra L.)?',
+        pergunta: 'A que família botânica pertence a amora (Morus nigra L.)?',
         alternativas: {
           A: 'Myrtaceae',
           B: 'Lauraceae',
@@ -101,7 +101,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'Moraceae (Souza e Lorenzi, 2019). Myrtaceae é a família da Goiaba, Lauraceae a do Abacate e Lamiaceae a do Boldo, Hortelã pimenta, Boldinho japonês e Malvarisco.',
+          'Moraceae (Souza e Lorenzi, 2019). Myrtaceae é a família da goiaba, Lauraceae a do abacate e Lamiaceae a do boldo, da hortelã-pimenta, do boldinho japonês e do malvarisco.',
         campo_fonte: 'familia',
         fonte: 'Família: "Moraceae (Souza e Lorenzi, 2019)".',
       },
@@ -116,7 +116,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Qual é o uso popular da Goiaba (Psidium guajava L.) mais citado na literatura reunida pela curadoria?',
+          'Qual é o uso popular da goiaba (Psidium guajava L.) mais citado na literatura reunida pela curadoria?',
         alternativas: {
           A: 'Efeito calmante e auxílio no sono',
           B: 'Ação antidiarreica',
@@ -125,7 +125,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ação antidiarreica é o uso com mais citações na ficha (Martínez et al., 2021; Almeida et al., 2023; Yusuf et al., 2021; Oliveira et al., 2024). Calmante é uso da Cidreira e do Capim santo; pedra nos rins, do Pobre-velho; fortalecer cabelos, do Capim santo.',
+          'A ação antidiarreica é o uso com mais citações na ficha (Martínez et al., 2021; Almeida et al., 2023; Yusuf et al., 2021; Oliveira et al., 2024). Calmante é uso da cidreira e do capim-santo; pedra nos rins, do pobre-velho; fortalecer cabelos, do capim-santo.',
         campo_fonte: 'usos_tradicionais',
         fonte:
           'Uso popular na literatura: "Antidiarreica (Martínez et al., 2021; Almeida et al., 2023; Yusuf et al., 2021; Oliveira et al., 2024)".',
@@ -152,7 +152,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'A ficha da Goiaba não registra contraindicações. Qual orientação da ANVISA, citada na abertura da curadoria, continua valendo mesmo nesses casos?',
+          'A ficha da goiaba não registra contraindicações. Qual orientação da ANVISA, citada na abertura da curadoria, continua valendo mesmo nesses casos?',
         alternativas: {
           A: 'Que plantas sem contraindicação registrada dispensam qualquer cuidado',
           B: 'Que apenas as plantas da lista RENISUS exigem uso cuidadoso',
@@ -182,7 +182,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'As flores brancas medem cerca de 25 mm de diâmetro e aparecem isoladas ou em grupos de 2 a 3 nas axilas das folhas. Os 10 cm da alternativa D correspondem ao diâmetro do fruto, não da flor.',
         campo_fonte: 'descricao',
         fonte:
-          'Características morfológicas: "flores brancas, medindo cerca de 25mm de diâmetro" (Fitoterapia Brasil).',
+          'Características morfológicas: "flores brancas, medindo cerca de 25 mm de diâmetro" (Fitoterapia Brasil).',
       },
     ],
   },
@@ -195,7 +195,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais condições metabólicas aparecem entre os usos populares registrados para o Abacate (Persea americana Mill.)?',
+          'Quais condições metabólicas aparecem entre os usos populares registrados para o abacate (Persea americana Mill.)?',
         alternativas: {
           A: 'Anemia e emagrecimento',
           B: 'Colesterol e diabetes',
@@ -204,7 +204,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ficha registra colesterol e diabetes (Oliveira et al., 2025). Anemia e emagrecimento são usos da Amora; hipertireoidismo e ansiedade, da Cidreira; leucemia e icterícia, do Crajiru.',
+          'A ficha registra colesterol e diabetes (Oliveira et al., 2025). Anemia e emagrecimento são usos da amora; hipertireoidismo e ansiedade, da cidreira; leucemia e icterícia, do crajiru.',
         campo_fonte: 'usos_tradicionais',
         fonte: 'Uso popular na literatura: "colesterol e diabetes (Oliveira et al., 2025)".',
       },
@@ -230,7 +230,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'Qual efeito indesejado a curadoria associa ao consumo excessivo do Abacate?',
+          'Qual efeito indesejado a curadoria associa ao consumo excessivo do abacate?',
         alternativas: {
           A: 'Queda de pressão e dor no estômago',
           B: 'Efeito abortivo em gestantes',
@@ -239,10 +239,10 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'Se ingerido em excesso, pode causar prisão de ventre e indigestão (Veras, 2025). Queda de pressão é o alerta da Cidreira; efeito abortivo, do Boldo e do Malvarisco.',
+          'Se ingerido em excesso, pode causar prisão de ventre e indigestão (Veras, 2025). Queda de pressão é o alerta da cidreira; efeito abortivo, do boldo e do malvarisco.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Se ingerido em excesso, pode causar prisão de ventre e indigestão (Veras, 2025)".',
+          'Contraindicações: "Se ingerido em excesso, pode causar prisão de ventre e indigestão (Veras, 2025)".',
       },
       {
         nivel: 'dificil',
@@ -252,11 +252,11 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           A: 'Pequenas, bissexuais e verde-amareladas',
           B: 'Grandes, campanuladas e violáceas',
           C: 'Amarelas, em espiga terminal protegida por brácteas cor de carmim',
-          D: 'Azuis-arroxeadas, em inflorescências capituliformes',
+          D: 'Azul-arroxeadas, em inflorescências capituliformes',
         },
         resposta_correta: 'A',
         feedback:
-          'As flores são pequenas, bissexuais e verde-amareladas (Cavalcante, 1991). As demais descrições pertencem, respectivamente, ao Crajiru, ao Pobre-velho e à Cidreira.',
+          'As flores são pequenas, bissexuais e verde-amareladas (Cavalcante, 1991). As demais descrições pertencem, respectivamente, ao crajiru, ao pobre-velho e à cidreira.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "flores são pequenas, bissexuais, verde-amareladas" (Cavalcante, 1991).',
@@ -272,7 +272,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'O Boldo (Plectranthus barbatus Andrew) é registrado na curadoria principalmente para qual grupo de queixas?',
+          'O boldo (Plectranthus barbatus Andrews) é registrado na curadoria principalmente para qual grupo de queixas?',
         alternativas: {
           A: 'Cicatrização de feridas e queimaduras',
           B: 'Má digestão e dores estomacais',
@@ -281,7 +281,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ficha lista má digestão, dor de barriga, prisão de ventre, dores estomacais, diarreia e cólica (Veras, 2025), além de distúrbios digestivos (Silva, 2025). Cicatrização é uso da Terramicina; pedra nos rins, do Pobre-velho.',
+          'A ficha lista má digestão, dor de barriga, prisão de ventre, dores estomacais, diarreia e cólica (Veras, 2025), além de distúrbios digestivos (Silva, 2025). Cicatrização é uso da terramicina; pedra nos rins, do pobre-velho.',
         campo_fonte: 'usos_tradicionais',
         fonte:
           'Uso popular na literatura: "má digestão, infecção no intestino e fígado, ... dor de barriga, prisão de ventre, dores estomacais, diarreia, cólica, gripe e calmante (Veras, 2025)".',
@@ -290,11 +290,11 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Segundo os dados sobre o uso do Boldo, qual é a quantidade diária registrada para o chá e o suco da folha?',
+          'Segundo os dados sobre o uso do boldo, qual é a quantidade diária registrada para o chá e o suco da folha?',
         alternativas: {
           A: '1 xícara ao dia',
           B: '2 xícaras/copos ao dia',
-          C: 'Até 3 vezes ao dia',
+          C: 'Até três vezes ao dia',
           D: '4 xícaras ao dia',
         },
         resposta_correta: 'B',
@@ -307,7 +307,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
       {
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
-        pergunta: 'Qual é o alerta mais grave que a curadoria registra sobre o Boldo?',
+        pergunta: 'Qual é o alerta mais grave que a curadoria registra sobre o boldo?',
         alternativas: {
           A: 'Pode causar queda de pressão arterial',
           B: 'Pode provocar litíase urinária',
@@ -319,13 +319,13 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'A ficha é explícita: abortivo, podendo trazer problemas de saúde se ingerido em excesso por gestantes, lactantes e crianças (Veras, 2025).',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Abortivo e pode trazer problemas de saúde, se ingerido em excesso por gestantes, lactantes e crianças (Veras, 2025)".',
+          'Contraindicações: "Abortivo e pode trazer problemas de saúde, se ingerido em excesso por gestantes, lactantes e crianças (Veras, 2025)".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'De acordo com a descrição morfológica, como são as flores do Boldo e em que estrutura se organizam?',
+          'De acordo com a descrição morfológica, como são as flores do boldo e em que estrutura se organizam?',
         alternativas: {
           A: 'Brancas, em panícula aberta no ápice dos ramos',
           B: 'Pequenas e azuladas, em racemos (espigas)',
@@ -334,7 +334,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'Flores pequenas e azuladas em racemos, ou espigas (Jardim Botânico USP). As outras alternativas descrevem a Terramicina, o Crajiru e o Pobre-velho.',
+          'Flores pequenas e azuladas em racemos, ou espigas (Jardim Botânico USP). As outras alternativas descrevem a terramicina, o crajiru e o pobre-velho.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "flores pequenas e azuladas se dão em racemos (espigas)" (Jardim Botânico USP).',
@@ -350,7 +350,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais queixas gástricas aparecem entre os usos populares registrados para a Corama (Kalanchoe pinnata (Lam.) Pers.)?',
+          'Quais queixas gástricas aparecem entre os usos populares registrados para a corama (Kalanchoe pinnata (Lam.) Pers.)?',
         alternativas: {
           A: 'Gastrite e úlceras gástricas',
           B: 'Gonorreia e nefrites',
@@ -359,7 +359,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'A ficha registra gastrite (De Campos e Oliveira, 2025) e úlceras gástricas (Sousa et al., 2023), além de dor de estômago e indigestão (Oliveira et al., 2025). Gonorreia e nefrites são usos do Pobre-velho; bronquite e asma, do Cumaru.',
+          'A ficha registra gastrite (De Campos e Oliveira, 2025) e úlceras gástricas (Sousa et al., 2023), além de dor de estômago e indigestão (Oliveira et al., 2025). Gonorreia e nefrites são usos do pobre-velho; bronquite e asma, do cumaru.',
         campo_fonte: 'usos_tradicionais',
         fonte:
           'Uso popular na literatura: "Gastrite (De Campos e Oliveira, 2025); úlceras gástricas (Sousa et al., 2023)".',
@@ -368,7 +368,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Além do chá, que outra forma de uso da folha de Corama a curadoria registra — e por qual via?',
+          'Além do chá, que outra forma de uso da folha de corama a curadoria registra — e por qual via?',
         alternativas: {
           A: 'Banho das folhas, por via cutânea',
           B: 'Compressa da folha, por via cutânea',
@@ -377,7 +377,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ficha registra "o chá e compressa da folha por via oral, cutânea (Amador e Lucas, 2025)", com o chá em 2 xícaras ao dia (Veras, 2025). Banho das folhas é preparo registrado para o Capim santo e para a Goiaba.',
+          'A ficha registra "o chá e compressa da folha por via oral, cutânea (Amador e Lucas, 2025)", com o chá em 2 xícaras ao dia (Veras, 2025). Banho das folhas é preparo registrado para o capim-santo e para a goiaba.',
         campo_fonte: 'preparo',
         fonte:
           'Dados sobre o uso: "o chá e compressa da folha por via oral, cutânea (Amador e Lucas, 2025)".',
@@ -386,7 +386,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'A ficha da Corama registra "Nenhuma" em contraindicações. Qual conduta é a mais adequada diante desse dado?',
+          'A ficha da corama registra "Nenhuma" em contraindicações. Qual conduta é a mais adequada diante desse dado?',
         alternativas: {
           A: 'Considerar o uso liberado para gestantes, lactantes e crianças',
           B: 'Assumir que a planta é comprovadamente segura em qualquer dose',
@@ -398,25 +398,25 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'A ausência de relato na literatura consultada não é prova de inocuidade. A própria ficha lista compostos ativos como alcaloides, saponinas, taninos e antraquinonas (Huachhuaco et al., 2024) — motivo a mais para uso responsável.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Nenhuma (Veras, 2025)" + Composição fitoquímica (Huachhuaco et al., 2024).',
+          'Contraindicações: "Nenhuma (Veras, 2025)" + Composição fitoquímica (Huachhuaco et al., 2024).',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'Qual característica das folhas identifica a Corama na descrição morfológica da curadoria?',
+          'Qual característica das folhas identifica a corama na descrição morfológica da curadoria?',
         alternativas: {
           A: 'Folhas opostas, suculentas, ovaladas e de margem crenada',
           B: 'Folhas espiraladas, invaginantes e paralelinérveas',
           C: 'Folhas compostas, bi ou trifolioladas',
-          D: 'Folhas verde-grisáceo, longas, lineares e estreitas',
+          D: 'Folhas verde-grisáceas, longas, lineares e estreitas',
         },
         resposta_correta: 'A',
         feedback:
-          'Folhas opostas, suculentas, ovaladas e de margem crenada, com 10 a 20 cm (Lorenzi e Matos, 2008). As demais descrevem o Pobre-velho, o Crajiru e o Capim santo.',
+          'Folhas opostas, suculentas, ovaladas e de margem crenada, com 10 a 20 cm (Lorenzi e Matos, 2008). As demais descrevem o pobre-velho, o crajiru e o capim-santo.',
         campo_fonte: 'descricao',
         fonte:
-          'Características morfológicas: "folhas opostas, suculentas, ovaladas e de margem crenada com 10 a 20cm de comprimento" (Lorenzi e Matos, 2008).',
+          'Características morfológicas: "folhas opostas, suculentas, ovaladas e de margem crenada com 10 a 20 cm de comprimento" (Lorenzi e Matos, 2008).',
       },
     ],
   },
@@ -429,7 +429,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Qual uso do Crajiru (Fridericia chica) é sustentado pelo maior número de fontes na curadoria, incluindo a mais antiga delas (Côrrea, 1926)?',
+          'Qual uso do crajiru (Fridericia chica) é sustentado pelo maior número de fontes na curadoria, incluindo a mais antiga delas (Côrrea, 1926)?',
         alternativas: {
           A: 'Tratamento de anemia',
           B: 'Alívio da insônia',
@@ -447,7 +447,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Qual é a única forma de uso do Crajiru registrada no campo "Dados sobre o uso" da curadoria?',
+          'Qual é a única forma de uso do crajiru registrada no campo "Dados sobre o uso" da curadoria?',
         alternativas: {
           A: 'Banho das folhas, por via cutânea',
           B: 'Compressa da folha sobre a pele',
@@ -456,7 +456,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'A ficha registra apenas "Chá das folhas, uso oral (Amador e Lucas, 2025)". Atenção: embora o Crajiru tenha usos cicatrizantes e para lavagem de feridas citados na literatura, a curadoria não descreve preparo de uso externo para esta espécie.',
+          'A ficha registra apenas "Chá das folhas, uso oral (Amador e Lucas, 2025)". Atenção: embora o crajiru tenha usos cicatrizantes e para lavagem de feridas citados na literatura, a curadoria não descreve preparo de uso externo para esta espécie.',
         campo_fonte: 'preparo',
         fonte: 'Dados sobre o uso: "Chá das folhas, uso oral (Amador e Lucas, 2025)".',
       },
@@ -464,7 +464,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'Por qual motivo a curadoria contraindica o Crajiru para gestantes, lactantes e crianças?',
+          'Por qual motivo a curadoria contraindica o crajiru para gestantes, lactantes e crianças?',
         alternativas: {
           A: 'Por comprovação de efeito abortivo',
           B: 'Por falta de estudos',
@@ -473,15 +473,15 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A contraindicação é por falta de estudos — não por dano comprovado. É a mesma justificativa usada para o Pobre-velho. O teor de mentol é o motivo no Boldinho japonês; o efeito abortivo, no Boldo e no Malvarisco.',
+          'A contraindicação é por falta de estudos — não por dano comprovado. É a mesma justificativa usada para o pobre-velho. O teor de mentol é o motivo no boldinho japonês; o efeito abortivo, no boldo e no malvarisco.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Contra indicado o uso por gestantes, lactantes e crianças, por falta de estudos".',
+          'Contraindicações: "Contraindicado o uso por gestantes, lactantes e crianças, por falta de estudos".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
-        pergunta: 'Qual é o hábito de crescimento do Crajiru descrito na curadoria?',
+        pergunta: 'Qual é o hábito de crescimento do crajiru descrito na curadoria?',
         alternativas: {
           A: 'Erva de hastes cilíndricas e duras, até 80 cm',
           B: 'Planta herbácea estolonífera de caule quadrangular',
@@ -490,7 +490,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'D',
         feedback:
-          'Planta arbustiva trepadeira com ramos escandentes, folhas bi ou trifolioladas e frutos em cápsulas deiscentes (Ferreira et al., 2005). As outras descrevem o Pobre-velho, o Boldinho japonês e a Goiaba.',
+          'Planta arbustiva trepadeira com ramos escandentes, folhas bi ou trifolioladas e frutos em cápsulas deiscentes (Ferreira et al., 2005). As outras descrevem o pobre-velho, o boldinho japonês e a goiaba.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "Planta arbustiva trepadeira, com ramos escandentes" (Ferreira et al., 2005).',
@@ -506,7 +506,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Os usos populares do Pobre-velho (Costus spicatus (Jacq.) Sw.) se concentram em qual sistema do corpo?',
+          'Os usos populares do pobre-velho (Costus spicatus (Jacq.) Sw.) se concentram em qual sistema do corpo?',
         alternativas: {
           A: 'Sistema respiratório',
           B: 'Sistema urinário e renal',
@@ -524,7 +524,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Segundo os dados sobre o uso, qual preparo das folhas do Pobre-velho é indicado para pedra nos rins?',
+          'Segundo os dados sobre o uso, qual preparo das folhas do pobre-velho é indicado para pedra nos rins?',
         alternativas: {
           A: 'Infusão',
           B: 'Compressa cutânea',
@@ -541,7 +541,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
       {
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
-        pergunta: 'Qual grupo NÃO deve usar o Pobre-velho, segundo a curadoria?',
+        pergunta: 'Qual grupo NÃO deve usar o pobre-velho, segundo a curadoria?',
         alternativas: {
           A: 'Apenas pessoas com hipertensão',
           B: 'Apenas menores de 18 anos',
@@ -550,16 +550,16 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'Contraindicado para gestantes, lactantes e crianças, por falta de estudos. A restrição a menores de 18 anos é específica do Capim santo.',
+          'Contraindicado para gestantes, lactantes e crianças, por falta de estudos. A restrição a menores de 18 anos é específica do capim-santo.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Contra indicado o uso por gestantes, lactantes e crianças, por falta de estudos".',
+          'Contraindicações: "Contraindicado o uso por gestantes, lactantes e crianças, por falta de estudos".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'Que estrutura protege a espiga terminal de flores amarelas do Pobre-velho?',
+          'Que estrutura protege a espiga terminal de flores amarelas do pobre-velho?',
         alternativas: {
           A: 'Brácteas escamosas cor de carmim',
           B: 'Cápsulas deiscentes',
@@ -568,7 +568,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'Flores amarelas em espiga terminal de 6 a 10 cm, protegida por brácteas escamosas cor de carmim (Côrrea, 1926). O cálice coriáceo ferrugíneo é do Cumaru; as cápsulas deiscentes, do Crajiru.',
+          'Flores amarelas em espiga terminal de 6 a 10 cm, protegida por brácteas escamosas cor de carmim (Côrrea, 1926). O cálice coriáceo ferrugíneo é do cumaru; as cápsulas deiscentes, do crajiru.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "flores amarelas dispostas em espiga terminal de 6-10 cm, protegida por brácteas escamosas cor de carmim" (Côrrea, 1926).',
@@ -584,7 +584,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Qual é o uso da Terramicina (Alternanthera brasiliana (L.) Kuntze) com maior número de fontes na curadoria?',
+          'Qual é o uso da terramicina (Alternanthera brasiliana (L.) Kuntze) com maior número de fontes na curadoria?',
         alternativas: {
           A: 'Ação anti-inflamatória',
           B: 'Ação calmante',
@@ -602,7 +602,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Segundo a curadoria, qual preparo da Terramicina é usado para cicatrização e queimaduras?',
+          'Segundo a curadoria, qual preparo da terramicina é usado para cicatrização e queimaduras?',
         alternativas: {
           A: 'O chá das folhas',
           B: 'O sumo da planta',
@@ -620,7 +620,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'A contraindicação da Terramicina para gestantes, lactantes e crianças tem uma ressalva. Qual é ela?',
+          'A contraindicação da terramicina para gestantes, lactantes e crianças tem uma ressalva. Qual é ela?',
         alternativas: {
           A: 'Vale apenas para o uso do sumo, não do chá',
           B: 'Vale apenas para menores de 6 anos',
@@ -632,22 +632,22 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'A ficha registra a contraindicação "exceto sob supervisão médica" (Freitas, 2025) — é a única das 15 espécies com essa ressalva explícita.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Contra indicado o uso por gestantes, lactantes e crianças, exceto sob supervisão médica (Freitas, 2025)".',
+          'Contraindicações: "Contraindicado o uso por gestantes, lactantes e crianças, exceto sob supervisão médica (Freitas, 2025)".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'A coloração das folhas da Terramicina, segundo a descrição morfológica, pode variar entre quais tons?',
+          'A coloração das folhas da terramicina, segundo a descrição morfológica, pode variar entre quais tons?',
         alternativas: {
           A: 'Apenas tons de verde-acinzentado',
           B: 'De verde, em várias tonalidades, até vermelho e púrpura',
-          C: 'De verde escuro a roxo-purpúreo, apenas no caule',
+          C: 'De verde-escuro a roxo-purpúreo, apenas no caule',
           D: 'De branco a vermelho, conforme a maturação',
         },
         resposta_correta: 'B',
         feedback:
-          'A folha pode ser verde em várias tonalidades até cores mais fortes como vermelho e púrpura (Fitoterapia Brasil). A alternativa C descreve o caule da Hortelã pimenta.',
+          'A folha pode ser verde em várias tonalidades até cores mais fortes como vermelho e púrpura (Fitoterapia Brasil). A alternativa C descreve o caule da hortelã-pimenta.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "a coloração pode ser verde, em várias tonalidades, até cores mais fortes como vermelho e púrpura" (Fitoterapia Brasil).',
@@ -662,7 +662,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
       {
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
-        pergunta: 'Qual é o uso popular mais destacado da Cidreira (Lippia alba) na curadoria?',
+        pergunta: 'Qual é o uso popular mais destacado da cidreira (Lippia alba) na curadoria?',
         alternativas: {
           A: 'Efeito calmante',
           B: 'Ação cicatrizante',
@@ -679,7 +679,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Quais formas de preparo das folhas da Cidreira estão registradas na curadoria?',
+          'Quais formas de preparo das folhas da cidreira estão registradas na curadoria?',
         alternativas: {
           A: 'Chá por via oral e infusão das folhas',
           B: 'Banho e compressa cutânea',
@@ -688,7 +688,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'A ficha registra chá das folhas por via oral (Amador e Lucas, 2025) e infusão das folhas (Oliveira et al., 2025). Tintura e inalante são preparos do Boldinho japonês.',
+          'A ficha registra chá das folhas por via oral (Amador e Lucas, 2025) e infusão das folhas (Oliveira et al., 2025). Tintura e inalante são preparos do boldinho japonês.',
         campo_fonte: 'preparo',
         fonte:
           'Dados sobre o uso: "Chá das folhas por via oral (Amador e Lucas, 2025); infusão das folhas (Oliveira et al., 2025)".',
@@ -697,7 +697,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'Que efeitos o consumo excessivo de Cidreira pode causar, segundo a curadoria?',
+          'Que efeitos o consumo excessivo de cidreira pode causar, segundo a curadoria?',
         alternativas: {
           A: 'Prisão de ventre e indigestão',
           B: 'Queda de pressão e dor no estômago',
@@ -706,15 +706,15 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ficha alerta: "Se ingerir em excesso, pode ter queda de pressão e dor no estômago (Veras, 2025)" — coerente com o uso registrado de regular a pressão arterial. Prisão de ventre é o alerta do Abacate.',
+          'A ficha alerta: "Se ingerir em excesso, pode ter queda de pressão e dor no estômago (Veras, 2025)" — coerente com o uso registrado de regular a pressão arterial. Prisão de ventre é o alerta do abacate.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Se ingerir em excesso, pode ter queda de pressão e dor no estômago (Veras, 2025)".',
+          'Contraindicações: "Se ingerir em excesso, pode ter queda de pressão e dor no estômago (Veras, 2025)".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
-        pergunta: 'A que família botânica pertence a Cidreira (Lippia alba)?',
+        pergunta: 'A que família botânica pertence a cidreira (Lippia alba)?',
         alternativas: {
           A: 'Lamiaceae',
           B: 'Amaranthaceae',
@@ -723,7 +723,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'Verbenaceae (Souza e Lorenzi, 2019) — atenção, é uma confusão comum: a "erva-cidreira" da família Lamiaceae é outra espécie. Amaranthaceae é a família da Terramicina e da Cuia-mansa; Poaceae, a do Capim santo.',
+          'Verbenaceae (Souza e Lorenzi, 2019) — atenção, é uma confusão comum: a "erva-cidreira" da família Lamiaceae é outra espécie. Amaranthaceae é a família da terramicina e da cuia-mansa; Poaceae, a do capim-santo.',
         campo_fonte: 'familia',
         fonte: 'Família: "Verbenaceae (Souza e Lorenzi, 2019)".',
       },
@@ -732,13 +732,13 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
   // =========================================================================
   {
     planta_id: '10',
-    planta: 'Hortelã pimenta',
+    planta: 'Hortelã-pimenta',
     desafios: [
       {
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais usos populares a curadoria registra para a Hortelã pimenta (Mentha × piperita L.)?',
+          'Quais usos populares a curadoria registra para a hortelã-pimenta (Mentha × piperita L.)?',
         alternativas: {
           A: 'Gripe, problemas respiratórios e diarreia',
           B: 'Anemia e cicatrização de feridas',
@@ -756,7 +756,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Segundo a curadoria, de quais três maneiras a folha da Hortelã pimenta pode ser utilizada?',
+          'Segundo a curadoria, de quais três maneiras a folha da hortelã-pimenta pode ser utilizada?',
         alternativas: {
           A: 'Banho, compressa e inalação',
           B: 'Decocção, infusão ou maceração',
@@ -768,13 +768,13 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'A folha pode ser utilizada em decocção, infusão ou maceração (Oliveira et al., 2025); a ficha também registra o chá por via oral (Amador e Lucas, 2025) e o uso por infusão (Pereira, 2020).',
         campo_fonte: 'preparo',
         fonte:
-          'Dados sobre o uso: "Folha pode ser utilizada em deccoção, infusão ou maceração (Oliveira et al., 2025)".',
+          'Dados sobre o uso: "Folha pode ser utilizada em decocção, infusão ou maceração (Oliveira et al., 2025)".',
       },
       {
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'A Hortelã pimenta tem a lista de contraindicações mais extensa do catálogo. Qual das situações abaixo NÃO consta nessa lista?',
+          'A hortelã-pimenta tem a lista de contraindicações mais extensa do catálogo. Qual das situações abaixo NÃO consta nessa lista?',
         alternativas: {
           A: 'Refluxo gastroesofágico',
           B: 'Cálculos biliares e litíase urinária',
@@ -786,25 +786,25 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'A ficha contraindica na gestação e lactação, para refluxo gastroesofágico, menores de 4 anos, cálculos biliares, obstrução dos ductos biliares, danos hepáticos severos e litíase urinária (EMA, 2020). Hipertensão não aparece.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "...refluxo gastroesofágico... crianças menores de 4 anos... cálculos biliares, obstrução dos ductos biliares, danos hepáticos severos e litíase urinária (EMA, 2020)".',
+          'Contraindicações: "...refluxo gastroesofágico... crianças menores de 4 anos... cálculos biliares, obstrução dos ductos biliares, danos hepáticos severos e litíase urinária (EMA, 2020)".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'Qual característica do caule aparece na descrição morfológica da Hortelã pimenta?',
+          'Qual característica do caule aparece na descrição morfológica da hortelã-pimenta?',
         alternativas: {
-          A: 'Caule quadrangular, de cor verde escuro a roxo-purpúreo',
+          A: 'Caule quadrangular, de cor verde-escuro a roxo-purpúreo',
           B: 'Caule rizomatoso, escuro, curto e palhoso',
           C: 'Caule liso, prostrado, de 0,5 a 1,2 m',
           D: 'Ramos eretos e sublenhosos de até 1,5 m',
         },
         resposta_correta: 'A',
         feedback:
-          'Caules quadrangulares, de cor verde escuro a roxo-purpúreo (Fitoterapia Brasil). As outras descrevem o Capim santo, a Cuia-mansa e o Boldo.',
+          'Caules quadrangulares, de cor verde-escuro a roxo-purpúreo (Fitoterapia Brasil). As outras descrevem o capim-santo, a cuia-mansa e o boldo.',
         campo_fonte: 'descricao',
         fonte:
-          'Características morfológicas: "caules quadrangulares, de cor verde escuro a roxo-purpúreo" (Fitoterapia Brasil).',
+          'Características morfológicas: "caules quadrangulares, de cor verde-escuro a roxo-purpúreo" (Fitoterapia Brasil).',
       },
     ],
   },
@@ -817,7 +817,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais usos populares a curadoria registra para a Cuia-mansa (Alternanthera tenella)?',
+          'Quais usos populares a curadoria registra para a cuia-mansa (Alternanthera tenella)?',
         alternativas: {
           A: 'Infecção urinária, anti-inflamatório e antioxidante',
           B: 'Calmante, insônia e ansiedade',
@@ -829,13 +829,13 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'A ficha registra infecção urinária (Da Silva, Pantoja e Oliveira, 2022), anti-inflamatório (Kassuya et al., 2021; Magalhães et al., 2021) e antioxidante (Brandão et al., 2014).',
         campo_fonte: 'usos_tradicionais',
         fonte:
-          'Uso popular na literatura: "Infecção urinária (Da Silva, Pantoja e Oliveira, 2022); anti-inflamatório (Kassuya et al., 2021; Magalhães et al., 2021); Anti-oxidante (Brandão et al., 2014)".',
+          'Uso popular na literatura: "Infecção urinária (Da Silva, Pantoja e Oliveira, 2022); anti-inflamatório (Kassuya et al., 2021; Magalhães et al., 2021); antioxidante (Brandão et al., 2014)".',
       },
       {
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'A curadoria registra para a Cuia-mansa o preparo mais detalhado do catálogo em tempo e frequência. Qual é ele?',
+          'A curadoria registra para a cuia-mansa o preparo mais detalhado do catálogo em tempo e frequência. Qual é ele?',
         alternativas: {
           A: 'Infusão por cerca de 10 minutos, até três vezes ao dia',
           B: 'Decocção por 40 minutos, uma vez ao dia',
@@ -844,7 +844,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'A ficha registra "chá usado através da infusão, infuso por cerca de 10 minutos e podendo ser consumido até três vezes ao dia (Magalhães et al., 2021)". Atenção: as opções C e D são preparos reais, mas da Amora e do Boldo.',
+          'A ficha registra "chá usado através da infusão, infuso por cerca de 10 minutos e podendo ser consumido até três vezes ao dia (Magalhães et al., 2021)". Atenção: as opções C e D são preparos reais, mas da amora e do boldo.',
         campo_fonte: 'preparo',
         fonte:
           'Dados sobre o uso: "Chá usado através da infusão, infuso por cerca de 10 minutos e podendo ser consumido até três vezes ao dia (Magalhães et al., 2021)".',
@@ -853,7 +853,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'O que a curadoria registra nos campos de composição fitoquímica e contraindicações da Cuia-mansa?',
+          'O que a curadoria registra nos campos de composição fitoquímica e contraindicações da cuia-mansa?',
         alternativas: {
           A: 'Que não há contraindicações conhecidas',
           B: 'Que há escassez de material científico sobre ambos',
@@ -862,16 +862,16 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'Os dois campos trazem "Escassez de material" — a Cuia-mansa é a espécie com menor cobertura científica do catálogo. Isso não significa segurança: significa que não há dados para afirmar nem risco nem inocuidade, o que pede cautela redobrada.',
+          'Os dois campos trazem "Escassez de material" — a cuia-mansa é a espécie com menor cobertura científica do catálogo. Isso não significa segurança: significa que não há dados para afirmar nem risco nem inocuidade, o que pede cautela redobrada.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Composição fitoquímica: "Escassez de material." / Contra indicações: "Escassez de material."',
+          'Composição fitoquímica: "Escassez de material." / Contraindicações: "Escassez de material."',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'Além das sementes, de que outra forma a Cuia-mansa se propaga, segundo a descrição morfológica?',
+          'Além das sementes, de que outra forma a cuia-mansa se propaga, segundo a descrição morfológica?',
         alternativas: {
           A: 'Por estacas produzidas a partir dos ramos',
           B: 'Por rizomas dos quais emergem novas plantas',
@@ -880,7 +880,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'A propagação ocorre principalmente por sementes, mas a planta também se alastra quando os nós do caule entram em contato com o solo e criam novas raízes (Flora Digital UFSC). As opções A, B e D descrevem, respectivamente, o Malvarisco, a Hortelã pimenta e a Cidreira.',
+          'A propagação ocorre principalmente por sementes, mas a planta também se alastra quando os nós do caule entram em contato com o solo e criam novas raízes (Flora Digital UFSC). As opções A, B e D descrevem, respectivamente, o malvarisco, a hortelã-pimenta e a cidreira.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "propagação ocorre principalmente por sementes, mas também se alastra quando os nós do caule entram em contato com o solo e criam novas raízes" (Flora Digital UFSC, Daniel Gracel).',
@@ -890,13 +890,13 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
   // =========================================================================
   {
     planta_id: '12',
-    planta: 'Capim santo',
+    planta: 'Capim-santo',
     desafios: [
       {
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Qual é o uso do Capim santo (Cymbopogon citratus) com maior número de fontes na curadoria?',
+          'Qual é o uso do capim-santo (Cymbopogon citratus) com maior número de fontes na curadoria?',
         alternativas: {
           A: 'Efeito cicatrizante',
           B: 'Efeito calmante',
@@ -914,7 +914,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Além do chá, que outra forma de uso das folhas do Capim santo a curadoria registra?',
+          'Além do chá, que outra forma de uso das folhas do capim-santo a curadoria registra?',
         alternativas: {
           A: 'Banho das folhas, de forma cutânea',
           B: 'Compressa sobre o abdômen',
@@ -923,7 +923,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'A ficha registra "chá das folhas, banho das folhas forma cutânea (Amador e Lucas, 2025)", além de decocção e infusão (Veras, 2025). Compressa é preparo registrado para a Corama.',
+          'A ficha registra "chá das folhas, banho das folhas forma cutânea (Amador e Lucas, 2025)", além de decocção e infusão (Veras, 2025). Compressa é preparo registrado para a corama.',
         campo_fonte: 'preparo',
         fonte:
           'Dados sobre o uso: "Chá das folhas, banho das folhas forma cutânea (Amador e Lucas, 2025)".',
@@ -932,7 +932,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'O Capim santo tem uma restrição de idade que é única entre as 15 espécies do catálogo. Qual é ela?',
+          'O capim-santo tem uma restrição de idade que é única entre as 15 espécies do catálogo. Qual é ela?',
         alternativas: {
           A: 'Desaconselhado para menores de 6 anos',
           B: 'Não recomendado para menores de 4 anos',
@@ -941,25 +941,25 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'Contraindicado na gestação, lactação e para menores de 18 anos, por falta de dados adequados de segurança (Royo, Damasceno e Veloso, 2023). As opções A e B são restrições reais, mas do Boldinho japonês e da Hortelã pimenta.',
+          'Contraindicado na gestação, lactação e para menores de 18 anos, por falta de dados adequados de segurança (Royo, Damasceno e Veloso, 2023). As opções A e B são restrições reais, mas do boldinho japonês e da hortelã-pimenta.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "O uso é contraindicado durante a gestação, lactação e para menores de 18 anos, devido à falta de dados adequados que comprovem a segurança nessas situações (Royo, Damasceno e Veloso, 2023)".',
+          'Contraindicações: "O uso é contraindicado durante a gestação, lactação e para menores de 18 anos, devido à falta de dados adequados que comprovem a segurança nessas situações (Royo, Damasceno e Veloso, 2023)".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'O que a descrição morfológica registra sobre o florescimento do Capim santo?',
+          'O que a descrição morfológica registra sobre o florescimento do capim-santo?',
         alternativas: {
           A: 'Ocorre no final do inverno, com flores brancas e pequenas',
           B: 'É raro, e as flores eventualmente formadas são estéreis',
-          C: 'Ocorre o ano todo, com flores azuis-arroxeadas',
+          C: 'Ocorre o ano todo, com flores azul-arroxeadas',
           D: 'Produz flores campanuladas róseas em panículas terminais',
         },
         resposta_correta: 'B',
         feedback:
-          'O florescimento é raro e as flores eventualmente formadas são estéreis (Fitoterapia Brasil) — por isso a propagação se dá pelos rizomas. As demais descrevem a Amora, a Cidreira e o Crajiru.',
+          'O florescimento é raro e as flores eventualmente formadas são estéreis (Fitoterapia Brasil) — por isso a propagação se dá pelos rizomas. As demais descrevem a amora, a cidreira e o crajiru.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "florescimento é raro; flores, eventualmente formadas, são estéreis" (Fitoterapia Brasil).',
@@ -975,7 +975,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais queixas respiratórias aparecem entre os usos populares do Cumaru (Dipteryx odorata)?',
+          'Quais queixas respiratórias aparecem entre os usos populares do cumaru (Dipteryx odorata)?',
         alternativas: {
           A: 'Tosse, bronquite e asma',
           B: 'Sinusite e resfriado',
@@ -984,7 +984,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'A ficha registra tosse, bronquite e asma (Martins et al., 2021), junto de ação antiespasmódica, tônica, anti-inflamatória, antimicrobiana e para reumatismos e dores abdominais. Sinusite e resfriado são usos do Malvarisco.',
+          'A ficha registra tosse, bronquite e asma (Martins et al., 2021), junto de ação antiespasmódica, tônica, anti-inflamatória, antimicrobiana e para reumatismos e dores abdominais. Sinusite e resfriado são usos do malvarisco.',
         campo_fonte: 'usos_tradicionais',
         fonte:
           'Uso popular na literatura: "Antiespasmódico, tônico, anti-inflamatório, reumatismos, antimicrobiano, dores abdominais, tosse, bronquite e asma (Martins et al., 2021)".',
@@ -993,7 +993,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'O campo "Dados sobre o uso" da ficha do Cumaru descreve, na verdade, a composição de qual parte da planta?',
+          'O campo "Dados sobre o uso" da ficha do cumaru descreve, na verdade, a composição de qual parte da planta?',
         alternativas: {
           A: 'Da folha seca',
           B: 'Do óleo',
@@ -1002,7 +1002,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ficha descreve o óleo do cumaru, com ácidos graxos de cadeia longa como linoleico, palmítico, ortocumárico e esteárico (Martins et al., 2021). LACUNA CONHECIDA: é a única das 15 espécies cujo campo de uso não descreve um modo de preparo — a ser complementado com a autora.',
+          'A ficha descreve o óleo do cumaru, com ácidos graxos de cadeia longa como linoleico, palmítico, ortocumárico e esteárico (Martins et al., 2021).',
         campo_fonte: 'preparo',
         fonte:
           'Dados sobre o uso: "O óleo do cumaru possui ácidos graxos de cadeia longa como o ácido linoleico, ácido palmítico, ácido ortocumárico, ácido esteárico entre outros componentes químicos (Martins et al., 2021)".',
@@ -1011,7 +1011,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'A curadoria afirma que o Cumaru não é tóxico. Que ressalva ela faz em seguida?',
+          'A curadoria afirma que o cumaru não é tóxico. Que ressalva ela faz em seguida?',
         alternativas: {
           A: 'Que ainda assim se infere contraindicação na gestação e lactação',
           B: 'Que o uso é liberado para todos os grupos',
@@ -1023,12 +1023,12 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
           'A ficha registra: não é tóxico (Melo et al., 2014), porém infere-se contraindicação durante a gestação e a lactação. Repare que a curadoria usa "infere-se" — é uma inferência de cautela, não um achado direto da literatura.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Não é tóxico (Melo et al., 2014), porém, ainda sim, infere-se que é contraindicado durante a gestação e lactação".',
+          'Contraindicações: "Não é tóxico (Melo et al., 2014), porém, ainda assim, infere-se que é contraindicado durante a gestação e lactação".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
-        pergunta: 'A que família botânica pertence o Cumaru (Dipteryx odorata)?',
+        pergunta: 'A que família botânica pertence o cumaru (Dipteryx odorata)?',
         alternativas: {
           A: 'Costaceae',
           B: 'Bignoniaceae',
@@ -1037,7 +1037,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'D',
         feedback:
-          'Fabaceae (Souza e Lorenzi, 2019), a família das leguminosas. Costaceae é a do Pobre-velho, Bignoniaceae a do Crajiru e Crassulaceae a da Corama.',
+          'Fabaceae (Souza e Lorenzi, 2019), a família das leguminosas. Costaceae é a do pobre-velho, Bignoniaceae a do crajiru e Crassulaceae a da corama.',
         campo_fonte: 'familia',
         fonte: 'Família: "Fabaceae (Souza e Lorenzi, 2019)".',
       },
@@ -1052,7 +1052,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais usos a curadoria registra para o Boldinho japonês (Mentha arvensis)?',
+          'Quais usos a curadoria registra para o boldinho japonês (Mentha arvensis)?',
         alternativas: {
           A: 'Problemas estomacais, náuseas e vômitos',
           B: 'Pedra nos rins e infecção urinária',
@@ -1070,7 +1070,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
         pergunta:
-          'Segundo a curadoria, de quais formas as folhas do Boldinho japonês podem ser usadas?',
+          'Segundo a curadoria, de quais formas as folhas do boldinho japonês podem ser usadas?',
         alternativas: {
           A: 'Somente frescas, em infusão rápida',
           B: 'Frescas ou secas, em chá, tintura ou como inalante',
@@ -1088,7 +1088,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'Qual substância presente no Boldinho japonês motiva a contraindicação na gestação e lactação?',
+          'Qual substância presente no boldinho japonês motiva a contraindicação na gestação e lactação?',
         alternativas: {
           A: 'O citral',
           B: 'A cânfora',
@@ -1097,16 +1097,16 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'A ficha atribui a contraindicação ao mentol, e desaconselha o uso para menores de 6 anos. O óleo essencial é rico em levomentol (65-75%) e mentol. Citral é o componente principal do Capim santo; cânfora aparece no Malvarisco; β-ecdisona, na Terramicina.',
+          'A ficha atribui a contraindicação ao mentol e desaconselha o uso para menores de 6 anos. O óleo essencial é rico em levomentol (65-75%) e mentol. Citral é o componente principal do capim-santo; cânfora aparece no malvarisco; β-ecdisona, na terramicina.',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Devido ao mentol, é contraindicado durante a gestação e lactação. E desaconselhado para menores de 6 anos".',
+          'Contraindicações: "Devido ao mentol, é contraindicado durante a gestação e lactação. É desaconselhado para menores de 6 anos".',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'Segundo a composição fitoquímica registrada, qual é o teor de levomentol no óleo essencial do Boldinho japonês?',
+          'Segundo a composição fitoquímica registrada, qual é o teor de levomentol no óleo essencial do boldinho japonês?',
         alternativas: {
           A: '10 a 20%',
           B: '30 a 40%',
@@ -1131,7 +1131,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'facil',
         eixo: 'Indicação Terapêutica',
         pergunta:
-          'Quais queixas das vias respiratórias aparecem entre os usos do Malvarisco (Plectranthus amboinicus (Lour.) Spreng.)?',
+          'Quais queixas das vias respiratórias aparecem entre os usos do malvarisco (Plectranthus amboinicus (Lour.) Spreng.)?',
         alternativas: {
           A: 'Gripe, resfriado e sinusite',
           B: 'Bronquite, asma e reumatismo',
@@ -1140,7 +1140,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'A',
         feedback:
-          'A ficha registra gripe, resfriado e sinusite (Veras, 2025), junto de vários usos digestivos e calmantes. Bronquite e asma são usos do Cumaru e do Boldo; catarro, do Pobre-velho.',
+          'A ficha registra gripe, resfriado e sinusite (Veras, 2025), junto de vários usos digestivos e calmantes. Bronquite e asma são usos do cumaru e do boldo; catarro, do pobre-velho.',
         campo_fonte: 'usos_tradicionais',
         fonte:
           'Uso popular na literatura: "...antioxidante, gripe, resfriado e sinusite (Veras, 2025)".',
@@ -1148,7 +1148,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
       {
         nivel: 'medio',
         eixo: 'Preparo Tradicional',
-        pergunta: 'Qual é o preparo e a dose diária do Malvarisco registrados na curadoria?',
+        pergunta: 'Qual é o preparo e a dose diária do malvarisco registrados na curadoria?',
         alternativas: {
           A: 'Infusão da folha, até três vezes ao dia',
           B: 'Chá da folha, 2 xícaras ao dia',
@@ -1157,7 +1157,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ficha registra "folha utilizada para chá, 2 xícaras ao dia (Veras, 2025)" — mesma dose registrada para a Corama e o Boldo.',
+          'A ficha registra "folha utilizada para chá, 2 xícaras ao dia (Veras, 2025)" — mesma dose registrada para a corama e o boldo.',
         campo_fonte: 'preparo',
         fonte: 'Dados sobre o uso: "Folha utilizada para chá, 2 xícaras ao dia (Veras, 2025)".',
       },
@@ -1165,7 +1165,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         nivel: 'medio',
         eixo: 'Segurança e Contraindicação',
         pergunta:
-          'Além da contraindicação para gestantes, que precaução específica a curadoria recomenda no uso do Malvarisco?',
+          'Além da contraindicação para gestantes, que precaução específica a curadoria recomenda no uso do malvarisco?',
         alternativas: {
           A: 'Evitar exposição ao sol após o uso',
           B: 'Não usar junto de alimentos gordurosos',
@@ -1174,16 +1174,16 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'C',
         feedback:
-          'A ficha alerta que a planta mostrou atividade sinérgica com alguns antifúngicos, mas antagônica com outros antimicrobianos — daí a recomendação de precaução no uso conjunto. Gestantes não podem ingerir: pode ser abortivo e causar má formação (Veras, 2025).',
+          'A ficha alerta que a planta mostrou atividade sinérgica com alguns antifúngicos, mas antagônica com outros antimicrobianos — daí a recomendação de precaução no uso conjunto. Gestantes não podem ingerir: pode ser abortivo e causar malformação (Veras, 2025).',
         campo_fonte: 'contraindicacoes',
         fonte:
-          'Contra indicações: "Recomenda-se, portanto, precaução na administração da planta conjuntamente com esses medicamentos, podendo interferir nos efeitos terapêuticos desejados" (Horto Didático UFSC).',
+          'Contraindicações: "Recomenda-se, portanto, precaução na administração da planta conjuntamente com esses medicamentos, podendo interferir nos efeitos terapêuticos desejados" (Horto Didático UFSC).',
       },
       {
         nivel: 'dificil',
         eixo: 'Identificação Botânica',
         pergunta:
-          'O que diferencia o Malvarisco das outras espécies de Plectranthus conhecidas como "boldos" (P. barbatus e P. ornatus)?',
+          'O que diferencia o malvarisco das outras espécies de Plectranthus conhecidas como "boldos" (P. barbatus e P. ornatus)?',
         alternativas: {
           A: 'Ter folhas maiores e não aromáticas',
           B: 'Não ter o sabor amargo característico dessas plantas',
@@ -1192,7 +1192,7 @@ export const PLANTAS_COM_QUIZ: PlantaComQuiz[] = [
         },
         resposta_correta: 'B',
         feedback:
-          'A ficha destaca que o Malvarisco se diferencia de P. barbatus e P. ornatus por não ter o sabor amargo característico dessas duas plantas (Horto Didático UFSC). A propagação do Malvarisco, aliás, é feita por estacas dos ramos.',
+          'A ficha destaca que o malvarisco se diferencia de P. barbatus e P. ornatus por não ter o sabor amargo característico dessas duas plantas (Horto Didático UFSC). A propagação do malvarisco, aliás, é feita por estacas dos ramos.',
         campo_fonte: 'descricao',
         fonte:
           'Características morfológicas: "Esta espécie diferencia-se das outras do gênero Plectranthus (P. barbatus e P. ornatus), conhecidas popularmente como boldos, por não ter o sabor amargo característico dessas duas outras plantas" (Horto Didático UFSC).',
@@ -1225,7 +1225,7 @@ export const PERGUNTAS_ODS_COMPLEMENTARES: Array<{
       nivel: 'dificil',
       eixo: 'Curiosidade ODS',
       pergunta:
-        'De que maneira a valorização e o manejo sustentável do Crajiru se relacionam com o ODS 15 (Vida Terrestre) da ONU?',
+        'De que maneira a valorização e o manejo sustentável do crajiru se relacionam com o ODS 15 (Vida Terrestre) da ONU?',
       alternativas: {
         A: 'Incentivando a substituição da floresta por monoculturas de grande escala',
         B: 'Proibindo qualquer coleta comunitária em áreas de vegetação nativa',
@@ -1236,7 +1236,7 @@ export const PERGUNTAS_ODS_COMPLEMENTARES: Array<{
       feedback:
         'O cultivo ético e a valorização das plantas nativas preservam o bioma amazônico e os conhecimentos tradicionais das comunidades locais.',
       campo_fonte: 'nota_geral',
-      fonte: 'PROMPT do projeto GERMINA (conexão com as ODS) — não consta na curadoria.',
+      fonte: 'PROMPT do projeto GERMINA (conexão com os ODS) — não consta na curadoria.',
     },
   },
   {
@@ -1246,7 +1246,7 @@ export const PERGUNTAS_ODS_COMPLEMENTARES: Array<{
       nivel: 'dificil',
       eixo: 'Curiosidade ODS',
       pergunta:
-        'Considerando o ODS 3 (Saúde e Bem-Estar), qual atitude representa o consumo consciente e seguro de chás de Boldo?',
+        'Considerando o ODS 3 (Saúde e Bem-Estar), qual atitude representa o consumo consciente e seguro de chás de boldo?',
       alternativas: {
         A: 'Consumir vários litros por dia continuamente sem pausa',
         B: 'Substituir tratamentos prescritos sem consultar profissionais',
@@ -1255,10 +1255,10 @@ export const PERGUNTAS_ODS_COMPLEMENTARES: Array<{
       },
       resposta_correta: 'D',
       feedback:
-        'O autocuidado com plantas medicinais requer responsabilidade; a curadoria registra o Boldo como abortivo e contraindicado em excesso para gestantes, lactantes e crianças (Veras, 2025).',
+        'O autocuidado com plantas medicinais requer responsabilidade; a curadoria registra o boldo como abortivo e contraindicado em excesso para gestantes, lactantes e crianças (Veras, 2025).',
       campo_fonte: 'nota_geral',
       fonte:
-        'PROMPT do projeto GERMINA (ODS 3) + Contra indicações da ficha do Boldo (Veras, 2025).',
+        'PROMPT do projeto GERMINA (ODS 3) + Contraindicações da ficha do boldo (Veras, 2025).',
     },
   },
   {
@@ -1268,7 +1268,7 @@ export const PERGUNTAS_ODS_COMPLEMENTARES: Array<{
       nivel: 'dificil',
       eixo: 'Curiosidade ODS',
       pergunta:
-        'Como o cultivo da Amora em hortas comunitárias favorece as metas do ODS 12 (Consumo e Produção Responsáveis)?',
+        'Como o cultivo da amora em hortas comunitárias favorece as metas do ODS 12 (Consumo e Produção Responsáveis)?',
       alternativas: {
         A: 'Estimulando a produção local sustentável e o aproveitamento de plantas medicinais',
         B: 'Gerando grande quantidade de embalagens plásticas descartáveis',

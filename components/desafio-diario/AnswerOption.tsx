@@ -1,3 +1,4 @@
+import { TextoCientifico } from '../ui/TextoCientifico';
 import { Check, X } from 'lucide-react';
 
 interface AnswerOptionProps {
@@ -47,7 +48,7 @@ export function AnswerOption({
       <span className={`w-8 h-8 rounded-lg font-bold text-sm flex items-center justify-center shrink-0 border transition-colors ${badgeStyle}`}>
         {keyLetter}
       </span>
-      <span className="text-sm leading-snug flex-1">{optionText}</span>
+      <span className="text-sm leading-snug flex-1"><TextoCientifico texto={optionText} /></span>
       {icon}
     </button>
   );

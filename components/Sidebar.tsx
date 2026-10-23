@@ -191,7 +191,7 @@ export function Sidebar({
             convite a entrar já está no topo da barra. */}
         {!visitante && (
         <div className="bg-surface-alt rounded-xl p-3.5">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+          <p className="text-[11px] font-semibold text-ink-muted">
             Seu progresso
           </p>
           <div className="flex items-center gap-3 mt-2">

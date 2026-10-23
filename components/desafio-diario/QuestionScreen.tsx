@@ -1,3 +1,4 @@
+import { TextoCientifico } from '../ui/TextoCientifico';
 import { PerguntaQuiz, PlantaComQuiz } from '../../lib/types';
 import { ProgressBar } from './ProgressBar';
 import { PlantBadge } from './PlantBadge';
@@ -42,7 +43,7 @@ export function QuestionScreen({
 
         <div className="space-y-1.5">
           <h2 className="text-base font-bold text-blue-deep leading-snug">
-            {desafio.pergunta}
+            <TextoCientifico texto={desafio.pergunta} />
           </h2>
           <p className="text-xs text-ink-muted flex items-center gap-1 font-medium">
             <HelpCircle className="w-3.5 h-3.5 text-blue-main" />

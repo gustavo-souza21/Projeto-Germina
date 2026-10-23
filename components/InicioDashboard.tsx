@@ -75,7 +75,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
               rotulo={`Nível ${nivelAtual}: ${nivelAtualInfo.nome}`}
             />
             <div className="sm:hidden">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+              <p className="text-[11px] font-semibold text-ink-muted">
                 Nível {nivelAtual}
               </p>
               <p className="text-base font-bold text-green-deep">{nivelAtualInfo.nome}</p>
@@ -84,7 +84,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
 
           <div className="flex-1 w-full min-w-0">
             <div className="hidden sm:block">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+              <p className="text-[11px] font-semibold text-ink-muted">
                 Nível {nivelAtual}
               </p>
               <h2 className="text-lg font-bold text-green-deep">{nivelAtualInfo.nome}</h2>
@@ -113,7 +113,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
 
         {/* Trilha completa — GER-UI-09 */}
         <div className="mt-5 pt-5 border-t border-black/[0.05]">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-3">
+          <h3 className="text-xs font-semibold text-ink-muted mb-3">
             Sua jornada de evolução
           </h3>
           <TimelineEvolucao nivelAtual={nivelAtual} />
@@ -125,7 +125,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="space-y-1 max-w-xl">
             <div className="flex items-center gap-2">
-              <span className="bg-amber-500 text-white text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-md tracking-wider">
+              <span className="bg-amber-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-md">
                 Desafio Diário
               </span>
               <div className="flex items-center gap-1 text-xs text-amber-800 font-semibold">
@@ -147,7 +147,7 @@ export const InicioDashboard: React.FC<InicioDashboardProps> = ({
           </div>
 
           {desafios.length > 0 && (
-            <div className="flex flex-col sm:items-end gap-2 w-full sm:w-auto">
+            <div className="flex flex-col items-stretch gap-2 w-full sm:w-auto">
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-emerald-200">
                 <Award className="w-4 h-4 text-emerald-600" />
                 <span>Até {desafios[0].xp_recompensa} XP</span>

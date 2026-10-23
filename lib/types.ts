@@ -99,7 +99,7 @@ export interface PlantaCatalogo {
   descricao: string; // Características morfológicas — texto literal (citação entre aspas na curadoria)
   morfologia_fonte: string; // Fonte citada pela curadoria para a descrição morfológica (ex: 'Jardim Botânico USP')
   usos_tradicionais: string[]; // "Uso popular na literatura" da curadoria, dividido por citação/grupo, citações preservadas
-  is_renisus: boolean; // 7 plantas raras que rendem XP em dobro
+  is_renisus: boolean; // 7 espécies da RENISUS, que rendem XP em dobro
   renisus_texto: string; // Texto literal do campo "RENISUS" da curadoria
   xp_recompensa: number; // Ex: 50 normal, 100 para RENISUS
   habitat: string; // Campo complementar do app (não consta na curadoria) — descrição de onde a planta é cultivada

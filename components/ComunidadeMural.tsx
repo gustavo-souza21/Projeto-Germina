@@ -354,7 +354,7 @@ export const ComunidadeMural: React.FC<ComunidadeMuralProps> = ({ profile, posts
           </div>
 
           <div className="bg-emerald-900 text-emerald-100 rounded-2xl p-4 border border-emerald-700 space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
+            <span className="text-[10px] font-boldr text-amber-300">
               Agenda do Herbário UFAM
             </span>
             <h4 className="font-bold text-sm text-white">Workshop de Fitoterapia Amazônica</h4>

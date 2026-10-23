@@ -1,5 +1,6 @@
 'use client';
 
+import { TextoCientifico } from './ui/TextoCientifico';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PlantaCatalogo } from '../lib/types';
@@ -10,6 +11,11 @@ import { NomeCientifico } from './ui/NomeCientifico';
 
 /** Em que ponto do estudo (ficha + quiz) o usuário está nesta espécie. */
 export type EtapaEstudo = 'nao_iniciado' | 'ficha_lida' | 'concluido';
+
+/** Título de seção da ficha: um só estilo para todas (hierarquia consistente). */
+const TITULO_SECAO = 'text-sm sm:text-[15px] font-bold mb-1.5';
+/** Texto de conteúdo da ficha: 14px em qualquer tela. */
+const TEXTO_SECAO = 'text-sm leading-relaxed';
 
 interface FichaBotanicaPlantaProps {
   planta: PlantaCatalogo;
@@ -110,7 +116,7 @@ export function FichaBotanicaPlanta({
         <div className="p-5 sm:p-6 space-y-4">
           <div className="bg-red-50 border border-red-300 rounded-xl p-3 flex items-start gap-2.5">
             <ShieldAlert className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-            <p className="text-xs text-red-900 leading-relaxed">
+            <p className="text-xs sm:text-sm text-red-900 leading-relaxed">
               <strong>O conteúdo do GERMINA é educativo e não substitui orientação médica ou farmacêutica.</strong>{' '}
               As plantas medicinais devem ser utilizadas garantindo os efeitos benéficos e evitando que o uso
               incorreto possa causar efeitos indesejáveis e toxicidade (ANVISA, 2010). Não se automedique —
@@ -118,71 +124,76 @@ export function FichaBotanicaPlanta({
             </p>
           </div>
 
-          <div>
-            <h4 className="text-sm font-bold text-ink-muted">Descrição botânica</h4>
-            <p className="text-sm text-ink-muted leading-relaxed mt-0.5">{planta.descricao}</p>
-          </div>
+          {/* Hierarquia da ficha (revisão da curadoria, 23/10/2026): nome
+              popular é o h1; cada seção é um h2 do MESMO tamanho e peso,
+              mudando só a cor da caixa; todo texto de conteúdo em 14px
+              (text-sm). Antes havia h4 e h5 misturados e quase todo o texto
+              técnico em 12px, pequeno demais para ler no celular. */}
+          <section>
+            <h2 className={TITULO_SECAO + ' text-green-deep'}>Descrição botânica</h2>
+            <p className={TEXTO_SECAO + ' text-ink'}><TextoCientifico texto={planta.descricao} /></p>
+          </section>
 
-          <div className="bg-surface-alt p-4 rounded-xl border border-black/[0.04]">
-            <h4 className="text-sm font-bold text-green-deep flex items-center gap-1.5 mb-2">
-              <HeartHandshake className="w-4 h-4 text-green-main" />
+          <section className="bg-surface-alt p-4 rounded-xl border border-black/[0.04]">
+            <h2 className={TITULO_SECAO + ' text-green-deep flex items-center gap-1.5'}>
+              <HeartHandshake className="w-4 h-4 text-green-main" aria-hidden />
               <span>Usos tradicionais na Amazônia</span>
-            </h4>
-            <ul className="space-y-1 text-xs sm:text-sm text-ink-muted">
+            </h2>
+            <ul className={TEXTO_SECAO + ' space-y-1 text-ink'}>
               {planta.usos_tradicionais.map((uso, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-green-main font-bold">•</span>
-                  <span>{uso}</span>
+                  <span className="text-green-main font-bold" aria-hidden>•</span>
+                  {/* Itens da lista sempre com inicial maiúscula (a curadoria alterna
+                      "Gripe, ..." e "diarreia, ..."); o dado não muda, só a exibição. */}
+                  <span><TextoCientifico texto={uso.charAt(0).toUpperCase() + uso.slice(1)} /></span>
                 </li>
               ))}
             </ul>
-          </div>
+          </section>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="bg-emerald-50/60 p-3.5 rounded-xl border border-emerald-200/60 text-xs">
-              <h5 className="font-bold text-emerald-900 mb-1">Modo de preparo tradicional</h5>
-              <p className="text-emerald-800/90 leading-relaxed">{planta.preparo}</p>
-            </div>
+            <section className="bg-emerald-50/60 p-4 rounded-xl border border-emerald-200/60">
+              <h2 className={TITULO_SECAO + ' text-emerald-900'}>Modo de preparo tradicional</h2>
+              <p className={TEXTO_SECAO + ' text-emerald-900/90'}><TextoCientifico texto={planta.preparo} /></p>
+            </section>
 
-            <div className="bg-teal-50/60 p-3.5 rounded-xl border border-teal-200/60 text-xs">
-              <h5 className="font-bold text-teal-900 mb-1">Habitat e ocorrência</h5>
-              <p className="text-teal-800/90 leading-relaxed">{planta.habitat}</p>
-            </div>
+            <section className="bg-teal-50/60 p-4 rounded-xl border border-teal-200/60">
+              <h2 className={TITULO_SECAO + ' text-teal-900'}>Habitat e ocorrência</h2>
+              <p className={TEXTO_SECAO + ' text-teal-900/90'}><TextoCientifico texto={planta.habitat} /></p>
+            </section>
           </div>
 
-          <div className="space-y-2 text-xs">
-            <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
-              <h5 className="font-bold text-blue-900">Composição fitoquímica e evidências</h5>
-              <p className="text-blue-800 mt-0.5">{planta.evidencias}</p>
-            </div>
+          <section className="bg-blue-50 p-4 rounded-xl border border-blue-200">
+            <h2 className={TITULO_SECAO + ' text-blue-900'}>Composição fitoquímica e evidências</h2>
+            <p className={TEXTO_SECAO + ' text-blue-900/90'}><TextoCientifico texto={planta.evidencias} /></p>
+          </section>
 
-            <div className="bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-start gap-2">
-              <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <h5 className="font-bold text-amber-900">Segurança e precauções</h5>
-                <p className="text-amber-800 mt-0.5">{planta.seguranca}</p>
-              </div>
-            </div>
+          <section className="bg-amber-50 p-4 rounded-xl border border-amber-200">
+            <h2 className={TITULO_SECAO + ' text-amber-900 flex items-center gap-1.5'}>
+              <ShieldAlert className="w-4 h-4 text-amber-600" aria-hidden />
+              Segurança e precauções
+            </h2>
+            <p className={TEXTO_SECAO + ' text-amber-900/90'}><TextoCientifico texto={planta.seguranca} /></p>
+          </section>
 
-            <div className="bg-red-50 p-3 rounded-xl border border-red-200 flex items-start gap-2">
-              <ShieldAlert className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-              <div>
-                <h5 className="font-bold text-red-900">Contraindicações</h5>
-                <p className="text-red-800 mt-0.5">{planta.contraindicacoes}</p>
-              </div>
-            </div>
-          </div>
+          <section className="bg-red-50 p-4 rounded-xl border border-red-200">
+            <h2 className={TITULO_SECAO + ' text-red-900 flex items-center gap-1.5'}>
+              <ShieldAlert className="w-4 h-4 text-red-600" aria-hidden />
+              Contraindicações
+            </h2>
+            <p className={TEXTO_SECAO + ' text-red-900/90'}><TextoCientifico texto={planta.contraindicacoes} /></p>
+          </section>
 
-          <div className="pt-2">
-            <span className="text-[11px] font-bold text-ink-muted block mb-1">Objetivos de Desenvolvimento Sustentável (ODS):</span>
+          <section className="pt-1">
+            <h2 className={TITULO_SECAO + ' text-green-deep'}>Objetivos de Desenvolvimento Sustentável (ODS)</h2>
             <div className="flex gap-1.5 flex-wrap">
               {planta.ods_relacionados.map((ods) => (
-                <span key={ods} className="bg-green-deep text-green-soft font-bold text-[11px] px-2.5 py-0.5 rounded-md">
+                <span key={ods} className="bg-green-deep text-green-soft font-bold text-xs px-2.5 py-1 rounded-md">
                   ODS {ods}
                 </span>
               ))}
             </div>
-          </div>
+          </section>
         </div>
 
         {/* Rodapé de ação — estudo em duas etapas: ficha e quiz (spec 1.1).

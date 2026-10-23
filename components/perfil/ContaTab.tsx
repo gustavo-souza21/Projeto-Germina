@@ -6,7 +6,7 @@ export function ContaTab({ profile, gameState }: { profile: Profile; gameState: 
   return (
     <div className="space-y-3">
       <div className="bg-card-bg rounded-2xl p-4 border border-black/[0.04] shadow-card space-y-2.5">
-        <h3 className="text-xs font-bold text-ink-muted uppercase tracking-wider">Informações da Conta</h3>
+        <h3 className="text-xs font-bold text-ink-mutedr">Informações da conta</h3>
 
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div>

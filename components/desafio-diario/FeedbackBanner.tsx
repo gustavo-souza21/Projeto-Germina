@@ -1,3 +1,5 @@
+import { TextoCientifico } from '../ui/TextoCientifico';
+
 interface FeedbackBannerProps {
   isCorrect: boolean;
   respostaCorreta: string;
@@ -32,11 +34,13 @@ export function FeedbackBanner({
       </div>
 
       <div className="p-5 space-y-4">
-        <div className="bg-surface-alt p-4 rounded-xl border border-black/[0.06] italic text-sm leading-relaxed text-ink">
-          <span className={`font-bold block mb-1 not-italic underline ${isCorrect ? 'text-green-deep' : 'text-blue-main'}`}>
+        {/* Sem itálico no parágrafo inteiro: texto longo em itálico cansa a leitura
+            e apagaria o destaque dos nomes científicos, que são o itálico aqui. */}
+        <div className="bg-surface-alt p-4 rounded-xl border border-black/[0.06] text-sm leading-relaxed text-ink">
+          <span className={`font-bold block mb-1 underline ${isCorrect ? 'text-green-deep' : 'text-blue-main'}`}>
             Por que {isCorrect ? 'está certo' : 'é essa opção'}?
           </span>
-          {feedbackText}
+          <TextoCientifico texto={feedbackText} />
         </div>
 
         <div className={`flex justify-between items-center p-3 rounded-lg border text-xs font-bold ${
